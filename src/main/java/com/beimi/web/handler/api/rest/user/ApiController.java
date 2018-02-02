@@ -78,7 +78,6 @@ public class ApiController extends Handler{
 					userToken.setUpdatetime(new Date(0));
 
 					tokenESRes.save(userToken);
-					System.out.println("123");
 					player.setToken(userToken.getId());
 				}
 				int users = playUserESRes.countByUsername(player.getUsername()) ;
