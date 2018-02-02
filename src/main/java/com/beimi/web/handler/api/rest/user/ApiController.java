@@ -39,7 +39,9 @@ public class ApiController extends Handler{
 	    public ResponseEntity<ResultData> register(HttpServletRequest request , @Valid PlayUser player) {
 			String ip = UKTools.getIpAddr(request);
 	        player = register(player,ip) ;
-	        return new ResponseEntity<>(new ResultData( player!=null,"200", player != null ? MessageEnum.USER_REGISTER_SUCCESS:MessageEnum.USER_REGISTER_FAILD_USERNAME , player), HttpStatus.OK);
+			int users = playUserESRes.countByUsername(player.getUsername()) ;
+			ResultData resu=new ResultData(player != null, users==0 ? "200":"201", users==0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, player);
+			return new ResponseEntity<>(resu, HttpStatus.OK);
 	    }
 	    /**
 	     * 注册用户
@@ -78,15 +80,14 @@ public class ApiController extends Handler{
 					userToken.setUpdatetime(new Date(0));
 
 					tokenESRes.save(userToken);
-					player.setToken(userToken.getId());
 				}
 				int users = playUserESRes.countByUsername(player.getUsername()) ;
 	            if(users == 0){
-					UKTools.published(player , playUserESRes , playUserRes);
+					playUserRes.save(player);
 	            }else{
 	                player = null ;
 	            }
 	        }
-	        return player ;
+	        return null ;
 	    }
 }

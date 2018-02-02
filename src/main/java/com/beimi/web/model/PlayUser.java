@@ -51,8 +51,6 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	private String secureconf = "5";
 	private String usertype ; //
 
-	private  String token;
-
 	private String country;
 	private String region;
 	private String useragent ;
@@ -176,14 +174,6 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 
 	public void setMidname(String midname) {
 		this.midname = midname;
-	}
-	public String getToken() {
-		return token;
-	}
-
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public String getLastname() {
