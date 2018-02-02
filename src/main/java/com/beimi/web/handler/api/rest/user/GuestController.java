@@ -62,7 +62,7 @@ public class GuestController {
         playUserClient.setToken(userToken.getId());
         CacheHelper.getApiUserCacheBean().put(userToken.getId(),userToken, userToken.getOrgi());
         CacheHelper.getApiUserCacheBean().put(playUserClient.getId(),playUserClient, userToken.getOrgi());
-        ResultData playerResultData = new ResultData( playUserClient!=null ,"200", playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS: MessageEnum.USER_REGISTER_FAILD_USERNAME , playUserClient , userToken) ;
+        ResultData playerResultData = new ResultData( playUserClient!=null , playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS: MessageEnum.USER_REGISTER_FAILD_USERNAME , "200",playUserClient , userToken) ;
         /**
          * 根据游戏配置 ， 选择 返回的 玩法列表
          */
