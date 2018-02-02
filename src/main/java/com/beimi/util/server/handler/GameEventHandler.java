@@ -29,6 +29,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.annotation.OnConnect;
 import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
+import sun.rmi.runtime.Log;
 
 public class GameEventHandler     
 {  
@@ -48,6 +49,8 @@ public class GameEventHandler
 		if(beiMiClient!=null && !StringUtils.isBlank(beiMiClient.getUserid())){
 			if(CacheHelper.getRoomMappingCacheBean().getCacheObject(beiMiClient.getUserid(), beiMiClient.getOrgi()) != null){
 				ActionTaskUtils.sendEvent("" , beiMiClient.getUserid(), null);
+
+				System.out.println("789");
 			}
 			
 		}
