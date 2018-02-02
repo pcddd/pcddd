@@ -17,7 +17,7 @@ public class ResultData implements java.io.Serializable{
 	private boolean status ;
 	private String msg ;
 	private Object data ;
-	
+	private String code;
 	private String gametype ;			// game model : 大厅 | 房卡
 	
 	private boolean enableai ;			//是否启用AI
@@ -34,13 +34,29 @@ public class ResultData implements java.io.Serializable{
 		this.msg = msg ;
 		this.data = data ;
 	}
-	
+
+	public ResultData(boolean status ,String code, String msg , Object data){
+		this.status = status ;
+		this.code=code;
+		this.msg = msg ;
+		this.data = data ;
+	}
+
+	public ResultData(boolean status , String msg ,String code, Object data , Token token ){
+		this.status = status ;
+		this.msg = msg ;
+		this.code=code;
+		this.data = data ;
+		this.token = token ;
+	}
+
 	public ResultData(boolean status , String msg , Object data , Token token ){
 		this.status = status ;
 		this.msg = msg ;
 		this.data = data ;
 		this.token = token ;
 	}
+
 	
 	public ResultData(boolean status , String msg , Object data , Token token ,List<BeiMiGame> games){
 		this.status = status ;
@@ -56,12 +72,22 @@ public class ResultData implements java.io.Serializable{
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public String getMsg() {
 		return msg;
 	}
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
+
 	public Object getData() {
 		return data;
 	}

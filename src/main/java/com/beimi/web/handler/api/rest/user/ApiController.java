@@ -39,7 +39,7 @@ public class ApiController extends Handler{
 	    public ResponseEntity<ResultData> register(HttpServletRequest request , @Valid PlayUser player) {
 			String ip = UKTools.getIpAddr(request);
 	        player = register(player,ip) ;
-	        return new ResponseEntity<>(new ResultData( player!=null , player != null ? MessageEnum.USER_REGISTER_SUCCESS:MessageEnum.USER_REGISTER_FAILD_USERNAME , player), HttpStatus.OK);
+	        return new ResponseEntity<>(new ResultData( player!=null,"200", player != null ? MessageEnum.USER_REGISTER_SUCCESS:MessageEnum.USER_REGISTER_FAILD_USERNAME , player), HttpStatus.OK);
 	    }
 	    /**
 	     * 注册用户
