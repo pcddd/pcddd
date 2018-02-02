@@ -47,7 +47,7 @@ public class ApiController extends Handler{
 	     * @return
 	     */
 	    public PlayUser register(PlayUser player, String ip){
-	        if(player!= null && !StringUtils.isBlank(player.getMobile()) && !StringUtils.isBlank(player.getPassword())){
+	        if(player!= null && !StringUtils.isBlank(player.getPassword())){
 	            if(StringUtils.isBlank(player.getUsername())){
 	                player.setUsername("Guest_"+ Base62.encode(UKTools.getUUID().toLowerCase()));
 	            }
