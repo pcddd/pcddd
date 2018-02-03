@@ -39,35 +39,44 @@ public class GuestController {
     private TokenESRepository tokenESRes ;
 
     @RequestMapping
-    public ResponseEntity<ResultData> caiGuest(HttpServletRequest request , @Valid String username) {
+    public ResponseEntity<ResultData> caiGuest(HttpServletRequest request , @Valid String username ,@Valid String password) {
         PlayUserClient playUserClient = null ;
         Token userToken = null ;
         playUserClient = playUserClientRes.findByUsername(username);
-        String ip = UKTools.getIpAddr(request);
-        IP ipdata = IPTools.getInstance().findGeography(ip);
-        if(userToken == null){
-            userToken = new Token();
-            userToken.setIp(ip);
-            userToken.setRegion(ipdata.getProvince()+ipdata.getCity());
-            userToken.setId(UKTools.getUUID());
-            userToken.setUserid(playUserClient.getId());
-            userToken.setCreatetime(new Date());
-            userToken.setOrgi(playUserClient.getOrgi());
-            AccountConfig config = CacheConfigTools.getGameAccountConfig(BMDataContext.SYSTEM_ORGI) ;
-            if(config!=null && config.getExpdays() > 0){
-                userToken.setExptime(new Date(System.currentTimeMillis()+60*60*24*config.getExpdays()*1000));//默认有效期 ， 7天
-            }else{
-                userToken.setExptime(new Date(System.currentTimeMillis()+60*60*24*7*1000));//默认有效期 ， 7天
-            }
-            userToken.setLastlogintime(new Date());
-            userToken.setUpdatetime(new Date(0));
+        if (playUserClient!=null) {
+            String ip = UKTools.getIpAddr(request);
+            IP ipdata = IPTools.getInstance().findGeography(ip);
+            if (userToken == null) {
+                userToken = new Token();
+                userToken.setIp(ip);
+                userToken.setRegion(ipdata.getProvince() + ipdata.getCity());
+                userToken.setId(UKTools.getUUID());
+                userToken.setUserid(playUserClient.getId());
+                userToken.setCreatetime(new Date());
+                userToken.setOrgi(playUserClient.getOrgi());
+                AccountConfig config = CacheConfigTools.getGameAccountConfig(BMDataContext.SYSTEM_ORGI);
+                if (config != null && config.getExpdays() > 0) {
+                    userToken.setExptime(new Date(System.currentTimeMillis() + 60 * 60 * 24 * config.getExpdays() * 1000));//默认有效期 ， 7天
+                } else {
+                    userToken.setExptime(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 7 * 1000));//默认有效期 ， 7天
+                }
+                userToken.setLastlogintime(new Date());
+                userToken.setUpdatetime(new Date(0));
 
-            tokenESRes.save(userToken) ;
+                tokenESRes.save(userToken);
+            }
+            playUserClient.setToken(userToken.getId());
+            CacheHelper.getApiUserCacheBean().put(userToken.getId(), userToken, userToken.getOrgi());
+            CacheHelper.getApiUserCacheBean().put(playUserClient.getId(), playUserClient, userToken.getOrgi());
         }
-        playUserClient.setToken(userToken.getId());
-        CacheHelper.getApiUserCacheBean().put(userToken.getId(),userToken, userToken.getOrgi());
-        CacheHelper.getApiUserCacheBean().put(playUserClient.getId(),playUserClient, userToken.getOrgi());
-        ResultData playerResultData = new ResultData( playUserClient!=null , playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS: MessageEnum.USER_REGISTER_FAILD_USERNAME ,playUserClient != null?"200":"201", playUserClient , userToken) ;
+        ResultData playerResultData=null;
+        PlayUser playUser=playUserESRes.findByUsername(username);
+        if (!playUser.getPassword().equals(password)){
+            playerResultData = new ResultData( false ,"201", "密码错误" , playUserClient) ;
+        }
+        else {
+            playerResultData = new ResultData(playUserClient != null, playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_NOT_EXIST, playUserClient != null ? "200" : "201", playUserClient, userToken);
+        }
         return new ResponseEntity<>(playerResultData, HttpStatus.OK);
     }
 }
