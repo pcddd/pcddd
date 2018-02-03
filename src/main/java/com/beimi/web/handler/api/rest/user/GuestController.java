@@ -39,24 +39,10 @@ public class GuestController {
     private TokenESRepository tokenESRes ;
 
     @RequestMapping
-    public ResponseEntity<ResultData> caiGuest(HttpServletRequest request , @Valid String token) {
+    public ResponseEntity<ResultData> caiGuest(HttpServletRequest request , @Valid String username) {
         PlayUserClient playUserClient = null ;
         Token userToken = null ;
-        if(!StringUtils.isBlank(token)){
-            userToken = tokenESRes.findById(token) ;
-            if(userToken != null && !StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
-                //返回token， 并返回游客数据给游客
-                playUserClient = playUserClientRes.findById(userToken.getUserid()) ;
-                if(playUserClient!=null){
-                    playUserClient.setToken(userToken.getId());
-                }
-            }else{
-                if(userToken!=null){
-                    tokenESRes.delete(userToken);
-                    userToken = null ;
-                }
-            }
-        }
+        playUserClient = playUserClientRes.findByUsername(username);
         String ip = UKTools.getIpAddr(request);
         IP ipdata = IPTools.getInstance().findGeography(ip);
         if(userToken == null){
@@ -81,7 +67,7 @@ public class GuestController {
         playUserClient.setToken(userToken.getId());
         CacheHelper.getApiUserCacheBean().put(userToken.getId(),userToken, userToken.getOrgi());
         CacheHelper.getApiUserCacheBean().put(playUserClient.getId(),playUserClient, userToken.getOrgi());
-        ResultData playerResultData = new ResultData( playUserClient!=null , playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS: MessageEnum.USER_REGISTER_FAILD_USERNAME , playUserClient , userToken) ;
+        ResultData playerResultData = new ResultData( playUserClient!=null , playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS: MessageEnum.USER_REGISTER_FAILD_USERNAME ,playUserClient != null?"200":"201", playUserClient , userToken) ;
         return new ResponseEntity<>(playerResultData, HttpStatus.OK);
     }
 }

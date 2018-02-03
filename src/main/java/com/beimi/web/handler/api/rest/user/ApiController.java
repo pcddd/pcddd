@@ -39,8 +39,7 @@ public class ApiController extends Handler{
 	    public ResponseEntity<ResultData> register(HttpServletRequest request , @Valid PlayUser player) {
 			String ip = UKTools.getIpAddr(request);
 	        player = register(player,ip) ;
-			int users = playUserESRes.countByUsername(player.getUsername()) ;
-			ResultData resu=new ResultData(player != null, users==0 ? "200":"201", users==0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, player);
+			ResultData resu=new ResultData(player != null, player!=null?"200":"201", player!=null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, player);
 			return new ResponseEntity<>(resu, HttpStatus.OK);
 	    }
 	    /**
@@ -81,13 +80,14 @@ public class ApiController extends Handler{
 
 					tokenESRes.save(userToken);
 				}
+				playUserESRes.delete("851b8761eff945fdbd808d31a7371257");
 				int users = playUserESRes.countByUsername(player.getUsername()) ;
 	            if(users == 0){
-					playUserRes.save(player);
+					playUserESRes.save(player);
 	            }else{
 	                player = null ;
 	            }
 	        }
-	        return null ;
+	        return player ;
 	    }
 }
