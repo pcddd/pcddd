@@ -41,6 +41,8 @@ public class GuestController {
     @RequestMapping
     public ResponseEntity<ResultData> caiGuest(HttpServletRequest request , @Valid String username ,@Valid String password) {
         PlayUserClient playUserClient = null ;
+        ResultData playerResultData=null;
+        PlayUser playUser=playUserESRes.findByUsername(username);
         Token userToken = null ;
         playUserClient = playUserClientRes.findByUsername(username);
         if (playUserClient!=null) {
@@ -68,14 +70,14 @@ public class GuestController {
             playUserClient.setToken(userToken.getId());
             CacheHelper.getApiUserCacheBean().put(userToken.getId(), userToken, userToken.getOrgi());
             CacheHelper.getApiUserCacheBean().put(playUserClient.getId(), playUserClient, userToken.getOrgi());
-        }
-        ResultData playerResultData=null;
-        PlayUser playUser=playUserESRes.findByUsername(username);
-        if (!playUser.getPassword().equals(password)){
-            playerResultData = new ResultData( false ,"201", "密码错误" , playUserClient) ;
-        }
-        else {
-            playerResultData = new ResultData(playUserClient != null, playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_NOT_EXIST, playUserClient != null ? "200" : "201", playUserClient, userToken);
+
+        if (!playUser.getPassword().equals(UKTools.md5(password))) {
+                playerResultData = new ResultData(false, "201", "密码错误", playUserClient);
+            } else {
+                playerResultData = new ResultData(playUserClient != null, playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, playUserClient != null ? "200" : "201", playUserClient, userToken);
+            }
+        }else {
+            playerResultData = new ResultData(false, "203", "用户未注册", playUserClient);
         }
         return new ResponseEntity<>(playerResultData, HttpStatus.OK);
     }
