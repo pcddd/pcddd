@@ -49,8 +49,6 @@ public class GameEventHandler
 		if(beiMiClient!=null && !StringUtils.isBlank(beiMiClient.getUserid())){
 			if(CacheHelper.getRoomMappingCacheBean().getCacheObject(beiMiClient.getUserid(), beiMiClient.getOrgi()) != null){
 				ActionTaskUtils.sendEvent("" , beiMiClient.getUserid(), null);
-
-				System.out.println("789");
 			}
 			
 		}

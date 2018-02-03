@@ -80,10 +80,9 @@ public class ApiController extends Handler{
 
 					tokenESRes.save(userToken);
 				}
-				playUserESRes.delete("851b8761eff945fdbd808d31a7371257");
 				int users = playUserESRes.countByUsername(player.getUsername()) ;
 	            if(users == 0){
-					playUserESRes.save(player);
+					UKTools.published(player , playUserESRes , playUserRes);
 	            }else{
 	                player = null ;
 	            }
