@@ -45,7 +45,7 @@ public class GuestController {
         PlayUser playUser=playUserESRes.findByUsername(username);
         Token userToken = null ;
         playUserClient = playUserClientRes.findByUsername(username);
-        if (playUserClient!=null) {
+        if (playUser!=null||playUserClient!=null) {
             String ip = UKTools.getIpAddr(request);
             IP ipdata = IPTools.getInstance().findGeography(ip);
             if (userToken == null) {
@@ -71,7 +71,7 @@ public class GuestController {
             CacheHelper.getApiUserCacheBean().put(userToken.getId(), userToken, userToken.getOrgi());
             CacheHelper.getApiUserCacheBean().put(playUserClient.getId(), playUserClient, userToken.getOrgi());
 
-        if (!playUser.getPassword().equals(UKTools.md5(password))) {
+            if (!playUser.getPassword().equals(UKTools.md5(password))) {
                 playerResultData = new ResultData(false, "201", "密码错误", playUserClient);
             } else {
                 playerResultData = new ResultData(playUserClient != null, playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, playUserClient != null ? "200" : "201", playUserClient, userToken);
