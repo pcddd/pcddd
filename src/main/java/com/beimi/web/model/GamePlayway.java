@@ -75,6 +75,8 @@ public class GamePlayway implements java.io.Serializable{
 
 	private String cardsrules ;	//定义允许的出牌规则
     private String mjwinrules ; //麻将允许的胡牌规则
+
+	private  String img;//背景图片
 	
 	@Id
 	@Column(length = 32)
@@ -182,6 +184,15 @@ public class GamePlayway implements java.io.Serializable{
 	public void setScore(int score) {
 		this.score = score;
 	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
 	public int getMincoins() {
 		return mincoins;
 	}
