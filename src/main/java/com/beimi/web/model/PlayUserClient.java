@@ -85,7 +85,12 @@ public class PlayUserClient implements UserEvent ,Message, java.io.Serializable 
 	private int cards;			//房卡数量
 	private int goldcoins;		//金币数量
 	private int diamonds ;		//钻石数量
-	
+
+	public String withdrawalsPassword;  //提现密码
+	public String realName;      //开户姓名
+	public String bankName;      //银行名称
+	public String bankNo;        //银行卡号
+	public String openCardAddress;  //开户地址
 	/**
 	 *对金币+房卡+id进行RSA签名 ， 任何对ID,cards ， goldcoins 进行修改之前，都需要做签名验证，
 	 *签名验证通过后才能进行修改，修改之后，重新签名 
@@ -134,6 +139,50 @@ public class PlayUserClient implements UserEvent ,Message, java.io.Serializable 
 		this.creater = creater;
 	}
 
+	@Column(name = "withdrawals_password")
+	public String getWithdrawalsPassword() {
+		return withdrawalsPassword;
+	}
+
+	public void setWithdrawalsPassword(String withdrawalsPassword) {
+		this.withdrawalsPassword = withdrawalsPassword;
+	}
+
+	@Column(name = "real_name")
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	@Column(name = "bank_name")
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	@Column(name = "bank_no")
+	public String getBankNo() {
+		return bankNo;
+	}
+
+	public void setBankNo(String bankNo) {
+		this.bankNo = bankNo;
+	}
+
+	@Column(name = "open_card_address")
+	public String getOpenCardAddress() {
+		return openCardAddress;
+	}
+
+	public void setOpenCardAddress(String openCardAddress) {
+		this.openCardAddress = openCardAddress;
+	}
 
 	public Date getCreatetime() {
 		return createtime;
