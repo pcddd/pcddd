@@ -33,12 +33,14 @@ public class LevelController {
     @RequestMapping
     public ResponseEntity<ResultData> level(@Valid String orgi,@Valid String token){
         Token userToken = null ;
+        ResultData resu=null;
         List<GamePlayway> roomLevelInfo=null;
         if(!StringUtils.isBlank(token)){
             userToken = tokenESRes.findById(token) ;
             if(userToken != null && !StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
                 //返回token， 并返回游客数据给游客
-                 roomLevelInfo = gamePlayRes.findByOrgi(orgi, new Sort(Sort.Direction.ASC, "sortindex"));
+                roomLevelInfo = gamePlayRes.findByOrgi(orgi, new Sort(Sort.Direction.ASC, "sortindex"));
+                resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_PLAYWAY, roomLevelInfo);
             }else{
                 if(userToken!=null){
                     tokenESRes.delete(userToken);
@@ -46,7 +48,7 @@ public class LevelController {
                 }
             }
         }
-        ResultData resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_PLAYWAY, roomLevelInfo);
+         resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_TOKEN, roomLevelInfo);
 
         return new ResponseEntity<>(resu, HttpStatus.OK);
     };

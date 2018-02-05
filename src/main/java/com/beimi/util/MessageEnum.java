@@ -6,6 +6,8 @@ public class MessageEnum {
 
 	public static final String USER_FAILD_PLAYWAY = "没有此游戏";
 
+	public static final String USER_TOKEN="token失效";
+
     public static final String USER_FAILD_GAMEROOM = "没有此房间";
 	
 	public static final String USER_NOT_EXIST = "用户不存在";
