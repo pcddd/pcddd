@@ -35,6 +35,8 @@ public class GamePlayway implements java.io.Serializable{
 	private String typecolor ;	//玩法图标颜色
 	
 	private String status ;	//当前状态
+
+    private  String detail;//详情
 	
 	private int score;		//底分
 	private int mincoins ;	//最小金币数量
@@ -160,7 +162,16 @@ public class GamePlayway implements java.io.Serializable{
 	public void setPlayers(int players) {
 		this.players = players;
 	}
-	public String getRoomtype() {
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public String getRoomtype() {
 		return roomtype;
 	}
 	public void setRoomtype(String roomtype) {
