@@ -46,9 +46,9 @@ public class LevelController {
                     tokenESRes.delete(userToken);
                     userToken = null ;
                 }
+                resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_TOKEN, roomLevelInfo);
             }
         }
-         resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_TOKEN, roomLevelInfo);
 
         return new ResponseEntity<>(resu, HttpStatus.OK);
     };
