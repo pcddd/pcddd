@@ -62,6 +62,8 @@ public class GameRoom implements UserEvent, java.io.Serializable, Comparable<Gam
 	private String roomtype ;	//房间类型， 房卡：大厅
 	
 	private String playway ;	//玩法
+
+	private  String img;//背景图片
 	
 	private int numofgames ;	//局数
 	private int currentnum ;	//已完局数
@@ -171,6 +173,15 @@ public class GameRoom implements UserEvent, java.io.Serializable, Comparable<Gam
 	public void setPlayway(String playway) {
 		this.playway = playway;
 	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
 	public int getNumofgames() {
 		return numofgames;
 	}

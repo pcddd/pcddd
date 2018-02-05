@@ -25,8 +25,8 @@ public class LevelController {
 
     @RequestMapping
     public ResponseEntity<ResultData> level(@Valid String orgi){
-        List<GamePlayway> list = gamePlayRes.findByOrgi(orgi, new Sort(Sort.Direction.ASC, "sortindex"));
-        ResultData resu=new ResultData(list.size() != 0, list.size() != 0?"200":"201", list.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_PLAYWAY, list);
+        List<GamePlayway> roomLevelInfo = gamePlayRes.findByOrgi(orgi, new Sort(Sort.Direction.ASC, "sortindex"));
+        ResultData resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_PLAYWAY, roomLevelInfo);
 
         return new ResponseEntity<>(resu, HttpStatus.OK);
     };

@@ -27,9 +27,8 @@ public class ApiRoomController {
 
     @RequestMapping
     public ResponseEntity<ResultData> register(@Valid String code) {
-        List<GameRoom> list=playRoomRes.findByCode(code);
-        System.out.println(list.size());
-        ResultData resu=new ResultData(list.size() != 0, list.size() != 0?"200":"201", list.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_GAMEROOM, list);
+        List<GameRoom> roominfo=playRoomRes.findByCode(code);
+        ResultData resu=new ResultData(roominfo.size() != 0, roominfo.size() != 0?"200":"201", roominfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_GAMEROOM, roominfo);
         return new ResponseEntity<>(resu, HttpStatus.OK);
     }
 }
