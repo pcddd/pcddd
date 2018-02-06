@@ -28,7 +28,7 @@ public class ApiRoomController {
     private TokenESRepository tokenESRes ;
 
     @RequestMapping
-    public ResponseEntity<ResultData> register(@Valid String code,@Valid String token) {
+    public ResponseEntity<ResultData> register(@Valid String code,@Valid String token,@Valid String orgi) {
         Token userToken = null ;
         ResultData resu=null;
         List<GameRoom> roominfo=null;
@@ -36,7 +36,7 @@ public class ApiRoomController {
             userToken = tokenESRes.findById(token) ;
             if(userToken != null && !StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
                 //返回token， 并返回游客数据给游客
-                roominfo=playRoomRes.findByCode(code);
+                roominfo=playRoomRes.findByCodeAndOrgi(code,orgi);
                 resu=new ResultData(roominfo.size() != 0, roominfo.size() != 0?"200":"201", roominfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_GAMEROOM, roominfo);
             }else{
                 if(userToken!=null){
