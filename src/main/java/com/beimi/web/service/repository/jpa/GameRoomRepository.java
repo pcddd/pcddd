@@ -16,5 +16,5 @@ public abstract interface GameRoomRepository  extends JpaRepository<GameRoom, St
   
   public abstract List<GameRoom> findByRoomidAndOrgi(String roomid, String orgi);
 
-  public abstract List<GameRoom> findByCodeAndOrgi(String code,String orgi);
+  public abstract List<GameRoom> findByRoomtypeAndOrgi(String roomtype,String orgi);
 }
