@@ -20,7 +20,7 @@ import java.net.URLConnection;
 @RequestMapping("/api/lottery")
 public class LotteryController {
     @RequestMapping
-    public ResponseEntity<ResultData> joinAndLeaveRoom(@Valid String roomid, @Valid String token){
+    public ResponseEntity<ResultData> joinAndLeaveRoom(){
         String url = "http://pckai.cc/api/latest?lotteryId=3&code=bjkl8";
         ResultData resu=null;
         String json=SendGet(url);
