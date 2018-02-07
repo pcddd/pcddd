@@ -1,7 +1,13 @@
 package com.beimi.web.handler.api.rest.user;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.beimi.web.model.Lottery;
+import com.beimi.web.model.PcData;
 import com.beimi.web.model.ResultData;
+import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +18,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by fanling on 2018/2/7.
@@ -20,12 +28,42 @@ import java.net.URLConnection;
 @RequestMapping("/api/lottery")
 public class LotteryController {
     @RequestMapping
-    public ResponseEntity<ResultData> Lottery(){
+    public ResponseEntity<PcData> Lottery(){
         String url = "http://pckai.cc/api/latest?lotteryId=3&code=bjkl8";
-        ResultData resu=null;
-        String json=SendGet(url);
-        resu=new ResultData(StringUtils.isNotEmpty(json),StringUtils.isNotEmpty(json)?"成功":"无法请求到数据",StringUtils.isNotEmpty(json)?"200":"201",json );
+        PcData resu=null;
+
+        Lottery lottery =  parseLotteryJson(SendGet(url));
+        if (lottery == null)
+            resu=new PcData("请求失败","201");
+        else
+            resu=new PcData(true,"200","请求成功",lottery);
         return new ResponseEntity<>(resu, HttpStatus.OK);
+    }
+
+    public Lottery parseLotteryJson(String lotteryJson){
+        try{
+            JSONObject jsonObject = JSON.parseObject(lotteryJson);
+            return new Lottery(jsonObject.getString("no"),jsonObject.getString("preno"),
+                    jsonObject.getString("prenum"),getPatternStr(jsonObject.getString("endtime")),
+                    jsonObject.getString("endtimeString"),
+                    getPatternStr(jsonObject.getString("now")));
+
+
+        }catch (Exception e){
+            System.out.println("（解析 http://pckai.cc/api/latest?lotteryId=3&code=bjkl8 异常 ）" + e);
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private String getPatternStr(String str){
+        Pattern p = Pattern.compile("(?<=\\()(.+?)(?=\\))");
+        Matcher m = p.matcher(str);
+        while(m.find()) {
+            return m.group();
+        }
+        return null;
     }
 
     /**
@@ -33,7 +71,7 @@ public class LotteryController {
      * @param url 链接
      * @return
      */
-    public static String SendGet(String url){
+    public String SendGet(String url){
         // 定义一个字符串用来存储网页内容
         String result = "";
         // 定义一个缓冲字符输入流
@@ -57,7 +95,7 @@ public class LotteryController {
             }
         } catch (Exception e)
         {
-            System.out.println("发送GET请求出现异常！" + e);
+            System.out.println("（http://pckai.cc/api/latest?lotteryId=3&code=bjkl8 请求异常）" + e);
             e.printStackTrace();
         }
         // 使用finally来关闭输入流

@@ -70,7 +70,7 @@ public class ResultData implements java.io.Serializable{
 		this.token = token ;
 		this.games = games ;
 	}
-	
+
 	public boolean isStatus() {
 		return status;
 	}

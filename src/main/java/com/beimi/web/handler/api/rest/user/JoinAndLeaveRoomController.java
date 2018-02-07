@@ -40,8 +40,7 @@ public class JoinAndLeaveRoomController {
                     message="玩家已加入房间";
                 }
                     resu=new ResultData(message,"200" );
-            }
-            else {
+            } else {
                 resu = new ResultData(MessageEnum.USER_TOKEN, "201");
             }
         }else{

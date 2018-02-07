@@ -2,6 +2,7 @@ package com.beimi.web.handler.api.rest.user;
 
 import com.beimi.util.MessageEnum;
 import com.beimi.web.model.GamePlayway;
+import com.beimi.web.model.ListContainer;
 import com.beimi.web.model.ResultData;
 import com.beimi.web.model.Token;
 import com.beimi.web.service.repository.es.TokenESRepository;
@@ -40,13 +41,15 @@ public class LevelController {
             if(userToken != null && !StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
                 //返回token， 并返回游客数据给游客
                 roomLevelInfo = gamePlayRes.findByOrgi(orgi, new Sort(Sort.Direction.ASC, "sortindex"));
-                resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_PLAYWAY, roomLevelInfo);
+                resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_PLAYWAY,
+                        new ListContainer<>(roomLevelInfo));
             }else{
                 if(userToken!=null){
                     tokenESRes.delete(userToken);
                     userToken = null ;
                 }
-                resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_TOKEN, roomLevelInfo);
+                resu=new ResultData(roomLevelInfo.size() != 0, roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_TOKEN,
+                        new ListContainer<>(roomLevelInfo));
             }
         }
 

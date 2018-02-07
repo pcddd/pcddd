@@ -65,7 +65,7 @@ public class GuestPlayerController extends Handler{
 			}else{
 				if(userToken!=null){
 					tokenESRes.delete(userToken);
-					userToken = null ;
+					userToken = null;
 				}
 			}
 		}

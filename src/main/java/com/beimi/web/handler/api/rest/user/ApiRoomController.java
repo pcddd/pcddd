@@ -37,13 +37,15 @@ public class ApiRoomController {
             if(userToken != null && !StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
                 //返回token， 并返回游客数据给游客
                 roominfo=playRoomRes.findByRoomtypeAndOrgi(roomtype,orgi);
-                resu=new ResultData(roominfo.size() != 0, roominfo.size() != 0?"200":"201", roominfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_GAMEROOM, roominfo);
+                resu=new ResultData(roominfo.size() != 0, roominfo.size() != 0?"200":"201", roominfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_GAMEROOM,
+                        new ListContainer(roominfo));
             }else{
                 if(userToken!=null){
                     tokenESRes.delete(userToken);
                     userToken = null ;
                 }
-                resu=new ResultData(roominfo.size() != 0, roominfo.size() != 0?"200":"201", roominfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_TOKEN, roominfo);
+                resu=new ResultData(roominfo.size() != 0, roominfo.size() != 0?"200":"201", roominfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_TOKEN,
+                        new ListContainer(roominfo));
             }
         }
         return new ResponseEntity<>(resu, HttpStatus.OK);
