@@ -24,7 +24,7 @@ public class LotteryController {
         String url = "http://pckai.cc/api/latest?lotteryId=3&code=bjkl8";
         ResultData resu=null;
         String json=SendGet(url);
-        resu=new ResultData(StringUtils.isNotEmpty(json)?"成功":"无法请求到数据",StringUtils.isNotEmpty(json)?"200":"201" );
+        resu=new ResultData(StringUtils.isNotEmpty(json),StringUtils.isNotEmpty(json)?"成功":"无法请求到数据",StringUtils.isNotEmpty(json)?"200":"201",json );
         return new ResponseEntity<>(resu, HttpStatus.OK);
     }
 
