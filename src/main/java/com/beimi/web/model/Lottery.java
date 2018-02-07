@@ -1,12 +1,12 @@
 package com.beimi.web.model;
 
 public class Lottery {
-    private String no;
-    private String preno;
-    private String prenum;
-    private String nexttime;
-    private String nexttimestr;
-    private String nowtime;
+    private String no;//期数
+    private String preno;//上一期数
+    private String prenum;//开奖数字
+    private String nexttime;//开奖时间
+    private String nexttimestr;//
+    private String nowtime;//系统当前时间
 
     public Lottery(String no,String preno,String prenum,String nexttime,String nexttimestr,String nowtime){
         this.no = no;
