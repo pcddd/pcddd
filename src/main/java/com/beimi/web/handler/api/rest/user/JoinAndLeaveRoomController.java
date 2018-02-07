@@ -41,7 +41,9 @@ public class JoinAndLeaveRoomController {
                 }
                     resu=new ResultData(message,"200" );
             }
-            resu=new ResultData(MessageEnum.USER_TOKEN,"201");
+            else {
+                resu = new ResultData(MessageEnum.USER_TOKEN, "201");
+            }
         }else{
             resu=new ResultData("参数为空","203" );
         }
