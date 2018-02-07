@@ -57,6 +57,11 @@ public class ResultData implements java.io.Serializable{
 		this.token = token ;
 	}
 
+	public ResultData(String msg , String code ){
+		this.msg = msg ;
+		this.code = code ;
+	}
+
 	
 	public ResultData(boolean status , String msg , Object data , Token token ,List<BeiMiGame> games){
 		this.status = status ;
