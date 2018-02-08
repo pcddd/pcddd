@@ -728,7 +728,7 @@ public class UKTools {
 	/** 
      * 16进制字符串转换为字符串 
      *  
-     * @param s 
+     * @param
      * @return 
      */  
 	public static String string2HexString(String strPart) {  

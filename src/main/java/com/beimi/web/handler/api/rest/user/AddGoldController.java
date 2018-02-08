@@ -35,10 +35,6 @@ public class AddGoldController {
 
     @RequestMapping
     public ResponseEntity<ResultData> addGold(@Valid PlayUserClient playUserClient) {
-        Lottery lottery=new Lottery();
-        lottery.setNexttime("22222");
-        lottery.setNo("2222");
-        gameESRepository.save(lottery);
         PlayUser playUser = playUserRes.findByUsername("111");
         if (playUserClient!=null){
             playUserClient.setGoldcoins(13);

@@ -18,7 +18,7 @@ public class Tools {
     public static Lottery parseLotteryJson(String lotteryJson){
         try{
             JSONObject jsonObject = JSON.parseObject(lotteryJson);
-            return new Lottery(jsonObject.getString("no"),jsonObject.getString("preno"),
+            return new Lottery(jsonObject.getInteger("no"),jsonObject.getInteger("preno"),
                     jsonObject.getString("prenum"),getPatternStr(jsonObject.getString("endtime")),
                     jsonObject.getString("endtimeString"),
                     getPatternStr(jsonObject.getString("now")));

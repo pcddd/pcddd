@@ -18,20 +18,21 @@ public class Lottery {
      */
     @Id
     private String id = UKTools.getUUID().toLowerCase();
-    private String no;//期数
-    private String preno;//上一期数
+    private int no;//期数
+    private int preno;//上一期数
     private String prenum;//开奖数字
-    private String nexttime;//开奖时间
-    private String nexttimestr;//
-    private String nowtime;//系统当前时间
+    private String nexTime;//开奖时间
+    private String preStartTime;//
+    private String preEndTime;//
+//    private String nowtime;//系统当前时间
 
-    public Lottery(String no,String preno,String prenum,String nexttime,String nexttimestr,String nowtime){
+    public Lottery(int no,int preno,String prenum,String nexttime,String preStartTime,String preEndTime){
         this.no = no;
         this.preno = preno;
         this.prenum = prenum;
-        this.nexttime = nexttime;
-        this.nexttimestr = nexttimestr;
-        this.nowtime = nowtime;
+        this.nexTime = nexttime;
+        this.preStartTime = preStartTime;
+        this.preEndTime = preEndTime;
     }
     public Lottery(){}
     /**
@@ -49,23 +50,27 @@ public class Lottery {
         this.id = id;
     }
 
-    public String getNexttime() {
-        return nexttime;
+    public String getNexTime() {
+        return nexTime;
     }
 
-    public String getNexttimestr() {
-        return nexttimestr;
+    public String getPreEndTime() {
+        return preEndTime;
     }
 
-    public String getNo() {
+    public String getPreStartTime() {
+        return preStartTime;
+    }
+
+    public int getNo() {
         return no;
     }
 
-    public String getNowtime() {
-        return nowtime;
-    }
+//    public String getNowtime() {
+//        return nowtime;
+//    }
 
-    public String getPreno() {
+    public int getPreno() {
         return preno;
     }
 
@@ -73,27 +78,41 @@ public class Lottery {
         return prenum;
     }
 
-    public void setNexttime(String nexttime) {
-        this.nexttime = nexttime;
+    public void setNexTime(String nexTime) {
+        this.nexTime = nexTime;
     }
 
-    public void setNexttimestr(String nexttimestr) {
-        this.nexttimestr = nexttimestr;
+    public void setPreEndTime(String preEndTime) {
+        this.preEndTime = preEndTime;
     }
 
-    public void setNo(String no) {
+    public void setPreStartTime(String preStartTime) {
+        this.preStartTime = preStartTime;
+    }
+
+    public void setNo(int no) {
         this.no = no;
     }
 
-    public void setNowtime(String nowtime) {
-        this.nowtime = nowtime;
-    }
+//    public void setNowtime(String nowtime) {
+//        this.nowtime = nowtime;
+//    }
 
-    public void setPreno(String preno) {
+    public void setPreno(int preno) {
         this.preno = preno;
     }
 
     public void setPrenum(String prenum) {
         this.prenum = prenum;
+    }
+
+    @Override
+    public String toString() {
+        return "no=" + no + "|" +
+                "preno=" + preno + "|" +
+                "prenum=" + prenum + "|" +
+                "nextTime=" + nexTime + "|" +
+                "preStartTime=" + preStartTime + "|" +
+                "preEndTime=" + preEndTime;
     }
 }
