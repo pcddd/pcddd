@@ -6,6 +6,7 @@ import com.beimi.util.Tools;
 import com.beimi.web.model.Lottery;
 import com.beimi.web.model.PcData;
 import com.beimi.web.model.ResultData;
+import com.beimi.web.service.repository.es.LotteryResESRepository;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,16 +31,19 @@ import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/api/lottery")
 public class LotteryController {
+
+    @Autowired
+    private LotteryResESRepository lotteryResESRepository;
+
     @RequestMapping
     public ResponseEntity<PcData> Lottery(){
-        String url = "http://pckai.cc/api/latest?lotteryId=3&code=bjkl8";
         PcData resu=null;
-
-        Lottery lottery =  Tools.parseLotteryJson(Tools.SendGet(url));
-        if (lottery == null)
-            resu=new PcData("请求失败","201");
-        else
-            resu=new PcData(true,"200","请求成功",lottery);
+        Iterator<Lottery> iterator = lotteryResESRepository.findAll().iterator();
+        if (iterator.hasNext()){
+            resu=new PcData(true,"200","请求成功",iterator.next());
+        }else{
+            resu=new PcData("暂无信息","201");
+        }
         return new ResponseEntity<>(resu, HttpStatus.OK);
     }
 
