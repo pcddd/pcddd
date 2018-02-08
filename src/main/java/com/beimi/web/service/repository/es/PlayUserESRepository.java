@@ -12,6 +12,8 @@ public abstract interface PlayUserESRepository
   public abstract PlayUser findById(String paramString);
   
   public abstract PlayUser findByUsername(String username);
+
+  public abstract PlayUser findByPeriods(String periods);
   
   public abstract int countByUsername(String username);
   
