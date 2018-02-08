@@ -89,7 +89,12 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	private int cards;			//房卡数量
 	private int goldcoins;		//金币数量
 	private int diamonds;		//钻石数量
-	
+
+	public String lotterType;//投注类型
+
+	public String periods;//期数
+
+
 	/**
 	 *对金币+房卡+id进行RSA签名 ， 任何对ID,cards ， goldcoins 进行修改之前，都需要做签名验证，
 	 *签名验证通过后才能进行修改，修改之后，重新签名 
@@ -138,6 +143,22 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 		this.email = email;
 	}
 
+	@Column(name = "lotter_type")
+	public String getLotterType() {
+		return lotterType;
+	}
+
+	public void setLotterType(String lotterType) {
+		this.lotterType = lotterType;
+	}
+
+	public String getPeriods() {
+		return periods;
+	}
+
+	public void setPeriods(String periods) {
+		this.periods = periods;
+	}
 
 	public String getUname() {
 		return uname;
