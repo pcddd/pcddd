@@ -21,6 +21,14 @@ public class PcData implements java.io.Serializable{
         this.data = data ;
     }
 
+    public PcData(String code, String msg , Object data){
+        this.code=code;
+        this.msg = msg ;
+        this.data = data ;
+    }
+
+
+
 
     public PcData(String msg , String code ){
         this.msg = msg ;

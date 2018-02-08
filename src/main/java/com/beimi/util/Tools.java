@@ -19,6 +19,8 @@ public class Tools {
         try{
             JSONObject jsonObject = JSON.parseObject(lotteryJson);
             return new Lottery(jsonObject.getInteger("no"),jsonObject.getInteger("preno"),
+                    jsonObject.getInteger("status"),
+                    jsonObject.getInteger("status"),
                     jsonObject.getString("prenum"),getPatternStr(jsonObject.getString("endtime")),
                     jsonObject.getString("endtimeString"),
                     getPatternStr(jsonObject.getString("now")));

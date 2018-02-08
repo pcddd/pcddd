@@ -4,6 +4,8 @@ package com.beimi.web.handler.api.rest.user;
 import com.beimi.web.model.Lottery;
 import com.beimi.web.model.PcData;
 import com.beimi.web.service.repository.es.LotteryResESRepository;
+import com.ctc.wstx.util.StringUtil;
+import org.mvel2.sh.text.TextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +33,16 @@ public class updateLotteryController {
             Lottery lottery = lotteryResESRepository.findAll().iterator().next();
             int no = lottery.getNo();
             if (curNo > no){
-                newLottery = new Lottery(curNo,preNo,preRes,nextTime,preStartTime,preEndTime);
+
+                //1正常 2封盘 3停售
+                int status = preRes == null || preRes.equals("2") ? 2 : 1;
+                newLottery = new Lottery(curNo,preNo,status,0,preRes,nextTime,preStartTime,preEndTime);
                 System.out.println(newLottery.toString());
                 lotteryResESRepository.deleteAll();
                 lotteryResESRepository.save(newLottery);
                 return new ResponseEntity<>(new PcData("更新成功","200"), HttpStatus.OK);
             }else if(curNo == no && !preRes.equals(lottery.getPrenum())){
-                newLottery = new Lottery(curNo,preNo,preRes,nextTime,preStartTime,preEndTime);
+                newLottery = new Lottery(curNo,preNo,1,0,preRes,nextTime,preStartTime,preEndTime);
                 lotteryResESRepository.deleteAll();
                 lotteryResESRepository.save(newLottery);
                 System.out.println(newLottery.toString());
@@ -45,7 +50,9 @@ public class updateLotteryController {
             }
 
         }else{
-            newLottery = new Lottery(curNo,preNo,preRes,nextTime,preStartTime,preEndTime);
+            //1正常 2封盘 3停售
+            int status = preRes == null || preRes.equals("2") ? 2 : 1;
+            newLottery = new Lottery(curNo,preNo,status,0,preRes,nextTime,preStartTime,preEndTime);
             lotteryResESRepository.save(newLottery);
             System.out.println(newLottery.toString());
             return new ResponseEntity<>(new PcData("更新成功","200"), HttpStatus.OK);

@@ -20,15 +20,22 @@ public class Lottery {
     private String id = UKTools.getUUID().toLowerCase();
     private int no;//期数
     private int preno;//上一期数
+
+    private long nextOpenSec;//距离下一次开奖倒计时
+
+
     private String prenum;//开奖数字
     private String nexTime;//开奖时间
     private String preStartTime;//
     private String preEndTime;//
 //    private String nowtime;//系统当前时间
+    private int stauts; //1正常 2封盘 3停售
 
-    public Lottery(int no,int preno,String prenum,String nexttime,String preStartTime,String preEndTime){
+    public Lottery(int no,int preno,int stauts,int sec,String prenum,String nexttime,String preStartTime,String preEndTime){
         this.no = no;
         this.preno = preno;
+        this.nextOpenSec = sec;
+        this.stauts = stauts;
         this.prenum = prenum;
         this.nexTime = nexttime;
         this.preStartTime = preStartTime;
@@ -46,8 +53,29 @@ public class Lottery {
         return id;
     }
 
+    public void setNextOpenSec(long nextOpenSec) {
+        this.nextOpenSec = nextOpenSec;
+    }
+
+    public long getNextOpenSec() {
+        return nextOpenSec;
+    }
+
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setStauts(int stauts) {
+        this.stauts = stauts;
+    }
+
+    public int getStauts() {
+        return stauts;
+    }
+
+    public Lottery addNextSec(long sec){
+        this.nextOpenSec = sec;
+        return this;
     }
 
     public String getNexTime() {
@@ -108,7 +136,8 @@ public class Lottery {
 
     @Override
     public String toString() {
-        return "no=" + no + "|" +
+        return "status=" + stauts + "|" +
+                "no=" + no + "|" +
                 "preno=" + preno + "|" +
                 "prenum=" + prenum + "|" +
                 "nextTime=" + nexTime + "|" +
