@@ -78,9 +78,7 @@ public class PlayUserClient implements UserEvent ,Message, java.io.Serializable 
 	
 	private Date lastlogintime = new Date();	//最后登录时间
 	
-	private int fans ;			//粉丝
-	private int follows ;		//关注
-	private int integral ;		//积分
+
 	
 	private int cards;			//房卡数量
 	private int goldcoins;		//金币数量
@@ -91,6 +89,12 @@ public class PlayUserClient implements UserEvent ,Message, java.io.Serializable 
 	public String bankName;      //银行名称
 	public String bankNo;        //银行卡号
 	public String openCardAddress;  //开户地址
+
+	public String lotterType;//投注类型
+
+	public String periods;//期数
+
+	public int rate;//倍率
 	/**
 	 *对金币+房卡+id进行RSA签名 ， 任何对ID,cards ， goldcoins 进行修改之前，都需要做签名验证，
 	 *签名验证通过后才能进行修改，修改之后，重新签名 
@@ -178,6 +182,31 @@ public class PlayUserClient implements UserEvent ,Message, java.io.Serializable 
 	@Column(name = "open_card_address")
 	public String getOpenCardAddress() {
 		return openCardAddress;
+	}
+
+	@Column(name = "lotter_type")
+	public String getLotterType() {
+		return lotterType;
+	}
+
+	public void setLotterType(String lotterType) {
+		this.lotterType = lotterType;
+	}
+
+	public String getPeriods() {
+		return periods;
+	}
+
+	public void setPeriods(String periods) {
+		this.periods = periods;
+	}
+
+	public int getRate() {
+		return rate;
+	}
+
+	public void setRate(int rate) {
+		this.rate = rate;
 	}
 
 	public void setOpenCardAddress(String openCardAddress) {
@@ -321,36 +350,6 @@ public class PlayUserClient implements UserEvent ,Message, java.io.Serializable 
 
 	public void setLastlogintime(Date lastlogintime) {
 		this.lastlogintime = lastlogintime;
-	}
-
-
-	public int getFans() {
-		return fans;
-	}
-
-
-	public void setFans(int fans) {
-		this.fans = fans;
-	}
-
-
-	public int getFollows() {
-		return follows;
-	}
-
-
-	public void setFollows(int follows) {
-		this.follows = follows;
-	}
-
-
-	public int getIntegral() {
-		return integral;
-	}
-
-
-	public void setIntegral(int integral) {
-		this.integral = integral;
 	}
 
 

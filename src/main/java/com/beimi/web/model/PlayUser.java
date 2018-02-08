@@ -39,14 +39,9 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	private String password ;
 	private String email ;
 	private String uname ;
-	private String firstname ;
-	private String midname ;
-	private String lastname ;
-	private String language ;
-	private String jobtitle ;
+
 	private String gender;
 	private String mobile ;
-	private String birthday ;
 	private String nickname ;
 	private String secureconf = "5";
 	private String usertype ; //
@@ -90,10 +85,7 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	
 	private Date lastlogintime = new Date();	//最后登录时间
 	
-	private int fans ;			//粉丝
-	private int follows ;		//关注
-	private int integral ;		//积分
-	
+
 	private int cards;			//房卡数量
 	private int goldcoins;		//金币数量
 	private int diamonds;		//钻石数量
@@ -157,55 +149,6 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	}
 
 
-	public String getFirstname() {
-		return firstname;
-	}
-
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-
-	public String getMidname() {
-		return midname;
-	}
-
-
-	public void setMidname(String midname) {
-		this.midname = midname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
-
-	public String getLanguage() {
-		return language;
-	}
-
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-
-	public String getJobtitle() {
-		return jobtitle;
-	}
-
-
-	public void setJobtitle(String jobtitle) {
-		this.jobtitle = jobtitle;
-	}
-
-
 	public String getGender() {
 		return gender;
 	}
@@ -224,15 +167,6 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 		this.mobile = mobile;
 	}
 
-
-	public String getBirthday() {
-		return birthday;
-	}
-
-
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
-	}
 
 
 	public String getNickname() {
@@ -432,36 +366,6 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 
 	public void setLastlogintime(Date lastlogintime) {
 		this.lastlogintime = lastlogintime;
-	}
-
-
-	public int getFans() {
-		return fans;
-	}
-
-
-	public void setFans(int fans) {
-		this.fans = fans;
-	}
-
-
-	public int getFollows() {
-		return follows;
-	}
-
-
-	public void setFollows(int follows) {
-		this.follows = follows;
-	}
-
-
-	public int getIntegral() {
-		return integral;
-	}
-
-
-	public void setIntegral(int integral) {
-		this.integral = integral;
 	}
 
 
