@@ -2,6 +2,7 @@ package com.beimi.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.beimi.web.handler.api.rest.user.ApiResultController;
 import com.beimi.web.model.Lottery;
 
 import java.io.BufferedReader;

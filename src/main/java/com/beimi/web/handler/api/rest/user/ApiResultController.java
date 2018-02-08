@@ -26,17 +26,14 @@ import java.util.List;
 /**
  * Created by fanling on 2018/2/7.
  */
+@RestController
+@RequestMapping("/api/result")
 public  class ApiResultController {
-
-    @Autowired
-    private LotteryResESRepository lotteryResESRepository;
-
     @Autowired
     private PlayUserESRepository playUserESRes;
 
     @Autowired
     private TypeGroupRepository typeGroupRes;
-
     /**
      *
      * @param prenum  中奖号码
@@ -44,7 +41,7 @@ public  class ApiResultController {
      * @return
      */
     @RequestMapping
-    public  List<String> result(@Valid String prenum,@Valid String periods) {
+    public List<String> result(@Valid String prenum,@Valid String periods) {
             String green = "1,4,7,10,16,19,22,25";
             String blue = "2,5,8,11,17,20,23,26";
             List<String> list = new ArrayList<String>();
@@ -77,16 +74,23 @@ public  class ApiResultController {
                 list.add("豹子");
             }
             list.add(sum.toString());
-            PlayUser playUser=playUserESRes.findByPeriods(periods);
-            if (playUser!=null){
-                if (list.contains(playUser.getLotterType())){
-                    TypeGroup typeGroup=typeGroupRes.findByName(playUser.getLotterType());
-                    playUser.setGoldcoins(playUser.getDiamonds()*Integer.parseInt(typeGroup.getValue())+playUser.getGoldcoins());
-                }else {
-                    playUser.setGoldcoins(playUser.getGoldcoins()-playUser.getDiamonds());
+            List<PlayUser> list1=playUserESRes.findByPeriods(periods);
+            if (list1.size()!=0){
+                for (PlayUser playUser :list1) {
+                    if (list.contains(playUser.getLotterType())){
+                        TypeGroup typeGroup=typeGroupRes.findByName(playUser.getLotterType());
+                        playUser.setGoldcoins(playUser.getDiamonds()*Integer.parseInt(typeGroup.getValue())+playUser.getGoldcoins());
+                    }else {
+                        playUser.setGoldcoins(playUser.getGoldcoins()-playUser.getDiamonds());
+                    }
+                    playUser.setDiamonds(0);
+                    playUser.setPeriods("");
+                    playUser.setLotterType("");
+                    playUserESRes.save(playUser);
                 }
+
             }
-            playUserESRes.save(playUser);
+
         }
         return list;
     }

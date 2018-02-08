@@ -6,6 +6,8 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchCrudReposi
 
 import com.beimi.web.model.PlayUser;
 
+import java.util.List;
+
 public abstract interface PlayUserESRepository
   extends ElasticsearchCrudRepository<PlayUser, String>
 {
@@ -13,7 +15,7 @@ public abstract interface PlayUserESRepository
   
   public abstract PlayUser findByUsername(String username);
 
-  public abstract PlayUser findByPeriods(String periods);
+  public abstract List<PlayUser> findByPeriods(String periods);
   
   public abstract int countByUsername(String username);
   
