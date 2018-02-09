@@ -1,6 +1,7 @@
 package com.beimi.web.handler.api.rest.user;
 
 import com.beimi.web.model.*;
+import com.beimi.web.service.repository.es.GameDetailESRepository;
 import com.beimi.web.service.repository.es.PlayUserESRepository;
 import com.beimi.web.service.repository.es.TokenESRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
@@ -27,6 +28,9 @@ public class AddGoldController {
     private PlayUserESRepository playUserESRes;
 
     @Autowired
+    private GameDetailESRepository gameDetailESRes;
+
+    @Autowired
     private TokenESRepository tokenESRes;
 
     @RequestMapping
@@ -38,24 +42,26 @@ public class AddGoldController {
             if (userToken != null && !StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime() != null && userToken.getExptime().after(new Date())) {
                 PlayUser  playUser = playUserESRes.findById(userToken.getUserid());
                 if (playUser != null) {
-                    playUser.setDiamonds(playUser.getDiamonds()+diamonds);//下注金额
-                    playUser.setPeriods(periods);//期数
-                    playUser.setLotterType(lotterType);//投注类型
-                    if (playUser.getGoldcoins()>playUser.getDiamonds()) {
-                        playUserESRes.save(playUser);
-                        pcData = new PcData(true, "200", "保存成功");
+                    GameDetail gameDetail=new GameDetail();
+                    gameDetail.setUserId(userToken.getUserid());//玩家id
+                    gameDetail.setDiamonds(diamonds);//下注金额
+                    gameDetail.setPeriods(periods);//期数
+                    gameDetail.setLotterType(lotterType);//投注类型
+                    if (playUser.getGoldcoins()>gameDetail.getDiamonds()) {
+                        gameDetailESRes.save(gameDetail);
+                        pcData = new PcData("保存成功","200");
                     }else {
-                        pcData=new PcData(false,"204","余额不足");
+                        pcData=new PcData("余额不足","204");
                     }
                 } else {
-                    pcData = new PcData(true, "201", "没有找到此用户");
+                    pcData = new PcData("没有找到此用户", "201");
                 }
             }else {
-                pcData = new PcData(true, "202", "token失效");
+                pcData = new PcData("token失效", "202" );
             }
         }
         else {
-            pcData = new PcData(true, "203", "token为空");
+            pcData = new PcData("token为空", "203" );
         }
         return new ResponseEntity<>(pcData, HttpStatus.OK);
     }

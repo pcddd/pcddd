@@ -1,10 +1,8 @@
 package com.beimi.web.handler.api.rest.user;
 
 import com.beimi.util.Tools;
-import com.beimi.web.model.Lottery;
-import com.beimi.web.model.PlayUser;
-import com.beimi.web.model.ResultData;
-import com.beimi.web.model.TypeGroup;
+import com.beimi.web.model.*;
+import com.beimi.web.service.repository.es.GameDetailESRepository;
 import com.beimi.web.service.repository.es.LotteryResESRepository;
 import com.beimi.web.service.repository.es.PlayUserESRepository;
 import com.beimi.web.service.repository.jpa.GamePlaywayRepository;
@@ -34,6 +32,9 @@ public  class ApiResultController {
 
     @Autowired
     private TypeGroupRepository typeGroupRes;
+
+    @Autowired
+    private GameDetailESRepository gameDetailESRes;
     /**
      *
      * @param prenum  中奖号码
@@ -74,21 +75,24 @@ public  class ApiResultController {
                 list.add("豹子");
             }
             list.add(sum.toString());
-            List<PlayUser> list1=playUserESRes.findByPeriods(periods);
+            List<GameDetail> list1=gameDetailESRes.findByPeriods(periods);
             if (list1.size()!=0){
-                for (PlayUser playUser :list1) {
-                    if (list.contains(playUser.getLotterType())){
-                        TypeGroup typeGroup=typeGroupRes.findByName(playUser.getLotterType());
-                        playUser.setGoldcoins(playUser.getDiamonds()*Integer.parseInt(typeGroup.getValue())+playUser.getGoldcoins());
-                    }else {
-                        playUser.setGoldcoins(playUser.getGoldcoins()-playUser.getDiamonds());
+                PlayUser playUser=null;
+                for (GameDetail gameDetail :list1) {
+                         playUser = playUserESRes.findById(gameDetail.getUserId());
+                       if (playUser!=null) {
+                           TypeGroup typeGroup = typeGroupRes.findById(gameDetail.getLotterType());
+                           if (list.contains(typeGroup.getName())) {
+                               playUser.setGoldcoins(gameDetail.getDiamonds() * Integer.parseInt(typeGroup.getValue()) + playUser.getGoldcoins());
+                           } else {
+                               playUser.setGoldcoins(playUser.getGoldcoins() - gameDetail.getDiamonds());
+                           }
+                           playUserESRes.save(playUser);
+                       }
                     }
-                    playUser.setDiamonds(0);
-                    playUser.setPeriods("");
-                    playUser.setLotterType("");
-                    playUserESRes.save(playUser);
-                }
-
+                    if (playUser!=null) {
+                        gameDetailESRes.deleteAll();
+                    }
             }
 
         }
