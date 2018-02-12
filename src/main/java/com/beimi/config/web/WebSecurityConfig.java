@@ -60,7 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     {
         return new ApiRequestMatchingFilter(new AntPathRequestMatcher[]{
                 new AntPathRequestMatcher("/api/addGold"),
-                new AntPathRequestMatcher("/api/result"),
                 new AntPathRequestMatcher("/api/lottery"),
                 new AntPathRequestMatcher("/api/caiRegister"),
                 new AntPathRequestMatcher("/api/joinAndLeaveRoom"),
