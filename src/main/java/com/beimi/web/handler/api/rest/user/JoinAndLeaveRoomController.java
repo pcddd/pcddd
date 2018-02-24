@@ -2,9 +2,12 @@ package com.beimi.web.handler.api.rest.user;
 
 import com.beimi.util.MessageEnum;
 import com.beimi.util.cache.CacheHelper;
+import com.beimi.web.model.PcData;
+import com.beimi.web.model.PlayUser;
 import com.beimi.web.model.ResultData;
 import com.beimi.web.model.Token;
 import com.beimi.web.service.repository.es.TokenESRepository;
+import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,27 +27,33 @@ public class JoinAndLeaveRoomController {
     @Autowired
     private TokenESRepository tokenESRes ;
 
+    @Autowired
+    private PlayUserRepository playUserRes ;
+
     @RequestMapping
-    public ResponseEntity<ResultData> joinAndLeaveRoom(@Valid String roomid, @Valid String token){
+    public ResponseEntity<PcData> joinAndLeaveRoom(@Valid String roomid, boolean inOrOut, @Valid String token){
         Token userToken = null ;
-        ResultData resu=null;
+        PcData resu=null;
         String message="";
         if(!StringUtils.isBlank(token)&&StringUtils.isNotEmpty(roomid)) {
             userToken = tokenESRes.findById(token);
             if (userToken != null && !StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime() != null && userToken.getExptime().after(new Date())) {
-                if (CacheHelper.getRoomMappingCacheBean().getCacheObject(userToken.getUserid(),"beimi")!=null){
-                    CacheHelper.getRoomMappingCacheBean().delete(userToken.getUserid(),"beimi");//玩家离开房间
-                    message="玩家已离开房间";
-                }else {
+                if(inOrOut){
+                    //加入
                     CacheHelper.getRoomMappingCacheBean().put(userToken.getUserid(), roomid, "beimi");//玩家加入房间
                     message="玩家已加入房间";
+                }else{
+                    if (CacheHelper.getRoomMappingCacheBean().getCacheObject(userToken.getUserid(),"beimi")!=null){
+                        CacheHelper.getRoomMappingCacheBean().delete(userToken.getUserid(),"beimi");//玩家离开房间
+                        message="玩家已离开房间";
+                    }
                 }
-                    resu=new ResultData(message,"200" );
+                resu=new PcData("200",message,null );
             } else {
-                resu = new ResultData(MessageEnum.USER_TOKEN, "201");
+                resu = new PcData("201",MessageEnum.USER_TOKEN, null);
             }
         }else{
-            resu=new ResultData("参数为空","203" );
+            resu=new PcData("203","无效参数",null);
         }
 
         return new ResponseEntity<>(resu, HttpStatus.OK);

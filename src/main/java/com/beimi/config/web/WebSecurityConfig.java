@@ -59,14 +59,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public Filter apiTokenFilterSecurityInterceptor() throws Exception
     {
         return new ApiRequestMatchingFilter(new AntPathRequestMatcher[]{
-                new AntPathRequestMatcher("/api/addGold"),
                 new AntPathRequestMatcher("/api/lottery"),
                 new AntPathRequestMatcher("/api/caiRegister"),
                 new AntPathRequestMatcher("/api/joinAndLeaveRoom"),
                 new AntPathRequestMatcher("/api/room"),
                 new AntPathRequestMatcher("/api/Level"),
                 new AntPathRequestMatcher("/api/updateLottery"),
-                new AntPathRequestMatcher("/api/caiGuest")},
+                new AntPathRequestMatcher("/api/caiGuest"),
+                new AntPathRequestMatcher("/api/dobet"),
+                new AntPathRequestMatcher("/api/bettype")},
                 new AntPathRequestMatcher("/api/**"));
     }
     

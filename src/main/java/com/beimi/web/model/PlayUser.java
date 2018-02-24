@@ -58,7 +58,9 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	private Date createtime = new Date();
 	private Date updatetime = new Date();
 	private Date passupdatetime = new Date();
-	
+
+	private String token;
+
 	private String openid ;	//微信
 	private String qqid ;
 	
@@ -72,7 +74,7 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	private boolean online ; 	//是否在线
 	private String status ;		//
 	
-	private boolean disabled ;	//是否禁用
+	private int disabled ;	//是否禁用
 	
 	private boolean datastatus ;//数据状态，是否已删除	
 	private boolean headimg ; 	//是否上传头像
@@ -123,6 +125,13 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 		this.username = username;
 	}
 
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getToken() {
+		return token;
+	}
 
 	public String getPassword() {
 		return password;
@@ -495,12 +504,12 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	}
 
 
-	public boolean isDisabled() {
+	public int isDisabled() {
 		return disabled;
 	}
 
 
-	public void setDisabled(boolean disabled) {
+	public void setDisabled(int disabled) {
 		this.disabled = disabled;
 	}
 

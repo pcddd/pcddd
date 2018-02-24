@@ -25,8 +25,6 @@ public class ApiUserController extends Handler{
 	@Autowired
 	private PlayUserESRepository playUserESRes;
 	
-	@Autowired
-	private PlayUserRepository playUserRes ;
 
 	@RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ResultData> get(HttpServletRequest request , @RequestParam String id) {

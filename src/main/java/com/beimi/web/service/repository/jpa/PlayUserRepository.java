@@ -10,6 +10,8 @@ public abstract interface PlayUserRepository extends JpaRepository<PlayUser, Str
 {
 	public abstract PlayUser findById(String paramString);
 
+	public abstract PlayUser findByToken(String token);
+
 	public abstract PlayUser findByUsername(String username);
 
 	public abstract PlayUser findByEmail(String email);

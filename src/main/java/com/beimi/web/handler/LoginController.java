@@ -147,6 +147,5 @@ public class LoginController extends Handler{
     public String logout(HttpServletRequest request  ){  
     	request.getSession().removeAttribute(BMDataContext.USER_SESSION_NAME) ;
          return "redirect:/";
-    }  
-    
+    }
 }

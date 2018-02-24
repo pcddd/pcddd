@@ -25,7 +25,7 @@ import com.beimi.web.service.repository.jpa.PlayUserRepository;
  */
 @RestController
 @RequestMapping("/api/caiRegister")
-public class ApiController extends Handler{
+public class ApiPcRegisterController extends Handler{
 	   @Autowired
 	    private PlayUserESRepository playUserESRes;
 
@@ -36,10 +36,10 @@ public class ApiController extends Handler{
 	   private TokenESRepository tokenESRes ;
 
 	    @RequestMapping
-	    public ResponseEntity<ResultData> register(HttpServletRequest request , @Valid PlayUser player) {
+	    public ResponseEntity<PcData> register(HttpServletRequest request , @Valid PlayUser player) {
 			String ip = UKTools.getIpAddr(request);
 	        player = register(player,ip) ;
-			ResultData resu=new ResultData(player != null, player!=null?"200":"201", player!=null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, player);
+			PcData resu=new PcData(player!=null?"200":"201", player!=null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, player);
 			return new ResponseEntity<>(resu, HttpStatus.OK);
 	    }
 	    /**
@@ -80,8 +80,8 @@ public class ApiController extends Handler{
 
 					tokenESRes.save(userToken);
 				}
-				int users = playUserESRes.countByUsername(player.getUsername()) ;
-	            if(users == 0){
+				PlayUser users = playUserRes.findByUsername(player.getUsername()) ;
+	            if(users == null){
 					UKTools.published(player , playUserESRes , playUserRes);
 	            }else{
 	                player = null ;

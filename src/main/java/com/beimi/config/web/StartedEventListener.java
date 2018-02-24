@@ -62,13 +62,18 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
     	}
     	
     	
-    	GamePlaywayRepository playwayRes = event.getApplicationContext().getBean(GamePlaywayRepository.class) ;
-    	List<GamePlayway> gamePlaywayList = playwayRes.findAll() ;
-    	if(gamePlaywayList.size() > 0){
-    		for(GamePlayway playway : gamePlaywayList){
-    			CacheHelper.getSystemCacheBean().put(playway.getId(), playway, playway.getOrgi());
-    		}
-    	}
+    	GamePlaywayRepository playwayRes = event.getApplicationContext().getBean(GamePlaywayRepository.class);
+    	try{
+			List<GamePlayway> gamePlaywayList = playwayRes.findAll() ;
+			if(gamePlaywayList.size() > 0){
+				for(GamePlayway playway : gamePlaywayList){
+					CacheHelper.getSystemCacheBean().put(playway.getId(), playway, playway.getOrgi());
+				}
+			}
+		}catch (Exception e){
+    		e.printStackTrace();
+		}
+
     	
     	GameRoomRepository gameRoomRes = event.getApplicationContext().getBean(GameRoomRepository.class) ;
     	List<GameRoom> gameRoomList = gameRoomRes.findAll() ;

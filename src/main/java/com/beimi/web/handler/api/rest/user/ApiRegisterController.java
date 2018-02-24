@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.beimi.web.model.PcData;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,9 @@ public class ApiRegisterController extends Handler{
 	private PlayUserRepository playUserRes ;
 
 	@RequestMapping
-    public ResponseEntity<ResultData> register(HttpServletRequest request , @Valid PlayUser player) {
+    public ResponseEntity<PcData> register(HttpServletRequest request , @Valid PlayUser player) {
 		player = register(player) ;
-        return new ResponseEntity<>(new ResultData( player!=null , player != null ? MessageEnum.USER_REGISTER_SUCCESS: MessageEnum.USER_REGISTER_FAILD_USERNAME , player), HttpStatus.OK);
+        return new ResponseEntity<>(new PcData( player!=null ? "200" : "201" , player != null ? MessageEnum.USER_REGISTER_SUCCESS: MessageEnum.USER_REGISTER_FAILD_USERNAME , player), HttpStatus.OK);
     }
 	/**
 	 * 注册用户

@@ -8,9 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
+
 @Document(indexName = "beimi", type = "uk_lotter")
 @Entity
-public class Lottery {
+public class Lottery implements Serializable{
     private static final long serialVersionUID = 1L;
 
     /**
@@ -18,28 +20,24 @@ public class Lottery {
      */
     @Id
     private String id = UKTools.getUUID().toLowerCase();
-    private int no;//期数
-    private int preno;//上一期数
+    private int curNo;//期数
 
     private long nextOpenSec;//距离下一次开奖倒计时
 
 
-    private String prenum;//开奖数字
-    private String nexTime;//开奖时间
-    private String preStartTime;//
-    private String preEndTime;//
-//    private String nowtime;//系统当前时间
+    private String curRes;//开奖数字
+    private String nextTime;//开奖时间
+
     private int stauts; //1正常 2封盘 3停售
 
-    public Lottery(int no,int preno,int stauts,int sec,String prenum,String nexttime,String preStartTime,String preEndTime){
-        this.no = no;
-        this.preno = preno;
+    private int curPoint; // 当前元宝
+
+    public Lottery(int curNo,String curRes,int stauts,int sec,String nextTime){
+        this.curNo = curNo;
+        this.curRes = curRes;
         this.nextOpenSec = sec;
         this.stauts = stauts;
-        this.prenum = prenum;
-        this.nexTime = nexttime;
-        this.preStartTime = preStartTime;
-        this.preEndTime = preEndTime;
+        this.nextTime = nextTime;
     }
     public Lottery(){}
     /**
@@ -73,75 +71,51 @@ public class Lottery {
         return stauts;
     }
 
+    public void setCurPoint(int curPoint) {
+        this.curPoint = curPoint;
+    }
+
+    public int getCurPoint() {
+        return curPoint;
+    }
+
     public Lottery addNextSec(long sec){
         this.nextOpenSec = sec;
         return this;
     }
 
-    public String getNexTime() {
-        return nexTime;
+    public int getCurNo() {
+        return curNo;
     }
 
-    public String getPreEndTime() {
-        return preEndTime;
+    public void setCurNo(int curNo) {
+        this.curNo = curNo;
     }
 
-    public String getPreStartTime() {
-        return preStartTime;
+    public void setCurRes(String curRes) {
+        this.curRes = curRes;
     }
 
-    public int getNo() {
-        return no;
+    public String getCurRes() {
+        return curRes;
     }
 
-//    public String getNowtime() {
-//        return nowtime;
-//    }
-
-    public int getPreno() {
-        return preno;
+    public void setNextTime(String nextTime) {
+        this.nextTime = nextTime;
     }
 
-    public String getPrenum() {
-        return prenum;
+    public String getNextTime() {
+        return nextTime;
     }
 
-    public void setNexTime(String nexTime) {
-        this.nexTime = nexTime;
-    }
-
-    public void setPreEndTime(String preEndTime) {
-        this.preEndTime = preEndTime;
-    }
-
-    public void setPreStartTime(String preStartTime) {
-        this.preStartTime = preStartTime;
-    }
-
-    public void setNo(int no) {
-        this.no = no;
-    }
-
-//    public void setNowtime(String nowtime) {
-//        this.nowtime = nowtime;
-//    }
-
-    public void setPreno(int preno) {
-        this.preno = preno;
-    }
-
-    public void setPrenum(String prenum) {
-        this.prenum = prenum;
-    }
 
     @Override
     public String toString() {
         return "status=" + stauts + "|" +
-                "no=" + no + "|" +
-                "preno=" + preno + "|" +
-                "prenum=" + prenum + "|" +
-                "nextTime=" + nexTime + "|" +
-                "preStartTime=" + preStartTime + "|" +
-                "preEndTime=" + preEndTime;
+                "curNo=" + curNo + "|" +
+                "curRes=" + curRes + "|" +
+                "nextTime=" + nextTime + "|" ;
+//                "preStartTime=" + preStartTime + "|" +
+//                "preEndTime=" + preEndTime;
     }
 }
