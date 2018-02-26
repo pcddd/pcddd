@@ -1,11 +1,14 @@
 package com.beimi.web.handler.api.rest.user;
 
 import com.beimi.core.BMDataContext;
+import com.beimi.util.HttpUtils;
 import com.beimi.util.cache.CacheHelper;
 import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.BetGameDetailESRepository;
 import com.beimi.web.service.repository.es.PlayUserESRepository;
 import com.beimi.web.service.repository.es.TokenESRepository;
+import com.beimi.web.service.repository.jpa.BetTypeGroupRepository;
+import com.beimi.web.service.repository.jpa.HxConfigRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by fanling on 2018/2/8.
@@ -32,7 +36,13 @@ public class ApiBetController {
     private BetGameDetailESRepository betGameDetailESRes;
 
     @Autowired
+    BetTypeGroupRepository betTypeGroupRepository;
+
+    @Autowired
     private TokenESRepository tokenESRes;
+
+    @Autowired
+    private HxConfigRepository hxConfigRes;
 
     @RequestMapping
     public ResponseEntity<PcData> doBet(@Valid int type,@Valid int diamonds,@Valid String lotterTypeId,@Valid int periods, @Valid String token) {
