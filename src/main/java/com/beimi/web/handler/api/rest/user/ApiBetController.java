@@ -1,13 +1,11 @@
 package com.beimi.web.handler.api.rest.user;
 
 import com.beimi.core.BMDataContext;
-import com.beimi.util.HttpUtils;
 import com.beimi.util.cache.CacheHelper;
 import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.BetGameDetailESRepository;
+import com.beimi.web.service.repository.es.PlayUserESRepository;
 import com.beimi.web.service.repository.es.TokenESRepository;
-import com.beimi.web.service.repository.jpa.BetTypeGroupRepository;
-import com.beimi.web.service.repository.jpa.HxConfigRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by fanling on 2018/2/8.
@@ -36,12 +33,6 @@ public class ApiBetController {
 
     @Autowired
     private TokenESRepository tokenESRes;
-
-    @Autowired
-    private HxConfigRepository hxConfigRes;
-
-    @Autowired
-    private BetTypeGroupRepository betTypeGroupRepository;
 
     @RequestMapping
     public ResponseEntity<PcData> doBet(@Valid int type,@Valid int diamonds,@Valid String lotterTypeId,@Valid int periods, @Valid String token) {
@@ -63,8 +54,10 @@ public class ApiBetController {
                     }
 
                     BetGameDetail betGameDetail =new BetGameDetail();
+                    betGameDetail.setPlayUser(playUser);
                     betGameDetail.setTokenId(userToken.getId());//玩家id
                     betGameDetail.setType(type);
+                    betGameDetail.setOrgi("beimi");
                     betGameDetail.setDiamonds(diamonds);//下注金额
                     betGameDetail.setPeriods(periods);//期数
                     betGameDetail.setLotterTypeId(lotterTypeId);//投注类型

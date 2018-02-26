@@ -2,6 +2,7 @@ package com.beimi.web.service.repository.es;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.repository.ElasticsearchCrudRepository;
 
 import com.beimi.web.model.PlayUserClient;
