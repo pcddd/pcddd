@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 @Document(indexName = "beimi", type = "uk_lotter")
 @Entity
-public class Lottery implements Serializable{
+public class LotteryClient implements Serializable{
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,14 +32,14 @@ public class Lottery implements Serializable{
 
     private int curPoint; // 当前元宝
 
-    public Lottery(int curNo,String curRes,int stauts,int sec,String nextTime){
+    public LotteryClient(int curNo, String curRes, int stauts, int sec, String nextTime){
         this.curNo = curNo;
         this.curRes = curRes;
         this.nextOpenSec = sec;
         this.stauts = stauts;
         this.nextTime = nextTime;
     }
-    public Lottery(){}
+    public LotteryClient(){}
     /**
      * @return the id
      */
@@ -79,7 +79,7 @@ public class Lottery implements Serializable{
         return curPoint;
     }
 
-    public Lottery addNextSec(long sec){
+    public LotteryClient addNextSec(long sec){
         this.nextOpenSec = sec;
         return this;
     }

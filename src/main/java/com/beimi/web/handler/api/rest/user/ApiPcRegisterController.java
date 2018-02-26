@@ -27,10 +27,10 @@ import com.beimi.web.service.repository.jpa.PlayUserRepository;
 @RequestMapping("/api/caiRegister")
 public class ApiPcRegisterController extends Handler{
 	   @Autowired
-	    private PlayUserESRepository playUserESRes;
+	   private PlayUserESRepository playUserESRes;
 
 	    @Autowired
-	    private PlayUserRepository playUserRes ;
+	   private PlayUserRepository playUserRes ;
 
 	   @Autowired
 	   private TokenESRepository tokenESRes ;

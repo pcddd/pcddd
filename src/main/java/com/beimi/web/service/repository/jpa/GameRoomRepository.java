@@ -10,8 +10,10 @@ import com.beimi.web.model.GameRoom;
 
 public abstract interface GameRoomRepository  extends JpaRepository<GameRoom, String>{
 	
-  public abstract GameRoom findByIdAndOrgi(String id, String orgi);
-  
+  public abstract GameRoom findByRoomid(String roomid);
+
+  public abstract GameRoom findByIdAndOrgi(String id,String orgi);
+
   public abstract Page<GameRoom> findByOrgi(String orgi , Pageable page);
   
   public abstract List<GameRoom> findByRoomidAndOrgi(String roomid, String orgi);

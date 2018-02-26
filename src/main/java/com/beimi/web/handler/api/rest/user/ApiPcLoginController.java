@@ -67,6 +67,9 @@ public class ApiPcLoginController {
 
             tokenESRes.save(userToken);
             playUserClient.setToken(userToken.getId());
+            UserInfo userInfo = new UserInfo();
+            userInfo.token = userToken.getId();
+            userInfo.id = playUserClient.getId();
             playUser.setToken(userToken.getId());
             CacheHelper.getApiUserCacheBean().put(userToken.getId(), userToken, userToken.getOrgi());
             CacheHelper.getApiUserCacheBean().put(playUserClient.getId(), playUserClient, userToken.getOrgi());
@@ -74,13 +77,13 @@ public class ApiPcLoginController {
             String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(userToken.getId(), "beimi") ;
             System.out.println(roomid);
             if (!playUser.getPassword().equals(UKTools.md5(password))) {
-                playerResultData = new PcData("201", "密码错误", playUserClient);
+                playerResultData = new PcData("201", "密码错误", null);
             } else {
-                playerResultData = new PcData( playUserClient != null ? "200" : "201", playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, playUserClient);
+                playerResultData = new PcData( playUserClient != null ? "200" : "201", playUserClient != null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, userInfo);
                 UKTools.published(playUser , playUserESRes , playUserRes , BMDataContext.UserDataEventType.SAVE.toString());
             }
         }else {
-            playerResultData = new PcData("203", "用户未注册", playUserClient);
+            playerResultData = new PcData("203", "用户未注册", null);
         }
         return new ResponseEntity<>(playerResultData, HttpStatus.OK);
     }

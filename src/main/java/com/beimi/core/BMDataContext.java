@@ -37,7 +37,9 @@ public class BMDataContext {
 
 	public static final String BET_TYPE_BJ_PERIOD = "bj" ;
 	public static final String BET_TYPE_BJ_LOTTERY = "bjlottery" ;
-	
+
+	public static final String HX_TOKEN = "hx_token";
+
 	public static String SYSTEM_ORGI = "beimi" ;
 	
 	private static int WebIMPort = 9081 ;

@@ -2,13 +2,13 @@ package com.beimi.web.handler.api.rest.user;
 
 
 import com.beimi.core.BMDataContext;
+import com.beimi.util.HttpUtils;
 import com.beimi.util.UKTools;
 import com.beimi.util.cache.CacheHelper;
 import com.beimi.web.model.*;
-import com.beimi.web.service.repository.es.BetGameDetailESRepository;
-import com.beimi.web.service.repository.es.BjLotteryResESRepository;
-import com.beimi.web.service.repository.es.JNDLotteryResESRepository;
-import com.beimi.web.service.repository.es.PlayUserESRepository;
+import com.beimi.web.service.repository.es.*;
+import com.beimi.web.service.repository.jpa.HxConfigRepository;
+import com.beimi.web.service.repository.jpa.PcddPeriodsRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import com.beimi.web.service.repository.jpa.BetTypeGroupRepository;
 import org.apache.commons.lang.StringUtils;
@@ -30,12 +30,6 @@ import java.util.List;
 public class updateLotteryController {
 
     @Autowired
-    private JNDLotteryResESRepository jndLotteryResESRepository;
-
-    @Autowired
-    private BjLotteryResESRepository bjLotteryResESRepository;
-
-    @Autowired
     private BetGameDetailESRepository betGameDetailESRepository;
 
     @Autowired
@@ -47,142 +41,80 @@ public class updateLotteryController {
     @Autowired
     private BetTypeGroupRepository betTypeGroupRepository;
 
+    @Autowired
+    private PcddPeriodsESRepository pcddPeriodsESRepository;
+
+    @Autowired
+    private PcddPeriodsRepository pcddPeriodsRepository;
+
+    @Autowired
+    private HxConfigRepository hxConfigRes;
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<PcData> updateLottery(@Valid int type,@Valid int curNo,@Valid String curRes,@Valid String nextDrawTime){
+        PcddPeriods pcddPeriods = getCurLottery(type,curNo);
+        PcddPeriods newPcddPeriods;
+        int intervalSec,status;
+        String BM_TAG;
         if (type == 1){
-            //北京
-            Lottery lottery = getCurLottery(type);
-            Lottery newLottery = null;
-            if (lottery == null){
-                //1正常 2封盘 3停售
-                newLottery = new Lottery(curNo,curRes,0,0,nextDrawTime);
-                System.out.println(newLottery.toString());
-                CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_BJ_LOTTERY,newLottery,BMDataContext.SYSTEM_ORGI);
-                bjLotteryResESRepository.save(newLottery);
-                return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
-            }else{
-                if (curNo > lottery.getCurNo()){
-                    //1正常 2封盘 3停售
-                    newLottery = new Lottery(curNo,curRes,0,0,nextDrawTime);
-                    System.out.println(newLottery.toString());
-                    try {
-                        doBetSetttleAccounts(1,curRes,curNo);
-                    } catch (Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                    CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_BJ_LOTTERY,newLottery,BMDataContext.SYSTEM_ORGI);
-                    bjLotteryResESRepository.deleteAll();
-                    bjLotteryResESRepository.save(newLottery);
-                    return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
-                }
-            }
-//            Iterator<Lottery> iterator = bjLotteryResESRepository.findAll().iterator();
-//            if (iterator.hasNext()){
-//                Lottery lottery = bjLotteryResESRepository.findAll().iterator().next();
-//                int no = lottery.getCurNo();
-//                if (curNo > no){
-//                    //1正常 2封盘 3停售
-//                    newLottery = new Lottery(curNo,curRes,0,0,nextDrawTime);
-//                    System.out.println(newLottery.toString());
-//                    bjLotteryResESRepository.deleteAll();
-//                    bjLotteryResESRepository.save(newLottery);
-//                    CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_BJ_PERIOD,curNo,BMDataContext.SYSTEM_ORGI);
-//                    try {
-//                        doBetSetttleAccounts(1,lottery.getCurRes(),lottery.getCurNo());
-//                    } catch (Exception e){
-//                        System.out.println(e.getMessage());
-//                    }
-//                    return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
-//                }
-//            }else{
-//                CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_BJ_PERIOD,curNo,BMDataContext.SYSTEM_ORGI);
-//                newLottery = new Lottery(curNo,curRes,0,0,nextDrawTime);
-//                bjLotteryResESRepository.save(newLottery);
-//                System.out.println(newLottery.toString());
-//                return new ResponseEntity<>(new PcData("200","更新成功",null), HttpStatus.OK);
-//            }
+            intervalSec = 300;
+            BM_TAG = BMDataContext.BET_TYPE_BJ_LOTTERY;
         }else{
-            //加拿大
-            Lottery lottery = getCurLottery(type);
-            Lottery newLottery = null;
-            if (lottery == null){
-                //1正常 2封盘 3停售
-                newLottery = new Lottery(curNo,curRes,0,0,nextDrawTime);
-                System.out.println(newLottery.toString());
-                CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_JND_LOTTERY,newLottery,BMDataContext.SYSTEM_ORGI);
-                jndLotteryResESRepository.save(newLottery);
-                return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
-            }else{
-                if (curNo > lottery.getCurNo()){
-                    //1正常 2封盘 3停售
-                    newLottery = new Lottery(curNo,curRes,0,0,nextDrawTime);
-                    System.out.println(newLottery.toString());
-                    try {
-                        doBetSetttleAccounts(2,curRes,curNo);
-                    } catch (Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                    CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_JND_LOTTERY,newLottery,BMDataContext.SYSTEM_ORGI);
-                    jndLotteryResESRepository.deleteAll();
-                    jndLotteryResESRepository.save(newLottery);
-                    return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
-                }
-            }
-
-//            Iterator<Lottery> iterator = jndLotteryResESRepository.findAll().iterator();
-//            Lottery newLottery = null;
-//            if (iterator.hasNext()){
-//                Lottery lottery = jndLotteryResESRepository.findAll().iterator().next();
-//                int no = lottery.getCurNo();
-//                if (curNo > no){
-//                    //1正常 2封盘 3停售
-//                    newLottery = new Lottery(curNo,curRes,0,0,nextDrawTime);
-//                    System.out.println(newLottery.toString());
-//                    jndLotteryResESRepository.deleteAll();
-//                    jndLotteryResESRepository.save(newLottery);
-//                    CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_JND_PERIOD,curNo,BMDataContext.SYSTEM_ORGI);
-//                    try{
-//                        doBetSetttleAccounts(2,lottery.getCurRes(),lottery.getCurNo());
-//                    }catch (Exception e){
-//                        System.out.println(e.getMessage());
-//                    }
-//                    return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
-//                }
-//            }else{
-//                CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_JND_PERIOD,curNo,BMDataContext.SYSTEM_ORGI);
-//                newLottery = new Lottery(curNo,curRes,0,0,nextDrawTime);
-//                jndLotteryResESRepository.save(newLottery);
-//                System.out.println(newLottery.toString());
-//                return new ResponseEntity<>(new PcData("200","更新成功",null), HttpStatus.OK);
-//            }
+            intervalSec = 210;
+            BM_TAG = BMDataContext.BET_TYPE_JND_LOTTERY;
         }
+        if (curNo >= pcddPeriods.getPeriods()) {
+            status = getStatus(intervalSec, nextDrawTime);
+        }else{
+            return new ResponseEntity<>(new PcData("更新失败","200",null), HttpStatus.OK);
+        }
+        if (pcddPeriods == null){
+            //1正常 2封盘 3停售
+            newPcddPeriods = new PcddPeriods(type,curNo,status,curRes,nextDrawTime);
+            System.out.println(newPcddPeriods.toString());
+            CacheHelper.getSystemCacheBean().put(BM_TAG,newPcddPeriods,BMDataContext.SYSTEM_ORGI);
+            UKTools.published(pcddPeriods,pcddPeriodsESRepository,pcddPeriodsRepository);
+            return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
+        }else{
+            if (curNo > pcddPeriods.getPeriods()){
+                newPcddPeriods = new PcddPeriods(type,curNo,status,curRes,nextDrawTime);
+                System.out.println(newPcddPeriods.toString());
+                try {
+                    doBetSetttleAccounts(type,curRes,curNo);
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+                CacheHelper.getSystemCacheBean().put(BM_TAG,newPcddPeriods,BMDataContext.SYSTEM_ORGI);
+                UKTools.published(newPcddPeriods,pcddPeriodsESRepository,pcddPeriodsRepository);
+                //通知客户端开奖结果
+                HttpUtils.getInstance().postOpenLotteryMes(getHxToken(), curNo,curRes,new Date().getTime()/1000);
+                return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
+            }else if (pcddPeriods.getStatus() != status){
+                pcddPeriods.setStatus(status);
+                //通知客户端
+                postMes(status,curNo);
+                CacheHelper.getSystemCacheBean().put(BM_TAG,pcddPeriods,BMDataContext.SYSTEM_ORGI);
+                System.out.println(pcddPeriods.toString());
+                UKTools.published(pcddPeriods,pcddPeriodsESRepository,pcddPeriodsRepository);
+                return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
+            }
+        }
+
         return new ResponseEntity<>(new PcData("201","更新失败",null), HttpStatus.OK);
     }
 
-    private Lottery getCurLottery(int type){
-        Lottery lottery = null;
+    private PcddPeriods getCurLottery(int type,int periods){
+        PcddPeriods pcddPeriods;
         if (type == 1){
-            lottery = (Lottery) CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.BET_TYPE_BJ_LOTTERY, BMDataContext.SYSTEM_ORGI);
-            if (lottery == null){
-                Iterator<Lottery> iterator = bjLotteryResESRepository.findAll().iterator();
-                if (iterator.hasNext()){
-                    lottery = iterator.next();
-                    CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_BJ_LOTTERY,lottery,BMDataContext.SYSTEM_ORGI);
-                }
-            }
-
+            pcddPeriods = (PcddPeriods) CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.BET_TYPE_BJ_LOTTERY, BMDataContext.SYSTEM_ORGI);
         }else{
-            lottery = (Lottery) CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.BET_TYPE_JND_LOTTERY, BMDataContext.SYSTEM_ORGI);
-            if (lottery == null){
-                Iterator<Lottery> iterator = jndLotteryResESRepository.findAll().iterator();
-                if (iterator.hasNext()){
-                    lottery = iterator.next();
-                    CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_JND_LOTTERY,lottery,BMDataContext.SYSTEM_ORGI);
-                }
-            }
+            pcddPeriods = (PcddPeriods) CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.BET_TYPE_JND_LOTTERY, BMDataContext.SYSTEM_ORGI);
+        }
+        if (pcddPeriods == null){
+            pcddPeriods = pcddPeriodsESRepository.findByTypeAndPeriods(type,periods);
         }
 
-        return lottery;
+        return pcddPeriods;
     }
 
     private void doBetSetttleAccounts(int type,String resno,int periods) throws Exception{
@@ -248,5 +180,61 @@ public class updateLotteryController {
             }
 
         }
+    }
+
+    /**
+     * 状态
+     */
+    private int getStatus(int intervalSec,String nextDrawTime){
+        long nexttime = Integer.parseInt(nextDrawTime) - new Date().getTime()/1000;
+//        int intervalSec = type == 1 ? 300 : 200;
+        int status;
+        if (nexttime < 0){
+            if(nexttime < -intervalSec){
+                //停盘
+                status = 3;
+            }else{
+                //客户端显示?,?,? 同时进行下一期下注
+                status = 4;
+            }
+        }else if (nexttime > 20){
+            //正常下注
+            status = 1;
+        }else{
+            //提前20s封盘
+            status = 2;
+        }
+
+        return status;
+    }
+
+    /**
+     * 通知客户端
+     */
+    private void postMes(int status,int periods){
+       switch (status){
+           case 1:  //正常下注
+               HttpUtils.getInstance().postOpenBetMes(getHxToken(),String.valueOf(periods),"");
+               break;
+           case 2:  //提前20s封盘
+               HttpUtils.getInstance().postCloseBetMes(getHxToken(),String.valueOf(periods));
+               break;
+           case 3:  //停盘
+               HttpUtils.getInstance().postCloseBetMes(getHxToken(),String.valueOf(periods));
+               break;
+           case 4:  //客户端显示?,?,? 同时进行下一期下注
+               HttpUtils.getInstance().postOpenBetMes(getHxToken(),String.valueOf(periods),"");
+               break;
+       }
+    }
+
+    private String getHxToken(){
+        String hxtoken = (String)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.HX_TOKEN,BMDataContext.SYSTEM_ORGI);
+        if (StringUtils.isBlank(hxtoken)){
+            List<HxConfig> hxConfigList = hxConfigRes.findAll();
+            if (hxConfigList.size() > 0)
+                hxtoken = hxConfigList.get(0).getToken();
+        }
+        return hxtoken;
     }
 }

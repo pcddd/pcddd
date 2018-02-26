@@ -11,10 +11,10 @@ import java.util.regex.Pattern;
  * Created by fanling on 2018/2/7.
  */
 public class Tools {
-//    public static Lottery parseLotteryJson(String lotteryJson){
+//    public static LotteryClient parseLotteryJson(String lotteryJson){
 //        try{
 //            JSONObject jsonObject = JSON.parseObject(lotteryJson);
-//            return new Lottery(jsonObject.getInteger("no"),jsonObject.getInteger("preno"),
+//            return new LotteryClient(jsonObject.getInteger("no"),jsonObject.getInteger("preno"),
 //                    jsonObject.getInteger("status"),
 //                    jsonObject.getInteger("status"),
 //                    jsonObject.getString("prenum"),getPatternStr(jsonObject.getString("endtime")),

@@ -1,13 +1,14 @@
 package com.beimi.web.handler.api.rest.user;
 
+import com.beimi.core.BMDataContext;
 import com.beimi.util.cache.CacheHelper;
 import com.beimi.web.model.*;
-import com.beimi.web.service.repository.es.BjLotteryResESRepository;
-import com.beimi.web.service.repository.es.JNDLotteryResESRepository;
+import com.beimi.web.service.repository.es.PcddPeriodsESRepository;
 import com.beimi.web.service.repository.es.TokenESRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +26,7 @@ import java.util.Iterator;
 public class LotteryController {
 
     @Autowired
-    private BjLotteryResESRepository bjLotteryResESRepository;
-
-    @Autowired
-    private JNDLotteryResESRepository jndLotteryResESRepository;
+    private PcddPeriodsESRepository pcddPeriodsESRepository;
 
     @Autowired
     private TokenESRepository tokenESRes ;
@@ -46,26 +44,25 @@ public class LotteryController {
             playUser = playUserRes.findByToken(token);
             if(userToken != null && !StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date()) &&
                 playUser != null){
-                PcData resu=null;
+                PcData resu;
                 int intervalSec;
-                Iterator<Lottery> iterator = null;
+                PcddPeriods pcddPeriods = getCurLottery(type);
                 if (type == 1){
-                    iterator = bjLotteryResESRepository.findAll().iterator();
                     intervalSec = 300;
                 }else{
-                    iterator = jndLotteryResESRepository.findAll().iterator();
                     intervalSec = 210;
                 }
-                if (iterator.hasNext()){
-                    Lottery lottery = iterator.next();
-                    long nexttime = Integer.parseInt(lottery.getNextTime()) - new Date().getTime()/1000;
+                if (pcddPeriods != null){
+                    LotteryClient lottery = new LotteryClient(pcddPeriods.getPeriods(),
+                            pcddPeriods.getRes(),pcddPeriods.getStatus(),0,pcddPeriods.getOpentime());
+                    long nexttime = Integer.parseInt(pcddPeriods.getOpentime()) - new Date().getTime()/1000;
                     if (nexttime < 0){
                         lottery.setNextOpenSec(0);
                         if(nexttime < -intervalSec){
                             //停盘
                             lottery.setStauts(3);
                         }else{
-                            //客户端显示?,?,? 同时进行下一期下注，此时不断请求新的彩果
+                            //客户端显示?,?,? 同时进行下一期下注
                             lottery.setStauts(4);
                             lottery.setNextOpenSec(intervalSec + nexttime - 20);
                             lottery.setCurNo(lottery.getCurNo()+1);
@@ -95,5 +92,29 @@ public class LotteryController {
             }
         }
         return new ResponseEntity<>(new PcData("201","登录已失效，请重新登录",null), HttpStatus.OK);
+    }
+
+    private PcddPeriods getCurLottery(int type){
+        PcddPeriods pcddPeriods = null;
+        if (type == 1){
+            pcddPeriods = (PcddPeriods) CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.BET_TYPE_BJ_LOTTERY, BMDataContext.SYSTEM_ORGI);
+            if (pcddPeriods == null){
+                Iterator<PcddPeriods> iterator = pcddPeriodsESRepository.findByType(type,new Sort(Sort.Direction.DESC, "periods")).iterator();
+                if (iterator.hasNext()){
+                    pcddPeriods = iterator.next();
+                    CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_BJ_LOTTERY,pcddPeriods,BMDataContext.SYSTEM_ORGI);
+                }
+            }
+        }else{
+            pcddPeriods = (PcddPeriods) CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.BET_TYPE_JND_LOTTERY, BMDataContext.SYSTEM_ORGI);
+            if (pcddPeriods == null){
+                Iterator<PcddPeriods> iterator = pcddPeriodsESRepository.findByType(type,new Sort(Sort.Direction.DESC, "periods")).iterator();
+                if (iterator.hasNext()){
+                    pcddPeriods = iterator.next();
+                    CacheHelper.getSystemCacheBean().put(BMDataContext.BET_TYPE_JND_LOTTERY,pcddPeriods,BMDataContext.SYSTEM_ORGI);
+                }
+            }
+        }
+        return pcddPeriods;
     }
 }
