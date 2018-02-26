@@ -1,10 +1,14 @@
 package com.beimi.web.handler.apps.business.platform;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.beimi.web.model.BetGameDetail;
+import com.beimi.web.service.repository.es.BetGameDetailESRepository;
+import freemarker.template.utility.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -27,11 +31,38 @@ public class OnlineGameUsersController extends Handler{
 	
 	@Autowired
 	private PlayUserRepository playUserRes ;
+
+	@Autowired
+	private BetGameDetailESRepository betGameDetailESRes;
 	
+	/*@RequestMapping({"/gameusers"})
+	@Menu(type="platform", subtype="onlinegameusers")
+	public ModelAndView online(ModelMap map , HttpServletRequest request , @Valid String id){
+		map.addAttribute("playersList", playersRes.findByOrgi("beimi",new PageRequest(super.getP(request), super.getPs(request)))) ;
+		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
+	}*/
+
 	@RequestMapping({"/gameusers"})
 	@Menu(type="platform", subtype="onlinegameusers")
 	public ModelAndView online(ModelMap map , HttpServletRequest request , @Valid String id){
-		map.addAttribute("playersList", playersRes.findByOrgiAndOnline(super.getOrgi(request), true,new PageRequest(super.getP(request), super.getPs(request)))) ;
+		map.addAttribute("playersList", betGameDetailESRes.findByOrgi("beimi",new PageRequest(super.getP(request), super.getPs(request)))) ;
+		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
+	}
+
+	@RequestMapping({"/gameusers/search"})
+	@Menu(type="platform", subtype="onlinegameusers")
+	public ModelAndView search(ModelMap map , HttpServletRequest request , @Valid String username,@Valid String periods){
+		int per=0;
+		if(!"".equals(periods)){
+			per=Integer.parseInt(periods);
+		}
+		PlayUser playUser=playersRes.findByUsername(username);
+		if (playUser!=null){
+			username=playUser.getToken();
+		}else {
+			username="";
+		}
+		map.addAttribute("playersList", betGameDetailESRes.findByTokenIdAndPeriods(username,per,new PageRequest(super.getP(request), super.getPs(request)))) ;
 		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
 	}
 	

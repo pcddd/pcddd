@@ -6,6 +6,7 @@ import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.BetGameDetailESRepository;
 import com.beimi.web.service.repository.es.PlayUserESRepository;
 import com.beimi.web.service.repository.es.TokenESRepository;
+import com.beimi.web.service.repository.jpa.BetTypeGroupRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class ApiBetController {
     @Autowired
     private TokenESRepository tokenESRes;
 
+    @Autowired
+    private BetTypeGroupRepository betTypeGroupRepository;
+
     @RequestMapping
     public ResponseEntity<PcData> doBet(@Valid int type,@Valid int diamonds,@Valid String lotterTypeId,@Valid int periods, @Valid String token) {
         PcData pcData = null;
@@ -54,11 +58,15 @@ public class ApiBetController {
                     }
 
                     BetGameDetail betGameDetail =new BetGameDetail();
+                    betGameDetail.setPlayUser(playUser);
                     betGameDetail.setTokenId(userToken.getId());//玩家id
                     betGameDetail.setType(type);
+                    betGameDetail.setOrgi("beimi");
                     betGameDetail.setDiamonds(diamonds);//下注金额
                     betGameDetail.setPeriods(periods);//期数
                     betGameDetail.setLotterTypeId(lotterTypeId);//投注类型
+                    GameBetType gameBetType = betTypeGroupRepository.findById(betGameDetail.getLotterTypeId());
+                    betGameDetail.setLotterName(gameBetType.getName());//投注类型名称
                     if (playUser.getDiamonds()>= betGameDetail.getDiamonds()) {
                         betGameDetailESRes.save(betGameDetail);
                         pcData = new PcData("200","下注成功",null);
