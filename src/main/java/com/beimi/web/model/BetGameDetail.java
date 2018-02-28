@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by fanling on 2018/2/9.
@@ -26,15 +28,19 @@ public class BetGameDetail {
 
     private String tokenId;
 
-    private int diamonds;		//下注金额
+//    private int goldcoins;		//下注金额
+//
+//    private String lotterTypeId;//投注类型
+//
+//    private String lotterName;//投注类型名称
 
-    public String lotterTypeId;//投注类型
-
-    public String lotterName;//投注类型名称
+    private ArrayList<PcBetEntity> pcBetEntityList;
 
     public int periods;//期数
 
-    public PlayUser playUser;//用户信息
+    private int status = -1; //0未开奖 1已开奖
+
+//    public PlayUser playUser;//用户信息
 
     @Id
     @Column(length = 32)
@@ -46,6 +52,22 @@ public class BetGameDetail {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setPcBetEntityList(ArrayList<PcBetEntity> pcBetEntityList) {
+        this.pcBetEntityList = pcBetEntityList;
+    }
+
+    public ArrayList<PcBetEntity> getPcBetEntityList() {
+        return pcBetEntityList;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
     }
 
     public int getType() {
@@ -72,29 +94,29 @@ public class BetGameDetail {
         this.tokenId = tokenId;
     }
 
-    public int getDiamonds() {
-        return diamonds;
-    }
-
-    public void setDiamonds(int diamonds) {
-        this.diamonds = diamonds;
-    }
-
-    public String getLotterTypeId() {
-        return lotterTypeId;
-    }
-
-    public void setLotterTypeId(String lotterTypeId) {
-        this.lotterTypeId = lotterTypeId;
-    }
-
-    public String getLotterName() {
-        return lotterName;
-    }
-
-    public void setLotterName(String lotterName) {
-        this.lotterName = lotterName;
-    }
+//    public int getGoldcoins() {
+//        return goldcoins;
+//    }
+//
+//    public void setGoldcoins(int diamonds) {
+//        this.goldcoins = diamonds;
+//    }
+//
+//    public String getLotterTypeId() {
+//        return lotterTypeId;
+//    }
+//
+//    public void setLotterTypeId(String lotterTypeId) {
+//        this.lotterTypeId = lotterTypeId;
+//    }
+//
+//    public String getLotterName() {
+//        return lotterName;
+//    }
+//
+//    public void setLotterName(String lotterName) {
+//        this.lotterName = lotterName;
+//    }
 
     public int getPeriods() {
         return periods;
@@ -104,11 +126,11 @@ public class BetGameDetail {
         this.periods = periods;
     }
 
-    public PlayUser getPlayUser() {
-        return playUser;
-    }
+//    public PlayUser getPlayUser() {
+//        return playUser;
+//    }
 
-    public void setPlayUser(PlayUser playUser) {
-        this.playUser = playUser;
-    }
+//    public void setPlayUser(PlayUser playUser) {
+//        this.playUser = playUser;
+//    }
 }

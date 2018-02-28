@@ -620,21 +620,21 @@ public class GameEngine {
 	 */
 	public GameRoom leaveRoom(PlayUserClient playUser , String orgi){
 		GameRoom gameRoom = whichRoom(playUser.getId(), orgi) ;
-		if(gameRoom!=null){
-			List<PlayUserClient> players = CacheHelper.getGamePlayerCacheBean().getCacheObject(gameRoom.getId(), orgi) ;
-			if(gameRoom.isCardroom()){
-				CacheHelper.getGameRoomCacheBean().delete(gameRoom.getId(), gameRoom.getOrgi()) ;
-				CacheHelper.getGamePlayerCacheBean().clean(gameRoom.getId() , orgi) ;
-				UKTools.published(gameRoom , null , BMDataContext.getContext().getBean(GameRoomRepository.class) , BMDataContext.UserDataEventType.DELETE.toString());
-			}else{
-				if(players.size() <= 1){
-					//解散房间 , 保留 ROOM资源 ， 避免 从队列中取出ROOM
-					CacheHelper.getGamePlayerCacheBean().clean(gameRoom.getId() , orgi) ;
-				}else{
-					CacheHelper.getGamePlayerCacheBean().delete(playUser.getId(), orgi) ;
-				}
-			}
-		}
+//		if(gameRoom!=null){
+//			List<PlayUserClient> players = CacheHelper.getGamePlayerCacheBean().getCacheObject(gameRoom.getId(), orgi) ;
+//			if(gameRoom.isCardroom()){
+//				CacheHelper.getGameRoomCacheBean().delete(gameRoom.getId(), gameRoom.getOrgi()) ;
+//				CacheHelper.getGamePlayerCacheBean().clean(gameRoom.getId() , orgi) ;
+//				UKTools.published(gameRoom , null , BMDataContext.getContext().getBean(GameRoomRepository.class) , BMDataContext.UserDataEventType.DELETE.toString());
+//			}else{
+//				if(players.size() <= 1){
+//					//解散房间 , 保留 ROOM资源 ， 避免 从队列中取出ROOM
+//					CacheHelper.getGamePlayerCacheBean().clean(gameRoom.getId() , orgi) ;
+//				}else{
+//					CacheHelper.getGamePlayerCacheBean().delete(playUser.getId(), orgi) ;
+//				}
+//			}
+//		}
 		return gameRoom;
 	}
 	/**
@@ -672,57 +672,57 @@ public class GameEngine {
 	 */
 	private  GameRoom creatGameRoom(GamePlayway playway , String userid , boolean cardroom , BeiMiClient beiMiClient){
 		GameRoom gameRoom = new GameRoom() ;
-		gameRoom.setCreatetime(new Date());
-		gameRoom.setRoomid(UKTools.getUUID());
-		gameRoom.setUpdatetime(new Date());
-		
-		if(playway!=null){
-			gameRoom.setPlayway(playway.getId());
-			gameRoom.setRoomtype(playway.getRoomtype());
-			gameRoom.setPlayers(playway.getPlayers());
-		}
-		gameRoom.setPlayers(playway.getPlayers());
-		gameRoom.setCardsnum(playway.getCardsnum());
-		
-		gameRoom.setCurpalyers(1);
-		gameRoom.setCardroom(cardroom);
-		
-		gameRoom.setStatus(BeiMiGameEnum.CRERATED.toString());
-		
-		gameRoom.setCardsnum(playway.getCardsnum());
-		
-		gameRoom.setCurrentnum(0);
-		
-		gameRoom.setCreater(userid);
-		
-		gameRoom.setMaster(userid);
-		gameRoom.setNumofgames(playway.getNumofgames());   //无限制
-		gameRoom.setOrgi(playway.getOrgi());
-
-		/**
-		 * 房卡模式启动游戏
-		 */
-		if(beiMiClient.getExtparams()!=null && BMDataContext.BEIMI_SYSTEM_ROOM.equals(beiMiClient.getExtparams().get("gamemodel"))){
-			gameRoom.setRoomtype(BMDataContext.ModelType.ROOM.toString());
-			gameRoom.setCardroom(true);
-			gameRoom.setExtparams(beiMiClient.getExtparams());
-			/**
-			 * 产生 房间 ID ， 麻烦的是需要处理冲突 ，准备采用的算法是 先生成一个号码池子，然后重分布是缓存的 Queue里获取
-			 */
-			gameRoom.setRoomid(RandomCharUtil.getRandomNumberChar(6));
-
-			/**
-			 * 分配房间号码 ， 并且，启用 规则引擎，对房间信息进行赋值
-			 */
-			kieSession.insert(gameRoom) ;
-			kieSession.fireAllRules() ;
-		}else{
-			gameRoom.setRoomtype(BMDataContext.ModelType.HALL.toString());
-		}
-		
-		CacheHelper.getQueneCache().put(gameRoom, playway.getOrgi());	//未达到最大玩家数量，加入到游戏撮合 队列，继续撮合
-		
-		UKTools.published(gameRoom, null, BMDataContext.getContext().getBean(GameRoomRepository.class) , BMDataContext.UserDataEventType.SAVE.toString());
+//		gameRoom.setCreatetime(new Date());
+//		gameRoom.setRoomid(UKTools.getUUID());
+//		gameRoom.setUpdatetime(new Date());
+//
+//		if(playway!=null){
+//			gameRoom.setPlayway(playway.getId());
+//			gameRoom.setRoomtype(playway.getRoomtype());
+//			gameRoom.setPlayers(playway.getPlayers());
+//		}
+//		gameRoom.setPlayers(playway.getPlayers());
+//		gameRoom.setCardsnum(playway.getCardsnum());
+//
+//		gameRoom.setCurpalyers(1);
+//		gameRoom.setCardroom(cardroom);
+//
+//		gameRoom.setStatus(BeiMiGameEnum.CRERATED.toString());
+//
+//		gameRoom.setCardsnum(playway.getCardsnum());
+//
+//		gameRoom.setCurrentnum(0);
+//
+//		gameRoom.setCreater(userid);
+//
+//		gameRoom.setMaster(userid);
+//		gameRoom.setNumofgames(playway.getNumofgames());   //无限制
+//		gameRoom.setOrgi(playway.getOrgi());
+//
+//		/**
+//		 * 房卡模式启动游戏
+//		 */
+//		if(beiMiClient.getExtparams()!=null && BMDataContext.BEIMI_SYSTEM_ROOM.equals(beiMiClient.getExtparams().get("gamemodel"))){
+//			gameRoom.setRoomtype(BMDataContext.ModelType.ROOM.toString());
+//			gameRoom.setCardroom(true);
+//			gameRoom.setExtparams(beiMiClient.getExtparams());
+//			/**
+//			 * 产生 房间 ID ， 麻烦的是需要处理冲突 ，准备采用的算法是 先生成一个号码池子，然后重分布是缓存的 Queue里获取
+//			 */
+//			gameRoom.setRoomid(RandomCharUtil.getRandomNumberChar(6));
+//
+//			/**
+//			 * 分配房间号码 ， 并且，启用 规则引擎，对房间信息进行赋值
+//			 */
+//			kieSession.insert(gameRoom) ;
+//			kieSession.fireAllRules() ;
+//		}else{
+//			gameRoom.setRoomtype(BMDataContext.ModelType.HALL.toString());
+//		}
+//
+//		CacheHelper.getQueneCache().put(gameRoom, playway.getOrgi());	//未达到最大玩家数量，加入到游戏撮合 队列，继续撮合
+//
+//		UKTools.published(gameRoom, null, BMDataContext.getContext().getBean(GameRoomRepository.class) , BMDataContext.UserDataEventType.SAVE.toString());
 		
 		return gameRoom ;
 	}

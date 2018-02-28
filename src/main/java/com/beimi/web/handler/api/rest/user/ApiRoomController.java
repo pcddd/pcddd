@@ -4,6 +4,7 @@ import com.beimi.util.MessageEnum;
 import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.TokenESRepository;
 import com.beimi.web.service.repository.jpa.GameRoomRepository;
+import com.beimi.web.service.repository.jpa.PcRoomRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.List;
 @RequestMapping("/api/room")
 public class ApiRoomController {
     @Autowired
-    private GameRoomRepository playRoomRes;
+    private PcRoomRepository playRoomRes;
 
     @Autowired
     private TokenESRepository tokenESRes ;
@@ -35,7 +36,7 @@ public class ApiRoomController {
             Token userToken = userToken = tokenESRes.findById(token);
             if(userToken != null){
                 if (!StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
-                    List<GameRoom> roominfo = playRoomRes.findByRoomtypeAndOrgi(roomtype,orgi);
+                    List<PcRoomInfo> roominfo = playRoomRes.findByRoomtypeAndOrgi(roomtype,orgi);
                     resu=new PcData( roominfo.size() != 0?"200":"201", roominfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_GAMEROOM,
                             new ListContainer(roominfo));
                     return new ResponseEntity<>(resu,HttpStatus.OK);

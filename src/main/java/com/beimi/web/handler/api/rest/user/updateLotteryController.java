@@ -38,8 +38,8 @@ public class updateLotteryController {
     @Autowired
     private PlayUserRepository playUserRes ;
 
-    @Autowired
-    private BetTypeGroupRepository betTypeGroupRepository;
+//    @Autowired
+//    private BetTypeGroupRepository betTypeGroupRepository;
 
     @Autowired
     private PcddPeriodsESRepository pcddPeriodsESRepository;
@@ -63,7 +63,7 @@ public class updateLotteryController {
             intervalSec = 210;
             BM_TAG = BMDataContext.BET_TYPE_JND_LOTTERY;
         }
-        if (curNo >= pcddPeriods.getPeriods()) {
+        if (pcddPeriods == null || curNo >= pcddPeriods.getPeriods()) {
             status = getStatus(intervalSec, nextDrawTime);
         }else{
             return new ResponseEntity<>(new PcData("更新失败","200",null), HttpStatus.OK);
@@ -87,7 +87,7 @@ public class updateLotteryController {
                 CacheHelper.getSystemCacheBean().put(BM_TAG,newPcddPeriods,BMDataContext.SYSTEM_ORGI);
                 UKTools.published(newPcddPeriods,pcddPeriodsESRepository,pcddPeriodsRepository);
                 //通知客户端开奖结果
-                HttpUtils.getInstance().postOpenLotteryMes(getHxToken(), curNo,curRes,new Date().getTime()/1000);
+                HttpUtils.getInstance().postOpenLotteryMes(getHxToken(), curNo,curRes,new Date().getTime());
                 return new ResponseEntity<>(new PcData("更新成功","200",null), HttpStatus.OK);
             }else if (pcddPeriods.getStatus() != status){
                 pcddPeriods.setStatus(status);
@@ -162,16 +162,31 @@ public class updateLotteryController {
             if (betGameDetailList.size()!=0){
                 PlayUser playUser=null;
                 for (BetGameDetail betGameDetail : betGameDetailList){
+                    if (betGameDetail.getStatus() == 1)
+                        continue;
                     playUser = playUserRes.findByToken(betGameDetail.getTokenId());
                     if (playUser!=null) {
-                        GameBetType gameBetType = betTypeGroupRepository.findById(betGameDetail.getLotterTypeId());
-                        if (list.contains(gameBetType.getName())) {
-                            playUser.setDiamonds(betGameDetail.getDiamonds() * Integer.parseInt(gameBetType.getValue()) + playUser.getDiamonds());
-                        } else {
-                            playUser.setDiamonds(playUser.getDiamonds() - betGameDetail.getDiamonds());
+                        List<PcBetEntity> pcBetEntityList = betGameDetail.getPcBetEntityList();
+                        int gold = 0;
+                        for (int i=0;i<pcBetEntityList.size();i++){
+                            PcBetEntity pcBetEntity = pcBetEntityList.get(i);
+                            GameBetType gameBetType = (GameBetType)CacheHelper.getSystemCacheBean().getCacheObject(pcBetEntity.getLotterTypeId(),BMDataContext.SYSTEM_ORGI);
+//                            GameBetType gameBetType = betTypeGroupRepository.findById(pcBetEntity.getLotterTypeId());
+                            if (list.contains(gameBetType.getName())) {
+                                gold += pcBetEntity.getGoldcoins() * Integer.parseInt(gameBetType.getValue());
+                            } else {
+                                gold -= pcBetEntity.getGoldcoins();
+                            }
+                            pcBetEntity.setGetGold(gold);
+                            pcBetEntity.setIsWin(gold > 0 ? 1 : 0);
+                            pcBetEntity.setRealResult(resno);
                         }
-//                        playUserESRes.save(playUser);
-                        UKTools.published(playUser , playUserESRes , playUserRes , BMDataContext.UserDataEventType.SAVE.toString());
+                        if (gold > 0){
+                            playUser.setGoldcoins(playUser.getGoldcoins() + gold);
+                            UKTools.published(playUser , playUserESRes , playUserRes , BMDataContext.UserDataEventType.SAVE.toString());
+                        }
+                        betGameDetail.setStatus(1);
+                        betGameDetailESRepository.save(betGameDetail);
                     }
                 }
 //                if (playUser!=null) {
@@ -214,16 +229,16 @@ public class updateLotteryController {
     private void postMes(int status,int periods){
        switch (status){
            case 1:  //正常下注
-               HttpUtils.getInstance().postOpenBetMes(getHxToken(),String.valueOf(periods),"");
+               HttpUtils.getInstance().postOpenBetMes(getHxToken(),String.valueOf(periods+1),"祝您好运连连，多多赢利");
                break;
            case 2:  //提前20s封盘
-               HttpUtils.getInstance().postCloseBetMes(getHxToken(),String.valueOf(periods));
+               HttpUtils.getInstance().postCloseBetMes(getHxToken(),String.valueOf(periods+1));
                break;
            case 3:  //停盘
-               HttpUtils.getInstance().postCloseBetMes(getHxToken(),String.valueOf(periods));
+               HttpUtils.getInstance().postCloseBetMes(getHxToken(),String.valueOf(periods+1));
                break;
            case 4:  //客户端显示?,?,? 同时进行下一期下注
-               HttpUtils.getInstance().postOpenBetMes(getHxToken(),String.valueOf(periods),"");
+               HttpUtils.getInstance().postOpenBetMes(getHxToken(),String.valueOf(periods+2),"祝您好运连连，多多赢利");
                break;
        }
     }

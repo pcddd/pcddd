@@ -46,11 +46,10 @@ public class LevelController {
                 if(userToken!=null){
                     tokenESRes.delete(userToken);
                 }
-                resu=new PcData(roomLevelInfo.size() != 0?"200":"201", roomLevelInfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_TOKEN,
-                        new ListContainer<>(roomLevelInfo));
+                resu = new PcData("201",MessageEnum.USER_TOKEN, null);
             }
         }
 
         return new ResponseEntity<>(resu, HttpStatus.OK);
-    };
+    }
 }

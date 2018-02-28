@@ -25,22 +25,22 @@ public class EnterAction<T,S> implements Action<T, S>{
 	 */
 	@Override
 	public void execute(Message<T> message, BeiMiExtentionTransitionConfigurer<T,S> configurer) {
-		String room = (String)message.getMessageHeaders().getHeaders().get("room") ;
-		if(!StringUtils.isBlank(room)){
-			GameRoom gameRoom = (GameRoom) CacheHelper.getGameRoomCacheBean().getCacheObject(room, BMDataContext.SYSTEM_ORGI) ; 
-			if(gameRoom!=null){
-				if(!gameRoom.isCardroom()) {
-					AiConfig aiConfig = CacheConfigTools.getAiConfig(gameRoom.getOrgi());
-					if (aiConfig.isEnableai()) {
-						CacheHelper.getExpireCache().put(gameRoom.getOrgi(), new CreateAITask(aiConfig.getWaittime(), gameRoom, gameRoom.getOrgi()));
-					}
-				}
-				/**
-				 * 更新状态
-				 */
-				gameRoom.setStatus(configurer.getTarget().toString());
-				CacheHelper.getGameRoomCacheBean().put(gameRoom.getId(), gameRoom, gameRoom.getOrgi());
-			}
-		}
+//		String room = (String)message.getMessageHeaders().getHeaders().get("room") ;
+//		if(!StringUtils.isBlank(room)){
+//			GameRoom gameRoom = (GameRoom) CacheHelper.getGameRoomCacheBean().getCacheObject(room, BMDataContext.SYSTEM_ORGI) ;
+//			if(gameRoom!=null){
+//				if(!gameRoom.isCardroom()) {
+//					AiConfig aiConfig = CacheConfigTools.getAiConfig(gameRoom.getOrgi());
+//					if (aiConfig.isEnableai()) {
+//						CacheHelper.getExpireCache().put(gameRoom.getOrgi(), new CreateAITask(aiConfig.getWaittime(), gameRoom, gameRoom.getOrgi()));
+//					}
+//				}
+//				/**
+//				 * 更新状态
+//				 */
+//				gameRoom.setStatus(configurer.getTarget().toString());
+//				CacheHelper.getGameRoomCacheBean().put(gameRoom.getId(), gameRoom, gameRoom.getOrgi());
+//			}
+//		}
 	}
 }

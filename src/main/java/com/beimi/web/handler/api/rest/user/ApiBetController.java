@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,16 +38,13 @@ public class ApiBetController {
     private BetGameDetailESRepository betGameDetailESRes;
 
     @Autowired
-    BetTypeGroupRepository betTypeGroupRepository;
-
-    @Autowired
     private TokenESRepository tokenESRes;
 
     @Autowired
     private HxConfigRepository hxConfigRes;
 
     @RequestMapping
-    public ResponseEntity<PcData> doBet(@Valid int type,@Valid int diamonds,@Valid String lotterTypeId,@Valid int periods, @Valid String token) {
+    public ResponseEntity<PcData> doBet(@Valid int type,@Valid int goldcoins,@Valid String lotterTypeId,@Valid int periods, @Valid String token) {
         PcData pcData = null;
         Token userToken = null;
         if (!StringUtils.isBlank(token)){
@@ -63,25 +62,51 @@ public class ApiBetController {
                         return new ResponseEntity<>(new PcData("201","当期期数不可用",null), HttpStatus.OK);
                     }
 
-                    BetGameDetail betGameDetail =new BetGameDetail();
-                    betGameDetail.setPlayUser(playUser);
-                    betGameDetail.setTokenId(userToken.getId());//玩家id
-                    betGameDetail.setType(type);
-                    betGameDetail.setOrgi("beimi");
-                    betGameDetail.setDiamonds(diamonds);//下注金额
-                    betGameDetail.setPeriods(periods);//期数
-                    betGameDetail.setLotterTypeId(lotterTypeId);//投注类型
-                    if (playUser.getDiamonds()>= betGameDetail.getDiamonds()) {
-                        GameBetType betType = betTypeGroupRepository.findById(lotterTypeId);
-                        if (betType!=null) {
-                            HttpUtils.getInstance().postBetMes(getHxToken(), "", playUser.getUsername(), pcddPeriods.getPeriods()+1, betType.getName(),diamonds,1);
-                            betGameDetailESRes.save(betGameDetail);
-                            pcData = new PcData("200", "下注成功", null);
+                    if (playUser.getGoldcoins() < goldcoins){
+                        return new ResponseEntity<>(new PcData("201","元宝不足，请先充值",null), HttpStatus.OK);
+                    }
+
+                    GameBetType betType = (GameBetType)CacheHelper.getSystemCacheBean().getCacheObject(lotterTypeId,BMDataContext.SYSTEM_ORGI);
+                    if (betType!=null) {
+                        HttpUtils.getInstance().postBetMes(getHxToken(), "", playUser.getUsername(), pcddPeriods.getPeriods()+1, betType.getName(),goldcoins,1);
+                        playUser.setGoldcoins(playUser.getGoldcoins() - goldcoins);
+                        playUserRes.save(playUser);
+                        BetGameDetail betGameDetail = betGameDetailESRes.findByPeriodsAndTokenId(periods,userToken.getId());
+                        if (betGameDetail == null){
+                            betGameDetail =new BetGameDetail();
+//                            betGameDetail.setPlayUser(playUser);
+                            betGameDetail.setTokenId(userToken.getId());//玩家id
+                            betGameDetail.setType(type);
+                            betGameDetail.setOrgi("beimi");
+                            betGameDetail.setStatus(0);
+                            PcBetEntity pcBetEntity = new PcBetEntity();
+                            pcBetEntity.setGoldcoins(goldcoins);//下注金额
+                            pcBetEntity.setLotterTypeId(lotterTypeId);//投注类型
+                            pcBetEntity.setLotterName(betType.getName());
+                            pcBetEntity.setCreateTime(new Date().getTime());
+                            pcBetEntity.setOrgi(type);
+                            pcBetEntity.setPeriods(periods);
+                            ArrayList<PcBetEntity> pcBetEntityList = new ArrayList<>();
+                            pcBetEntityList.add(pcBetEntity);
+                            betGameDetail.setPcBetEntityList(pcBetEntityList);
+                            betGameDetail.setPeriods(periods);//期数
+
                         }else{
-                            pcData = new PcData("200", "下注类型错误", null);
+                            ArrayList<PcBetEntity> pcBetEntityList = betGameDetail.getPcBetEntityList();
+                            PcBetEntity pcBetEntity = new PcBetEntity();
+                            pcBetEntity.setGoldcoins(goldcoins);//下注金额
+                            pcBetEntity.setLotterTypeId(lotterTypeId);//投注类型
+                            pcBetEntity.setLotterName(betType.getName());
+                            pcBetEntity.setCreateTime(new Date().getTime());
+                            pcBetEntity.setOrgi(type);
+                            pcBetEntity.setPeriods(periods);
+                            pcBetEntityList.add(pcBetEntity);
+                            betGameDetail.setPcBetEntityList(pcBetEntityList);
                         }
-                    }else {
-                        pcData=new PcData("204","余额不足",null);
+                        betGameDetailESRes.save(betGameDetail);
+                        pcData = new PcData("200", null, "下注成功");
+                    }else{
+                        pcData = new PcData("201", "下注类型错误", null);
                     }
                 } else {
                     pcData = new PcData("201", "没有找到此用户",null);

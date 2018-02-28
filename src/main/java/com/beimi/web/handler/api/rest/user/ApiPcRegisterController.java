@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beimi.web.handler.Handler;
@@ -35,7 +36,8 @@ public class ApiPcRegisterController extends Handler{
 	   @Autowired
 	   private TokenESRepository tokenESRes ;
 
-	    @RequestMapping
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.POST)
 	    public ResponseEntity<PcData> register(HttpServletRequest request , @Valid PlayUser player) {
 			String ip = UKTools.getIpAddr(request);
 	        player = register(player,ip) ;

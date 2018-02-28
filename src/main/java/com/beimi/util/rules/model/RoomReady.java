@@ -9,8 +9,8 @@ public class RoomReady implements Message{
 	private String roomid ;
 
 	public RoomReady(GameRoom gameRoom){
-		this.cardroom = gameRoom.isCardroom() ;
-		this.roomid = gameRoom.getRoomid() ;
+//		this.cardroom = gameRoom.isCardroom() ;
+//		this.roomid = gameRoom.getRoomid() ;
 	}
 
 	@Override

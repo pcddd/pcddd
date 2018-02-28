@@ -129,7 +129,7 @@ public class HttpUtils {
         //成功回调
         public abstract void onSusscess(String data);
         //失败
-        public void onError(String meg){};
+        public void onError(String meg){}
     }
 
     /**
@@ -138,8 +138,8 @@ public class HttpUtils {
      * @param username
      */
     public void postJoinRoomMes(String hxToken,String username){
-        String json = "{\"target_type\" : \"chatrooms\",\"target\" : [\"41992954380289\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type：1,nick_name: +"+ username +
-                ", level:1},}\"},\"from\" : \"" + username + "\"} ";
+        String json = "{\"target_type\" : \"chatrooms\",\"target\" : [\"42187441111041\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:1,nick_name:"+ username +
+                ",level:1}\"},\"from\" : \"" + username + "\"} ";
         postJson(HxService.MESSAGE,
                 hxToken,
                 json,
@@ -162,11 +162,11 @@ public class HttpUtils {
      */
     public void postBetMes(String hxToken,String user_photo,String nick_name,int game_count,String game_type,int point,int level){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"41992954380289\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type：2,nick_name:")
+        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"42187441111041\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:2,nick_name:")
                 .append(nick_name)
-                .append(",user_photo:")
-                .append(user_photo)
-                .append(",nick_name:")
+//                .append(",user_photo:")
+//                .append(user_photo)
+                .append(",game_count:")
                 .append(game_count)
                 .append(",game_type:")
                 .append(game_type)
@@ -174,7 +174,7 @@ public class HttpUtils {
                 .append(point)
                 .append(",level:")
                 .append(level)
-                .append("},}\"},\"from\" : \"")
+                .append("}\"},\"from\" : \"")
                 .append(nick_name)
                 .append("\"} ");
 
@@ -199,13 +199,13 @@ public class HttpUtils {
      */
     public void postOpenLotteryMes(String hxToken,int game_count,String ext_content,long create_time){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"41992954380289\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type：3,game_count:")
+        stringBuilder.append("{\"target_type\":\"chatrooms\",\"target\":[\"42187441111041\"],\"msg\":{\"type\":\"txt\",\"msg\":\"{notice_type:3,game_count:")
                 .append(game_count)
-                .append(", level:1,ext_content:")
+                .append(",level:1,ext_content:\\\"")
                 .append(ext_content)
-                .append(",create_time:")
+                .append("\\\",create_time:")
                 .append(create_time)
-                .append("},}\"},\"from\" : \"")
+                .append("}\"},\"from\":\"")
                 .append("admin")
                 .append("\"} ");
 
@@ -231,11 +231,11 @@ public class HttpUtils {
      */
     public void postOpenBetMes(String hxToken,String game_count,String extraStr){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"41992954380289\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type：5,game_count:")
+        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"42187441111041\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:5,game_count:")
                 .append(game_count)
                 .append(",ext_content:")
                 .append(extraStr)
-                .append("},}\"},\"from\" : \"")
+                .append("}\"},\"from\" : \"")
                 .append("admin")
                 .append("\"} ");
 
@@ -263,9 +263,9 @@ public class HttpUtils {
 
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"41992954380289\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type：4,game_count:")
+        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"42187441111041\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:4,game_count:")
                 .append(game_count)
-                .append("},}\"},\"from\" : \"")
+                .append("}\"},\"from\" : \"")
                 .append("admin")
                 .append("\"} ");
 

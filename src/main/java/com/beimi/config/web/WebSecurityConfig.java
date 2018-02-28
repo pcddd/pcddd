@@ -68,6 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 new AntPathRequestMatcher("/api/caiGuest"),
                 new AntPathRequestMatcher("/api/dobet"),
                 new AntPathRequestMatcher("/api/updatehxconfig"),
+                new AntPathRequestMatcher("/api/betRecord"),
                 new AntPathRequestMatcher("/api/bettype")},
                 new AntPathRequestMatcher("/api/**"));
     }

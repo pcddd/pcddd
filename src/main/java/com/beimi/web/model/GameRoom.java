@@ -55,7 +55,7 @@ public class GameRoom implements UserEvent, java.io.Serializable, Comparable<Gam
 	private int cardsnum ;	//发牌数量
 	private int curpalyers ;	//当前人数
 	
-	private boolean cardroom ;	//是否房卡模式 
+//	private boolean cardroom ;	//是否房卡模式
 	
 	private String master ;	//房主 ，开设房间的人 或第一个进入的人
 	
@@ -212,12 +212,12 @@ public class GameRoom implements UserEvent, java.io.Serializable, Comparable<Gam
 	public void setCurpalyers(int curpalyers) {
 		this.curpalyers = curpalyers;
 	}
-	public boolean isCardroom() {
-		return cardroom;
-	}
-	public void setCardroom(boolean cardroom) {
-		this.cardroom = cardroom;
-	}
+//	public boolean isCardroom() {
+//		return cardroom;
+//	}
+//	public void setCardroom(boolean cardroom) {
+//		this.cardroom = cardroom;
+//	}
 	@Transient
 	public PlayUser getMasterUser() {
 		return masterUser;

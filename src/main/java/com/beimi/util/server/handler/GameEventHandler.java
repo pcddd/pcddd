@@ -138,34 +138,34 @@ public class GameEventHandler
     @OnEvent(value = "gamestatus")   
     public void onGameStatus(SocketIOClient client , String data)  
     {  
-    	BeiMiClient beiMiClient = JSON.parseObject(data , BeiMiClient.class) ;
-    	Token userToken ;
-    	GameStatus gameStatus = new GameStatus() ;
-    	gameStatus.setGamestatus(BMDataContext.GameStatusEnum.NOTREADY.toString());
-		if(beiMiClient!=null && !StringUtils.isBlank(beiMiClient.getToken()) && (userToken = (Token) CacheHelper.getApiUserCacheBean().getCacheObject(beiMiClient.getToken(), beiMiClient.getOrgi()))!=null){
-			//鉴权完毕
-			PlayUserClient userClient = (PlayUserClient) CacheHelper.getApiUserCacheBean().getCacheObject(userToken.getUserid(), userToken.getOrgi()) ;
-			if(userClient!=null){
-				gameStatus.setGamestatus(BMDataContext.GameStatusEnum.READY.toString());
-				String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(userClient.getId(), userClient.getOrgi()) ;
-				if(!StringUtils.isBlank(roomid) && CacheHelper.getBoardCacheBean().getCacheObject(roomid, userClient.getId())!=null){
-					gameStatus.setUserid(userClient.getId());
-					gameStatus.setOrgi(userClient.getOrgi());
-
-					GameRoom gameRoom = (GameRoom)CacheHelper.getGameRoomCacheBean().getCacheObject(roomid , userClient.getOrgi()) ;
-                    GamePlayway gamePlayway = (GamePlayway) CacheHelper.getSystemCacheBean().getCacheObject(gameRoom.getPlayway(), userClient.getOrgi()) ;
-					gameStatus.setGametype(gamePlayway.getCode());
-					gameStatus.setPlayway(gamePlayway.getId());
-					gameStatus.setGamestatus(BMDataContext.GameStatusEnum.PLAYING.toString());
-					if(gameRoom.isCardroom()){
-						gameStatus.setCardroom(true);
-					}
-				}
-			}
-		}else{
-			gameStatus.setGamestatus(BMDataContext.GameStatusEnum.TIMEOUT.toString());
-		}
-		client.sendEvent(BMDataContext.BEIMI_GAMESTATUS_EVENT, gameStatus);
+//    	BeiMiClient beiMiClient = JSON.parseObject(data , BeiMiClient.class) ;
+//    	Token userToken ;
+//    	GameStatus gameStatus = new GameStatus() ;
+//    	gameStatus.setGamestatus(BMDataContext.GameStatusEnum.NOTREADY.toString());
+//		if(beiMiClient!=null && !StringUtils.isBlank(beiMiClient.getToken()) && (userToken = (Token) CacheHelper.getApiUserCacheBean().getCacheObject(beiMiClient.getToken(), beiMiClient.getOrgi()))!=null){
+//			//鉴权完毕
+//			PlayUserClient userClient = (PlayUserClient) CacheHelper.getApiUserCacheBean().getCacheObject(userToken.getUserid(), userToken.getOrgi()) ;
+//			if(userClient!=null){
+//				gameStatus.setGamestatus(BMDataContext.GameStatusEnum.READY.toString());
+//				String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(userClient.getId(), userClient.getOrgi()) ;
+//				if(!StringUtils.isBlank(roomid) && CacheHelper.getBoardCacheBean().getCacheObject(roomid, userClient.getId())!=null){
+//					gameStatus.setUserid(userClient.getId());
+//					gameStatus.setOrgi(userClient.getOrgi());
+//
+//					GameRoom gameRoom = (GameRoom)CacheHelper.getGameRoomCacheBean().getCacheObject(roomid , userClient.getOrgi()) ;
+//                    GamePlayway gamePlayway = (GamePlayway) CacheHelper.getSystemCacheBean().getCacheObject(gameRoom.getPlayway(), userClient.getOrgi()) ;
+//					gameStatus.setGametype(gamePlayway.getCode());
+//					gameStatus.setPlayway(gamePlayway.getId());
+//					gameStatus.setGamestatus(BMDataContext.GameStatusEnum.PLAYING.toString());
+//					if(gameRoom.isCardroom()){
+//						gameStatus.setCardroom(true);
+//					}
+//				}
+//			}
+//		}else{
+//			gameStatus.setGamestatus(BMDataContext.GameStatusEnum.TIMEOUT.toString());
+//		}
+//		client.sendEvent(BMDataContext.BEIMI_GAMESTATUS_EVENT, gameStatus);
     }
       
     //抢地主事件（斗地主中的抢地主）
