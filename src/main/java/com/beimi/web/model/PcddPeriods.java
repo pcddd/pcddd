@@ -20,6 +20,8 @@ public class PcddPeriods implements UserEvent, java.io.Serializable {
     private int status;
     private String res;
     private String opentime;
+    private String resname;
+    private int colorid = 4;
 
     public PcddPeriods(int type,int periods,int status,String res,String opentime){
         this.type = type;
@@ -29,8 +31,28 @@ public class PcddPeriods implements UserEvent, java.io.Serializable {
         this.opentime = opentime;
     }
 
+    public void setColorid(int colorid) {
+        this.colorid = colorid;
+    }
+
+    public int getColorid() {
+        return colorid;
+    }
+
     public PcddPeriods(){
 
+    }
+
+    public void setResname(String resname) {
+        this.resname = resname;
+    }
+
+    public String getResname() {
+        return resname;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public void setStatus(int status) {

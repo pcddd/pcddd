@@ -26,18 +26,23 @@ public class LotteryClient implements Serializable{
 
 
     private String curRes;//开奖数字
+    private String curResName;
     private String nextTime;//开奖时间
 
     private int stauts; //1正常 2封盘 3停售
 
     private int curPoint; // 当前元宝
 
-    public LotteryClient(int curNo, String curRes, int stauts, int sec, String nextTime){
+    private int colorId;
+
+    public LotteryClient(int curNo, String curRes,String curResName, int stauts, int sec, String nextTime,int colorId){
         this.curNo = curNo;
         this.curRes = curRes;
+        this.curResName = curResName;
         this.nextOpenSec = sec;
         this.stauts = stauts;
         this.nextTime = nextTime;
+        this.colorId = colorId;
     }
     public LotteryClient(){}
     /**
@@ -49,6 +54,26 @@ public class LotteryClient implements Serializable{
     @GenericGenerator(name = "system-uuid", strategy = "assigned")
     public String getId() {
         return id;
+    }
+
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setCurResName(String curResName) {
+        this.curResName = curResName;
+    }
+
+    public String getCurResName() {
+        return curResName;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public void setNextOpenSec(long nextOpenSec) {

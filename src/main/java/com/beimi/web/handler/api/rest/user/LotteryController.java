@@ -54,7 +54,7 @@ public class LotteryController {
                 }
                 if (pcddPeriods != null){
                     LotteryClient lottery = new LotteryClient(pcddPeriods.getPeriods(),
-                            pcddPeriods.getRes(),pcddPeriods.getStatus(),0,pcddPeriods.getOpentime());
+                            pcddPeriods.getRes(),pcddPeriods.getResname(),pcddPeriods.getStatus(),0,pcddPeriods.getOpentime(),pcddPeriods.getColorid());
                     long nexttime = Integer.parseInt(pcddPeriods.getOpentime()) - new Date().getTime()/1000;
                     if (nexttime < 0){
                         lottery.setNextOpenSec(0);

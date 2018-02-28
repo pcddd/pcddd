@@ -3,9 +3,9 @@ package com.beimi.web.model;
 public class PcBetEntity {
     private int goldcoins;		//下注金额
 
-    private String lotterTypeId;//投注类型
+    private String betLotterTypeId;//投注类型id
 
-    private String lotterName;//投注类型名称
+    private String betLotterName;//投注类型名称
 
     private double getGold;        //中奖金额
 
@@ -14,6 +14,8 @@ public class PcBetEntity {
     private int isWin = -1;            //是否中奖 -1待开奖 1中奖 0未中
 
     private String realResult;    //开奖结果
+
+    private String lotterName; //开奖类型
 
     private int periods; //期数
 
@@ -75,8 +77,20 @@ public class PcBetEntity {
         this.lotterName = lotterName;
     }
 
-    public void setLotterTypeId(String lotterTypeId) {
-        this.lotterTypeId = lotterTypeId;
+    public void setBetLotterName(String betLotterName) {
+        this.betLotterName = betLotterName;
+    }
+
+    public void setBetLotterTypeId(String betLotterTypeId) {
+        this.betLotterTypeId = betLotterTypeId;
+    }
+
+    public String getBetLotterName() {
+        return betLotterName;
+    }
+
+    public String getBetLotterTypeId() {
+        return betLotterTypeId;
     }
 
     public int getGoldcoins() {
@@ -87,7 +101,4 @@ public class PcBetEntity {
         return lotterName;
     }
 
-    public String getLotterTypeId() {
-        return lotterTypeId;
-    }
 }

@@ -81,8 +81,8 @@ public class ApiBetController {
                             betGameDetail.setStatus(0);
                             PcBetEntity pcBetEntity = new PcBetEntity();
                             pcBetEntity.setGoldcoins(goldcoins);//下注金额
-                            pcBetEntity.setLotterTypeId(lotterTypeId);//投注类型
-                            pcBetEntity.setLotterName(betType.getName());
+                            pcBetEntity.setBetLotterTypeId(lotterTypeId);//投注类型
+                            pcBetEntity.setBetLotterName(betType.getName());
                             pcBetEntity.setCreateTime(new Date().getTime());
                             pcBetEntity.setOrgi(type);
                             pcBetEntity.setPeriods(periods);
@@ -95,8 +95,8 @@ public class ApiBetController {
                             ArrayList<PcBetEntity> pcBetEntityList = betGameDetail.getPcBetEntityList();
                             PcBetEntity pcBetEntity = new PcBetEntity();
                             pcBetEntity.setGoldcoins(goldcoins);//下注金额
-                            pcBetEntity.setLotterTypeId(lotterTypeId);//投注类型
-                            pcBetEntity.setLotterName(betType.getName());
+                            pcBetEntity.setBetLotterTypeId(lotterTypeId);//投注类型
+                            pcBetEntity.setBetLotterName(betType.getName());
                             pcBetEntity.setCreateTime(new Date().getTime());
                             pcBetEntity.setOrgi(type);
                             pcBetEntity.setPeriods(periods);

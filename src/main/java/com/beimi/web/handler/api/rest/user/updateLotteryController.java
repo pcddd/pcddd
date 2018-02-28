@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/updateLottery")
@@ -80,7 +82,7 @@ public class updateLotteryController {
                 newPcddPeriods = new PcddPeriods(type,curNo,status,curRes,nextDrawTime);
                 System.out.println(newPcddPeriods.toString());
                 try {
-                    doBetSetttleAccounts(type,curRes,curNo);
+                    doBetSetttleAccounts(type,curRes,curNo,newPcddPeriods);
                 } catch (Exception e){
                     System.out.println(e.getMessage());
                 }
@@ -117,7 +119,7 @@ public class updateLotteryController {
         return pcddPeriods;
     }
 
-    private void doBetSetttleAccounts(int type,String resno,int periods) throws Exception{
+    private void doBetSetttleAccounts(int type,String resno,int periods,PcddPeriods pcddPeriods) throws Exception{
         String green = "1,4,7,10,16,19,22,25";
         String blue = "2,5,8,11,17,20,23,26";
         List<String> list = new ArrayList<String>();
@@ -128,36 +130,59 @@ public class updateLotteryController {
             }
             String[] nums = numStr[0].split(",");
             Integer sum = Integer.parseInt(numStr[1]);
-            if (sum <= 4) {
-                list.add("极小");
-            } else if (sum <= 13) {
+            if (sum <= 13){
                 list.add("小");
-            } else if (sum >= 23) {
-                list.add("极大");
-            } else if (sum >= 14) {
+
+                if (sum % 2 != 0) {
+                    list.add("单");
+                } else {
+                    list.add("双");
+                }
+
+                if (sum <= 4) {
+                    list.add("极小");
+                }
+
+            }else{
                 list.add("大");
-            }
 
-            if (sum % 2 != 0) {
-                list.add("单");
-            } else {
-                list.add("双");
-            }
+                if (sum % 2 != 0) {
+                    list.add("单");
+                } else {
+                    list.add("双");
+                }
 
-            list.add(list.get(0) + list.get(1));
+                if (sum >= 23) {
+                    list.add("极大");
+                }
+            }
+//            list.add(list.get(0) + list.get(1));
 
             if (sum % 3 == 0) {
                 list.add("红");
+                pcddPeriods.setColorid(1);
             } else if (green.contains(String.valueOf(sum))) {
                 list.add("绿");
+                pcddPeriods.setColorid(2);
             } else if (blue.contains(String.valueOf(sum))){
                 list.add("蓝");
+                pcddPeriods.setColorid(3);
+            }else{
+                pcddPeriods.setColorid(4);
             }
 
             if (nums[0].equals(nums[1]) && nums[1].equals(nums[2])) {
                 list.add("豹子");
             }
+
             list.add(sum.toString());
+
+            Pattern p = Pattern.compile("(\\[[^\\]]*\\])");
+            Matcher m = p.matcher(list.toString());
+            if (m.find()){
+                pcddPeriods.setResname(m.group().substring(1, m.group().length()-1));
+            }
+
             List<BetGameDetail> betGameDetailList =betGameDetailESRepository.findByTypeAndPeriods(type,periods);
             if (betGameDetailList.size()!=0){
                 PlayUser playUser=null;
@@ -170,7 +195,7 @@ public class updateLotteryController {
                         int gold = 0;
                         for (int i=0;i<pcBetEntityList.size();i++){
                             PcBetEntity pcBetEntity = pcBetEntityList.get(i);
-                            GameBetType gameBetType = (GameBetType)CacheHelper.getSystemCacheBean().getCacheObject(pcBetEntity.getLotterTypeId(),BMDataContext.SYSTEM_ORGI);
+                            GameBetType gameBetType = (GameBetType)CacheHelper.getSystemCacheBean().getCacheObject(pcBetEntity.getBetLotterTypeId(),BMDataContext.SYSTEM_ORGI);
 //                            GameBetType gameBetType = betTypeGroupRepository.findById(pcBetEntity.getLotterTypeId());
                             if (list.contains(gameBetType.getName())) {
                                 gold += pcBetEntity.getGoldcoins() * Integer.parseInt(gameBetType.getValue());
@@ -178,6 +203,7 @@ public class updateLotteryController {
                                 gold -= pcBetEntity.getGoldcoins();
                             }
                             pcBetEntity.setGetGold(gold);
+                            pcBetEntity.setLotterName(list.toString());
                             pcBetEntity.setIsWin(gold > 0 ? 1 : 0);
                             pcBetEntity.setRealResult(resno);
                         }
@@ -196,7 +222,6 @@ public class updateLotteryController {
 
         }
     }
-
     /**
      * 状态
      */
