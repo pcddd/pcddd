@@ -1,5 +1,9 @@
 package com.beimi.web.model;
 
+import java.beans.Transient;
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+
 public class PcBetEntity {
     private int goldcoins;		//下注金额
 
@@ -20,6 +24,8 @@ public class PcBetEntity {
     private int periods; //期数
 
     private int orgi; //游戏类型
+
+    private String newtime;
 
     public void setOrgi(int orgi) {
         this.orgi = orgi;
@@ -101,4 +107,14 @@ public class PcBetEntity {
         return lotterName;
     }
 
+    @Transient
+    public String getNewtime() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.newtime = simpleDateFormat.format(this.getCreateTime());
+        return newtime;
+    }
+
+    public void setNewtime(String newtime) {
+        this.newtime = newtime;
+    }
 }

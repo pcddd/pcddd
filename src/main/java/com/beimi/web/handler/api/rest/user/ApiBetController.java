@@ -75,6 +75,7 @@ public class ApiBetController {
                         if (betGameDetail == null){
                             betGameDetail =new BetGameDetail();
 //                            betGameDetail.setPlayUser(playUser);
+                            betGameDetail.setUsername(playUser.getUsername());
                             betGameDetail.setTokenId(userToken.getId());//玩家id
                             betGameDetail.setType(type);
                             betGameDetail.setOrgi("beimi");

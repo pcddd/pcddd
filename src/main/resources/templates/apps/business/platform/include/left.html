@@ -2,21 +2,6 @@
 	<li class="layui-nav-item <#if subtype?? && subtype == 'content'>layui-this</#if>">
 		<a class="layui-nav-default" href="/admin/content.html">业务概况</a>
 	</li>
-	<li class="layui-nav-item layui-nav-itemed">
-	<a class="layui-nav-title" 
-		href="javascript:;">游戏设置</a>
-		<dl class="layui-nav-child">
-			<dd  <#if subtype?? && subtype == 'account'>class="layui-this"</#if>>
-				<a href="/apps/platform/config/account.html">用户账号</a>
-			</dd>
-			<dd  <#if subtype?? && subtype == 'gameconfig'>class="layui-this"</#if>>
-				<a href="/apps/platform/config/game.html">游戏设置</a>
-			</dd>
-			<dd  <#if subtype?? && subtype == 'aiconfig'>class="layui-this"</#if>>
-				<a href="/apps/platform/config/ai.html">机器人设置</a>
-			</dd>
-		</dl>
-	</li>
 	
 	<li class="layui-nav-item layui-nav-itemed">
 		<a class="layui-nav-title" href="javascript:;">玩法设置</a>
@@ -28,10 +13,6 @@
 			</dd>
 			</#list>
 			</#if>
-			
-			<dd  <#if subtype?? && subtype == 'mjcardstype'>class="layui-this"</#if>>
-				<a href="/apps/platform/mjcardstype.html">麻将牌型</a>
-			</dd>
 		</dl>
 	</li>
 	
@@ -43,9 +24,6 @@
 			</dd>
 			<dd  <#if subtype?? && subtype == 'onlinegameusers'>class="layui-this"</#if>>
 				<a href="/apps/platform/online/gameusers.html">在线玩家</a>
-			</dd>
-			<dd  <#if subtype?? && subtype == 'gameroom'>class="layui-this"</#if>>
-				<a href="/apps/platform/gameroom.html">游戏房间</a>
 			</dd>
 		</dl>
 	</li>

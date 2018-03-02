@@ -1,51 +1,82 @@
 <div class="uk-layui-form">
 	<form class="layui-form uk-form"
 		action="/apps/platform/online/gameusers/update.html">
-		<input type="hidden" name="id" value="${playUser.id!''}">
-
+		<#list pcBetEntityList as playUser>
 		<div class="layui-form-item">
-			<label class="layui-form-label">用户名：</label>
+			<label class="layui-form-label">下注金额：</label>
 			<div class="layui-input-inline">
-				${playUser.username!''}
-			</div>
-		</div>
-		
-			
-		<div class="layui-form-item">
-			<label class="layui-form-label">账号：</label>
-			<div class="layui-input-inline">
-				<input type="checkbox" name="disabled" title="禁用" value="1" >
-			</div>
-		</div>
-		
-		<div class="layui-form-item">
-			<label class="layui-form-label">金币：</label>
-			<div class="layui-input-inline">
-				<input type="text" name="goldcoins" value="${playUser.goldcoins!''}" required lay-verify="required|number"
-					placeholder="金币数量" autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">房卡：</label>
-			<div class="layui-input-inline">
-				<input type="text" name="cards" value="${playUser.cards!''}" required lay-verify="required|number"
-					placeholder="房卡数量" autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">钻石：</label>
-			<div class="layui-input-inline">
-				<input type="text" name="diamonds" value="${playUser.diamonds!''}" required lay-verify="required|number"
-					placeholder="钻石数量" autocomplete="off" class="layui-input">
+				${playUser.goldcoins!''}
 			</div>
 		</div>
 
-		<div class="layui-form-button">
-			<div class="layui-button-block">
-				<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		<div class="layui-form-item">
+			<label class="layui-form-label">投注类型：</label>
+		        <div class="layui-input-inline">
+				   ${playUser.betLotterName!''}
+				</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">中奖金额：</label>
+			<div class="layui-input-inline">
+				${playUser.getGold!''}
 			</div>
 		</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">下注时间：</label>
+				<div class="layui-input-inline">
+					${playUser.newtime!''}
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否中奖：</label>
+				<div class="layui-input-inline">
+					<#if playUser.isWin?? && playUser.isWin == -1>
+						未开奖
+						<#elseif playUser.isWin?? && playUser.isWin == 0>
+							未中奖
+							<#elseif playUser.isWin?? && playUser.isWin == 1>
+								中奖
+					</#if>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">开奖结果：</label>
+				<div class="layui-input-inline">
+					${playUser.realResult!''}
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">开奖类型：</label>
+				<div class="layui-input-inline">
+					${playUser.lotterName!''}
+				</div>
+			</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">下注期数：</label>
+			<div class="layui-input-inline">
+				${playUser.periods!''}
+			</div>
+		</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">游戏类型：</label>
+				<div class="layui-input-inline">
+					<#if playUser.orgi?? && playUser.orgi == 1>
+						    北京28
+						<#elseif playUser.orgi?? && playUser.orgi == 2>
+							加拿大28
+
+					</#if>
+				</div>
+			</div>
+
+		</#list>
 	</form>
 </div>
 

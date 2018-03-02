@@ -18,10 +18,10 @@ import com.beimi.util.cache.CacheHelper;
 @Component
 public class StartedEventListener implements ApplicationListener<ContextRefreshedEvent> {
 	
-//	@Resource
+	@Resource
 //	private GameEngine gameEngine ;
 	
-//	private SysDicRepository sysDicRes;
+	private SysDicRepository sysDicRes;
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
     	if(BMDataContext.getContext() == null){
@@ -29,21 +29,21 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
     	}
 //    	BMDataContext.setGameEngine(gameEngine);
     	
-//    	sysDicRes = event.getApplicationContext().getBean(SysDicRepository.class) ;
-//    	List<SysDic> sysDicList = sysDicRes.findAll() ;
+    	sysDicRes = event.getApplicationContext().getBean(SysDicRepository.class) ;
+    	List<SysDic> sysDicList = sysDicRes.findAll() ;
     	
-//    	for(SysDic dic : sysDicList){
-//    		CacheHelper.getSystemCacheBean().put(dic.getId(), dic, dic.getOrgi());
-//			if(dic.getParentid().equals("0")){
-//				List<SysDic> sysDicItemList = new ArrayList<SysDic>();
-//				for(SysDic item : sysDicList){
-//					if(item.getDicid()!=null && item.getDicid().equals(dic.getId())){
-//						sysDicItemList.add(item) ;
-//					}
-//				}
-//				CacheHelper.getSystemCacheBean().put(dic.getCode(), sysDicItemList, dic.getOrgi());
-//			}
-//		}
+    	for(SysDic dic : sysDicList){
+    		CacheHelper.getSystemCacheBean().put(dic.getId(), dic, dic.getOrgi());
+			if(dic.getParentid().equals("0")){
+				List<SysDic> sysDicItemList = new ArrayList<SysDic>();
+				for(SysDic item : sysDicList){
+					if(item.getDicid()!=null && item.getDicid().equals(dic.getId())){
+						sysDicItemList.add(item) ;
+					}
+				}
+				CacheHelper.getSystemCacheBean().put(dic.getCode(), sysDicItemList, dic.getOrgi());
+			}
+		}
     	/**
     	 * 加载系统全局配置
     	 */

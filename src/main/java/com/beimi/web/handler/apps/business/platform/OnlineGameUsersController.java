@@ -1,5 +1,6 @@
 package com.beimi.web.handler.apps.business.platform;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,9 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.beimi.web.model.BetGameDetail;
+import com.beimi.web.model.PcBetEntity;
 import com.beimi.web.service.repository.es.BetGameDetailESRepository;
 import freemarker.template.utility.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,6 +48,10 @@ public class OnlineGameUsersController extends Handler{
 	@RequestMapping({"/gameusers"})
 	@Menu(type="platform", subtype="onlinegameusers")
 	public ModelAndView online(ModelMap map , HttpServletRequest request , @Valid String id){
+		/*Page<BetGameDetail> page=betGameDetailESRes.findByOrgi("beimi",new PageRequest(super.getP(request), super.getPs(request)));
+		for (BetGameDetail betGameDetail){
+
+		}*/
 		map.addAttribute("playersList", betGameDetailESRes.findByOrgi("beimi",new PageRequest(super.getP(request), super.getPs(request)))) ;
 		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
 	}
@@ -53,24 +60,25 @@ public class OnlineGameUsersController extends Handler{
 	@Menu(type="platform", subtype="onlinegameusers")
 	public ModelAndView search(ModelMap map , HttpServletRequest request , @Valid String username,@Valid String periods){
 		int per=0;
-		if(!"".equals(periods)){
+		if(!"".equals(periods)&&!"".equals(username)){
 			per=Integer.parseInt(periods);
+			map.addAttribute("playersList", betGameDetailESRes.findByUsernameAndPeriods(username,per,new PageRequest(super.getP(request), super.getPs(request)))) ;
+		}else if (!"".equals(periods)){
+			per=Integer.parseInt(periods);
+			map.addAttribute("playersList", betGameDetailESRes.findByPeriods(per,new PageRequest(super.getP(request), super.getPs(request)))) ;
+		}else if (!"".equals(username)){
+			map.addAttribute("playersList", betGameDetailESRes.findByUsername(username,new PageRequest(super.getP(request), super.getPs(request)))) ;
 		}
-		PlayUser playUser=playersRes.findByUsername(username);
-		if (playUser!=null){
-			username=playUser.getToken();
-		}else {
-			username="";
-		}
-		map.addAttribute("playersList", betGameDetailESRes.findByTokenIdAndPeriods(username,per,new PageRequest(super.getP(request), super.getPs(request)))) ;
+
 		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
 	}
 	
 	@RequestMapping({"/gameusers/edit"})
 	@Menu(type="platform", subtype="onlinegameusers")
-	public ModelAndView edit(ModelMap map , HttpServletRequest request , @Valid String id){
-		
-		map.addAttribute("playUser", playersRes.findById(id)) ;
+	public ModelAndView edit(ModelMap map , HttpServletRequest request , @Valid String username){
+		BetGameDetail betGameDetail=betGameDetailESRes.findByUsername(username);
+		ArrayList<PcBetEntity> pcBetEntityList= betGameDetail.getPcBetEntityList();
+		map.addAttribute("pcBetEntityList", pcBetEntityList) ;
 		
 		return request(super.createRequestPageTempletResponse("/apps/business/platform/game/online/edit"));
 	}

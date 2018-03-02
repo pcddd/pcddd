@@ -4,10 +4,7 @@ import com.beimi.util.UKTools;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +36,8 @@ public class BetGameDetail {
     public int periods;//期数
 
     private int status = -1; //0未开奖 1已开奖
+
+    private String username;
 
 //    public PlayUser playUser;//用户信息
 
@@ -133,4 +132,12 @@ public class BetGameDetail {
 //    public void setPlayUser(PlayUser playUser) {
 //        this.playUser = playUser;
 //    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
