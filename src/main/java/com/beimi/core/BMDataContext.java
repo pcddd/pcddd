@@ -33,9 +33,12 @@ public class BMDataContext {
 	public static final String BEIMI_SYSTEM_ROOM = "room" ;
 
 	public static final String BET_TYPE_JND_PERIOD = "jnd" ;
+	public static final String ROOMID_TYPE_JND = "Jndroom" ;
 	public static final String BET_TYPE_JND_LOTTERY = "jndlottery" ;
 
 	public static final String BET_TYPE_BJ_PERIOD = "bj" ;
+
+	public static final String ROOMID_TYPE_BJ = "bjroom" ;
 	public static final String BET_TYPE_BJ_LOTTERY = "bjlottery" ;
 
 	public static final String HX_TOKEN = "hx_token";

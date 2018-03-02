@@ -57,12 +57,7 @@ public class OnlineGameUsersController extends Handler{
 			per=Integer.parseInt(periods);
 		}
 		PlayUser playUser=playersRes.findByUsername(username);
-		if (playUser!=null){
-			username=playUser.getToken();
-		}else {
-			username="";
-		}
-		map.addAttribute("playersList", betGameDetailESRes.findByTokenIdAndPeriods(username,per,new PageRequest(super.getP(request), super.getPs(request)))) ;
+		map.addAttribute("playersList", betGameDetailESRes.findByUserIdAndPeriods(playUser.getId(),per,new PageRequest(super.getP(request), super.getPs(request)))) ;
 		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
 	}
 	

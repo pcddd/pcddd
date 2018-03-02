@@ -8,7 +8,7 @@ import com.beimi.web.model.PlayUser;
 
 public abstract interface PlayUserRepository extends JpaRepository<PlayUser, String>
 {
-	public abstract PlayUser findById(String paramString);
+	public abstract PlayUser findById(String id);
 
 	public abstract PlayUser findByToken(String token);
 

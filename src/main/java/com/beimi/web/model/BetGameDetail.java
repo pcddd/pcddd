@@ -4,10 +4,7 @@ import com.beimi.util.UKTools;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +13,8 @@ import java.util.List;
  */
 @Document(indexName = "beimi", type = "uk_game_betdetail")
 @Entity
+@Table(name = "bm_game_betdetail")
+@org.hibernate.annotations.Proxy(lazy = false)
 public class BetGameDetail {
     private static final long serialVersionUID = 1L;
 
@@ -26,7 +25,7 @@ public class BetGameDetail {
 
     private String orgi;// 标识
 
-    private String tokenId;
+    private String userId;
 
 //    private int goldcoins;		//下注金额
 //
@@ -86,12 +85,12 @@ public class BetGameDetail {
         this.orgi = orgi;
     }
 
-    public String getTokenId() {
-        return tokenId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setTokenId(String tokenId) {
-        this.tokenId = tokenId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 //    public int getGoldcoins() {

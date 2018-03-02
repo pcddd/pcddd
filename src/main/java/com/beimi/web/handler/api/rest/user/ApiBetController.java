@@ -44,7 +44,7 @@ public class ApiBetController {
     private HxConfigRepository hxConfigRes;
 
     @RequestMapping
-    public ResponseEntity<PcData> doBet(@Valid int type,@Valid int goldcoins,@Valid String lotterTypeId,@Valid int periods, @Valid String token) {
+    public ResponseEntity<PcData> doBet(@Valid String roomId,@Valid int type,@Valid int goldcoins,@Valid String lotterTypeId,@Valid int periods, @Valid String token) {
         PcData pcData = null;
         Token userToken = null;
         if (!StringUtils.isBlank(token)){
@@ -53,12 +53,13 @@ public class ApiBetController {
                 PlayUser  playUser = playUserRes.findByToken(userToken.getId());
                 if (playUser != null) {
                     PcddPeriods pcddPeriods;
+
                     if (type == 1)
                         pcddPeriods = (PcddPeriods)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.BET_TYPE_BJ_LOTTERY,BMDataContext.SYSTEM_ORGI);
                     else
                         pcddPeriods = (PcddPeriods)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.BET_TYPE_JND_LOTTERY,BMDataContext.SYSTEM_ORGI);
 
-                    if (pcddPeriods == null || periods != pcddPeriods.getPeriods()+1){
+                    if (pcddPeriods == null || periods < pcddPeriods.getPeriods()){
                         return new ResponseEntity<>(new PcData("201","当期期数不可用",null), HttpStatus.OK);
                     }
 
@@ -68,14 +69,15 @@ public class ApiBetController {
 
                     GameBetType betType = (GameBetType)CacheHelper.getSystemCacheBean().getCacheObject(lotterTypeId,BMDataContext.SYSTEM_ORGI);
                     if (betType!=null) {
-                        HttpUtils.getInstance().postBetMes(getHxToken(), "", playUser.getUsername(), pcddPeriods.getPeriods()+1, betType.getName(),goldcoins,1);
+                        HttpUtils.getInstance().postBetMes(roomId,getHxToken(), "",lotterTypeId, playUser.getUsername(), pcddPeriods.getPeriods()+1,
+                                betType.getName(),goldcoins,1);
                         playUser.setGoldcoins(playUser.getGoldcoins() - goldcoins);
                         playUserRes.save(playUser);
-                        BetGameDetail betGameDetail = betGameDetailESRes.findByPeriodsAndTokenId(periods,userToken.getId());
+                        BetGameDetail betGameDetail = betGameDetailESRes.findByPeriodsAndUserId(periods,playUser.getId());
                         if (betGameDetail == null){
                             betGameDetail =new BetGameDetail();
 //                            betGameDetail.setPlayUser(playUser);
-                            betGameDetail.setTokenId(userToken.getId());//玩家id
+                            betGameDetail.setUserId(playUser.getId());//玩家id
                             betGameDetail.setType(type);
                             betGameDetail.setOrgi("beimi");
                             betGameDetail.setStatus(0);
@@ -90,7 +92,6 @@ public class ApiBetController {
                             pcBetEntityList.add(pcBetEntity);
                             betGameDetail.setPcBetEntityList(pcBetEntityList);
                             betGameDetail.setPeriods(periods);//期数
-
                         }else{
                             ArrayList<PcBetEntity> pcBetEntityList = betGameDetail.getPcBetEntityList();
                             PcBetEntity pcBetEntity = new PcBetEntity();

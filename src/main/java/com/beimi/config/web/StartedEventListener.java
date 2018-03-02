@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import com.beimi.web.model.*;
 import com.beimi.web.service.repository.jpa.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
 //	private GameEngine gameEngine ;
 	
 //	private SysDicRepository sysDicRes;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
     	if(BMDataContext.getContext() == null){
@@ -83,5 +85,48 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
     	for(Generation generation : generationList){
     		CacheHelper.getSystemCacheBean().setAtomicLong(BMDataContext.ModelType.ROOM.toString(), generation.getStartinx());
     	}
+
+		String hxRoomIds = "";
+		String roomStrs = "[";
+		String[] roomIdArr;
+		PcRoomRepository pcRoomRepository = event.getApplicationContext().getBean(PcRoomRepository.class) ;
+		List<PcRoomInfo> pcBjRoomInfoList = pcRoomRepository.findByOrgi("1");
+		for(PcRoomInfo pcRoomInfo : pcBjRoomInfoList){
+			if (StringUtils.isNotEmpty(pcRoomInfo.getRoomid())){
+				hxRoomIds += pcRoomInfo.getRoomid()+",";
+			}
+		}
+		roomIdArr = hxRoomIds.split(",");
+		for (int i=0;i<roomIdArr.length;i++){
+			if (StringUtils.isNotEmpty(roomIdArr[i])){
+				roomStrs += "\"" + roomIdArr[i] + "\"";
+			}
+			if (i != roomIdArr.length-1){
+				roomStrs += ",";
+			}
+		}
+		roomStrs += "]";
+		CacheHelper.getSystemCacheBean().put(BMDataContext.ROOMID_TYPE_BJ,roomStrs,BMDataContext.SYSTEM_ORGI);
+		List<PcRoomInfo> pcJndRoomInfoList = pcRoomRepository.findByOrgi("2");
+
+		hxRoomIds = "";
+		roomStrs = "[";
+		for(PcRoomInfo pcRoomInfo : pcJndRoomInfoList){
+			if (StringUtils.isNotEmpty(pcRoomInfo.getRoomid())){
+				hxRoomIds += pcRoomInfo.getRoomid()+",";
+			}
+		}
+        roomIdArr = hxRoomIds.split(",");
+        for (int i=0;i<roomIdArr.length;i++){
+            if (StringUtils.isNotEmpty(roomIdArr[i])){
+                roomStrs += "\"" + roomIdArr[i] + "\"";
+            }
+            if (i != roomIdArr.length-1){
+                roomStrs += ",";
+            }
+        }
+        roomStrs += "]";
+
+		CacheHelper.getSystemCacheBean().put(BMDataContext.ROOMID_TYPE_JND,roomStrs,BMDataContext.SYSTEM_ORGI);
     }
 }

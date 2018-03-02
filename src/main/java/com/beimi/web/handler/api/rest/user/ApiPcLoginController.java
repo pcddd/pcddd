@@ -73,12 +73,15 @@ public class ApiPcLoginController {
             userInfo.token = userToken.getId();
             userInfo.id = playUser.getId();
             userInfo.account = playUser.getUsername();
+            userInfo.nick_name = playUser.getNickname();
+            userInfo.point = playUser.getGoldcoins();
+            userInfo.personal_sign = playUser.getPersonalword();
             playUser.setToken(userToken.getId());
             CacheHelper.getApiUserCacheBean().put(userToken.getId(), userToken, userToken.getOrgi());
             CacheHelper.getApiUserCacheBean().put(playUser.getId(), playUser, userToken.getOrgi());
-            System.out.println(CacheHelper.getApiUserCacheBean().getAllCacheObject("缓存："+"beimi"));
-            String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(userToken.getId(), "beimi") ;
-            System.out.println(roomid);
+//            System.out.println(CacheHelper.getApiUserCacheBean().getAllCacheObject("缓存："+"beimi"));
+//            String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(userToken.getId(), "beimi") ;
+//            System.out.println(roomid);
             if (!playUser.getPassword().equals(UKTools.md5(password))) {
                 playerResultData = new PcData("201", "密码错误", null);
             } else {

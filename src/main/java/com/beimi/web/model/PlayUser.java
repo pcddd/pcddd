@@ -53,6 +53,10 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	
 	private String playertype ;
 
+	private int level;
+
+	private String level_name;
+
 	private String orgi ;
 	private String creater;
 	private Date createtime = new Date();
@@ -96,14 +100,22 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 
 	public String periods;//期数
 
+	public String personalword;
 
 	/**
 	 *对金币+房卡+id进行RSA签名 ， 任何对ID,cards ， goldcoins 进行修改之前，都需要做签名验证，
 	 *签名验证通过后才能进行修改，修改之后，重新签名 
 	 */
-	private String sign ;		 
+	private String sign ;
 
-	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
 	/**
 	 * @return the id
 	 */
@@ -115,6 +127,21 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 		return id;
 	}
 
+	public String getLevel_name() {
+		return level_name;
+	}
+
+	public void setLevel_name(String level_name) {
+		this.level_name = level_name;
+	}
+
+	public void setPersonalword(String personalword) {
+		this.personalword = personalword;
+	}
+
+	public String getPersonalword() {
+		return personalword;
+	}
 
 	public String getUsername() {
 		return username;

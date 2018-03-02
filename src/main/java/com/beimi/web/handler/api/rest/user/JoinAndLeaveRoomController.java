@@ -8,6 +8,7 @@ import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.TokenESRepository;
 import com.beimi.web.service.repository.jpa.GameRoomRepository;
 import com.beimi.web.service.repository.jpa.HxConfigRepository;
+import com.beimi.web.service.repository.jpa.PcRoomRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class JoinAndLeaveRoomController {
     private PlayUserRepository playUserRes ;
 
     @Autowired
-    private GameRoomRepository playRoomRes;
+    private PcRoomRepository playRoomRes;
 
     @Autowired
     private HxConfigRepository hxConfigRes;
@@ -48,8 +49,8 @@ public class JoinAndLeaveRoomController {
             userToken = tokenESRes.findById(token);
             if (userToken != null && !StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime() != null && userToken.getExptime().after(new Date())) {
 
-                GameRoom gameRoom = playRoomRes.findByRoomid(roomid);
-                if (gameRoom == null)
+                PcRoomInfo pcRoomInfo = playRoomRes.findByRoomid(roomid);
+                if (pcRoomInfo == null)
                     return new ResponseEntity<>(new PcData("200","房间不存在",null ), HttpStatus.OK);
 
                 PlayUser playUser = playUserRes.findByToken(token);
@@ -75,7 +76,7 @@ public class JoinAndLeaveRoomController {
 //                        });
                 if(inOrOut){
                     //加入
-                    HttpUtils.getInstance().postJoinRoomMes(getHxToken(),playUser.getUsername());
+                    HttpUtils.getInstance().postJoinRoomMes(roomid,getHxToken(),playUser.getUsername());
                     CacheHelper.getRoomMappingCacheBean().put(userToken.getUserid(), roomid, "beimi");//玩家加入房间
                     message="玩家已加入房间";
                 }else{

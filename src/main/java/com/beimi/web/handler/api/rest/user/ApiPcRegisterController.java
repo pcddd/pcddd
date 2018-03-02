@@ -41,7 +41,7 @@ public class ApiPcRegisterController extends Handler{
 	    public ResponseEntity<PcData> register(HttpServletRequest request , @Valid PlayUser player) {
 			String ip = UKTools.getIpAddr(request);
 	        player = register(player,ip) ;
-			PcData resu=new PcData(player!=null?"200":"201", player!=null ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_REGISTER_FAILD_USERNAME, player);
+			PcData resu=new PcData(player!=null?"200":"201", player!=null ? MessageEnum.USER_REGISTER_SUCCESS :"注册失败  ", player);
 			return new ResponseEntity<>(resu, HttpStatus.OK);
 	    }
 	    /**
@@ -50,18 +50,12 @@ public class ApiPcRegisterController extends Handler{
 	     * @return
 	     */
 	    public PlayUser register(PlayUser player, String ip){
-	        if(player!= null && !StringUtils.isBlank(player.getPassword())){
-	            if(StringUtils.isBlank(player.getUsername())){
-	                player.setUsername("Guest_"+ Base62.encode(UKTools.getUUID().toLowerCase()));
-	            }
-	            if(!StringUtils.isBlank(player.getPassword())){
-	                player.setPassword(UKTools.md5(player.getPassword()));
-	            }else{
-	                player.setPassword(UKTools.md5(RandomKey.genRandomNum(6)));//随机生成一个6位数的密码 ，备用
-	            }
+	        if(player!= null && !StringUtils.isBlank(player.getPassword()) && StringUtils.isNotEmpty(player.getUsername())){
+				player.setPassword(UKTools.md5(player.getPassword()));
 	            player.setCreatetime(new Date());
 	            player.setUpdatetime(new Date());
 	            player.setLastlogintime(new Date());
+				player.setNickname(player.getUsername());
 				Token userToken=null;
 				userToken=tokenESRes.findById(player.getId());
 				if (userToken==null) {
@@ -88,7 +82,8 @@ public class ApiPcRegisterController extends Handler{
 	            }else{
 	                player = null ;
 	            }
+				return player;
 	        }
-	        return player ;
+	        return null ;
 	    }
 }

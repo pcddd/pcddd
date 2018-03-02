@@ -137,8 +137,8 @@ public class HttpUtils {
      * @param hxToken
      * @param username
      */
-    public void postJoinRoomMes(String hxToken,String username){
-        String json = "{\"target_type\" : \"chatrooms\",\"target\" : [\"42187441111041\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:1,nick_name:"+ username +
+    public void postJoinRoomMes(String roomId,String hxToken,String username){
+        String json = "{\"target_type\" : \"chatrooms\",\"target\" : [\"" + roomId + "\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:1,nick_name:"+ username +
                 ",level:1}\"},\"from\" : \"" + username + "\"} ";
         postJson(HxService.MESSAGE,
                 hxToken,
@@ -160,9 +160,9 @@ public class HttpUtils {
     /**
      *  下注
      */
-    public void postBetMes(String hxToken,String user_photo,String nick_name,int game_count,String game_type,int point,int level){
+    public void postBetMes(String roomId,String hxToken,String user_photo,String lotteryId,String nick_name,int game_count,String game_type,int point,int level){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"42187441111041\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:2,nick_name:")
+        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\""+ roomId +"\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:2,nick_name:")
                 .append(nick_name)
 //                .append(",user_photo:")
 //                .append(user_photo)
@@ -170,6 +170,8 @@ public class HttpUtils {
                 .append(game_count)
                 .append(",game_type:")
                 .append(game_type)
+                .append(",lotteryId:")
+                .append(lotteryId)
                 .append(",point:")
                 .append(point)
                 .append(",level:")
@@ -197,9 +199,18 @@ public class HttpUtils {
     /**
      * 开奖信息
      */
-    public void postOpenLotteryMes(String hxToken,int game_count,String ext_content,long create_time){
+    public void postOpenLotteryMes(int type,String hxToken,int game_count,String ext_content,long create_time){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{\"target_type\":\"chatrooms\",\"target\":[\"42187441111041\"],\"msg\":{\"type\":\"txt\",\"msg\":\"{notice_type:3,game_count:")
+
+        String roomIds = "";
+        if (type == 1){
+            roomIds = (String)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.ROOMID_TYPE_BJ,BMDataContext.SYSTEM_ORGI);
+        }else{
+            roomIds = (String)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.ROOMID_TYPE_JND,BMDataContext.SYSTEM_ORGI);
+        }
+
+
+        stringBuilder.append("{\"target_type\":\"chatrooms\",\"target\":" + roomIds + ",\"msg\":{\"type\":\"txt\",\"msg\":\"{notice_type:3,game_count:")
                 .append(game_count)
                 .append(",level:1,ext_content:\\\"")
                 .append(ext_content)
@@ -229,9 +240,16 @@ public class HttpUtils {
     /**
      * 开盘
      */
-    public void postOpenBetMes(String hxToken,String game_count,String extraStr){
+    public void postOpenBetMes(int type,String hxToken,String game_count,String extraStr){
+        String roomIds = "";
+        if (type == 1){
+            roomIds = (String)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.ROOMID_TYPE_BJ,BMDataContext.SYSTEM_ORGI);
+        }else{
+            roomIds = (String)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.ROOMID_TYPE_JND,BMDataContext.SYSTEM_ORGI);
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"42187441111041\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:5,game_count:")
+        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : " + roomIds + ",\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:5,game_count:")
                 .append(game_count)
                 .append(",ext_content:")
                 .append(extraStr)
@@ -258,12 +276,17 @@ public class HttpUtils {
     /**
      * 封盘
      */
-    public void postCloseBetMes(String hxToken,String game_count){
-
+    public void postCloseBetMes(int type,String hxToken,String game_count){
+        String roomIds = "";
+        if (type == 1){
+            roomIds = (String)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.ROOMID_TYPE_BJ,BMDataContext.SYSTEM_ORGI);
+        }else{
+            roomIds = (String)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.ROOMID_TYPE_JND,BMDataContext.SYSTEM_ORGI);
+        }
 
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : [\"42187441111041\"],\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:4,game_count:")
+        stringBuilder.append("{\"target_type\" : \"chatrooms\",\"target\" : " + roomIds + ",\"msg\" : {\"type\" : \"txt\",\"msg\" : \"{notice_type:4,game_count:")
                 .append(game_count)
                 .append("}\"},\"from\" : \"")
                 .append("admin")

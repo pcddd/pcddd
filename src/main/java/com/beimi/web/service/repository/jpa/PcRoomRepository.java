@@ -16,6 +16,8 @@ public abstract interface PcRoomRepository extends JpaRepository<PcRoomInfo, Str
 
   public abstract Page<PcRoomInfo> findByOrgi(String orgi, Pageable page);
 
+  public abstract List<PcRoomInfo> findByOrgi(String orgi);
+
   public abstract List<PcRoomInfo> findByRoomidAndOrgi(String roomid, String orgi);
 
   public abstract List<PcRoomInfo> findByRoomtypeAndOrgi(String roomtype, String orgi);
