@@ -27,7 +27,7 @@ public class ApiBetRecordController {
     private BetGameDetailESRepository betGameDetailESRes;
 
     @Autowired
-    private PlayUserRepository playUserRes ;
+    private PlayUserRepository playUserRes;
 
     @RequestMapping
     public ResponseEntity<PcData> betRecord(@Valid int type,@Valid String token,@Valid int page,@Valid int pagesize) {

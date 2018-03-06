@@ -1,11 +1,12 @@
 package com.beimi.web.handler.api.rest.user;
 
+import com.beimi.core.BMDataContext;
 import com.beimi.util.MessageEnum;
+import com.beimi.util.cache.CacheHelper;
 import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.TokenESRepository;
+import com.beimi.web.service.repository.jpa.BetLevelRepository;
 import com.beimi.web.service.repository.jpa.GameBetFatherTypeRepository;
-import com.beimi.web.service.repository.jpa.GameBetTypeRepository;
-import com.beimi.web.service.repository.jpa.GameRoomRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/bettype")
 public class ApiBetTypeController {
+
     @Autowired
-    private GameBetTypeRepository gameBetTypeRepository;
+    private BetLevelRepository betLevelRepository;
 
     @Autowired
     private GameBetFatherTypeRepository gameBetFatherTypeRepository;
@@ -38,18 +40,24 @@ public class ApiBetTypeController {
     public ResponseEntity<PcData> bettype(@Valid String token,@Valid String orgi,@Valid String roomtype) {
         PcData resu=null;
         if(!StringUtils.isBlank(token)){
-            Token userToken = userToken = tokenESRes.findById(token);
+            Token userToken = tokenESRes.findById(token);
             if(userToken != null){
                 if (!StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
 
                     List<GameBetFatherType> gameBetFatherTypeList = gameBetFatherTypeRepository.findAll();
-
                     List res = new ArrayList();
                     for (int i=0;i<gameBetFatherTypeList.size();i++){
                         GameBetFatherType gameBetFatherType = gameBetFatherTypeList.get(i);
                         if (gameBetFatherType!=null || gameBetFatherType.getId()!=null){
-                            List<GameBetType> gameBetType = gameBetTypeRepository.findByTypeAndRoomtypeAndOrgi(gameBetFatherType.getId(),roomtype,orgi);
-                            res.add(gameBetType);
+                            List<BetLevelTypeInfo> betLevelTypeInfoList = betLevelRepository.findByTypeAndOrgiAndRoomtype(gameBetFatherType.getId(),orgi,roomtype);
+                            List<BetLevelTypeInfoClient>  betLevelTypeInfoClientList = new ArrayList<>();
+                            for (int j=0; j<betLevelTypeInfoList.size();j++){
+                                BetLevelTypeInfo betLevelTypeInfo = betLevelTypeInfoList.get(j);
+                                GameBetType gameBetType = (GameBetType)CacheHelper.getPcGameLevelBetTypeCacheBean().getCacheObject(betLevelTypeInfo.getBettypeid(), BMDataContext.SYSTEM_ORGI);
+                                BetLevelTypeInfoClient betLevelTypeInfoClient = new BetLevelTypeInfoClient(betLevelTypeInfo,gameBetType.getName(),gameBetType.getRescode());
+                                betLevelTypeInfoClientList.add(betLevelTypeInfoClient);
+                            }
+                            res.add(betLevelTypeInfoClientList);
                         }
                     }
 

@@ -10,11 +10,4 @@ import java.util.List;
 
 public abstract interface GameBetTypeRepository extends JpaRepository<GameBetType, String>{
 
-  public abstract GameBetType findByIdAndOrgi(String id, String orgi);
-
-  public abstract Page<GameBetType> findByOrgi(String orgi, Pageable page);
-
-  public abstract List<GameBetType> findByTypeAndRoomtypeAndOrgi(String type,String roomtype, String orgi);
-
-  public abstract List<GameBetType> findByType(String typr);
 }

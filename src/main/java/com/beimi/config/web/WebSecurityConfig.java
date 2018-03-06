@@ -72,6 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 new AntPathRequestMatcher("/api/setNickName"),
                 new AntPathRequestMatcher("/api/getUserInfo"),
                 new AntPathRequestMatcher("/api/recordResult"),
+                new AntPathRequestMatcher("/api/getSystemMes"),
+                new AntPathRequestMatcher("/api/getPersonalMes"),
                 new AntPathRequestMatcher("/api/bettype")},
                 new AntPathRequestMatcher("/api/**"));
     }

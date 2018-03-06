@@ -56,7 +56,16 @@ public class CacheHelper {
 	public static CacheBean getGameRoomCacheBean() {
 		return cacheInstance!=null ? cacheInstance.getGameRoomCacheBean() : null ;
 	}
-	
+
+	public static CacheBean getBetValueCacheBean() {
+		return cacheInstance!=null ? cacheInstance.getBetValueCacheBean() : null ;
+	}
+
+
+	public static CacheBean getPcGameLevelBetTypeCacheBean() {
+		return cacheInstance!=null ? cacheInstance.getPcGameLevelBetTypeBean() : null ;
+	}
+
 	public static PlayerCacheBean getGamePlayerCacheBean() {
 		return cacheInstance!=null ? cacheInstance.getGamePlayerCacheBean() : null ;
 	}

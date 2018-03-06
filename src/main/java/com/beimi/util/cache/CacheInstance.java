@@ -10,14 +10,22 @@ public interface CacheInstance {
 	 * @return
 	 */
 	public CacheBean getOnlineCacheBean();
-	
+
 	/**
 	 * 系统缓存
 	 * @return
 	 */
 	public CacheBean getSystemCacheBean();
-	
-	
+
+
+	/**
+	 * PCDD
+	 * @return
+	 */
+	public CacheBean getPcGameLevelBetTypeBean();
+
+	public CacheBean getBetValueCacheBean();
+
 	/**
 	 * 游戏房间
 	 * @return

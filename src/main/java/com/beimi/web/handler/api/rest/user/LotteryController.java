@@ -64,14 +64,14 @@ public class LotteryController {
                         }else{
                             //客户端显示?,?,? 同时进行下一期下注
                             lottery.setStauts(4);
-                            lottery.setNextOpenSec(intervalSec + nexttime - 20);
+                            lottery.setNextOpenSec(intervalSec + nexttime - 15);
                             lottery.setCurNo(lottery.getCurNo()+1);
                             lottery.setCurRes("?,?,?=?");
                         }
-                    }else if (nexttime > 20){
+                    }else if (nexttime > 15){
                         //
                         lottery.setStauts(1);
-                        lottery.setNextOpenSec(nexttime - 20);
+                        lottery.setNextOpenSec(nexttime - 15);
                     }else{
                         //提前20s封盘
                         lottery.setStauts(2);

@@ -25,6 +25,8 @@ public class BetGameDetail {
 
     private String orgi;// 标识
 
+    private int level; //所在级别房
+
     private String userId;
 
 //    private int goldcoins;		//下注金额
@@ -39,6 +41,8 @@ public class BetGameDetail {
 
     private int status = -1; //0未开奖 1已开奖
 
+    private String username;
+
 //    public PlayUser playUser;//用户信息
 
     @Id
@@ -51,6 +55,14 @@ public class BetGameDetail {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     public void setPcBetEntityList(ArrayList<PcBetEntity> pcBetEntityList) {
@@ -132,4 +144,12 @@ public class BetGameDetail {
 //    public void setPlayUser(PlayUser playUser) {
 //        this.playUser = playUser;
 //    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

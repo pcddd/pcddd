@@ -137,8 +137,10 @@ public class updateLotteryController {
 
                 if (sum % 2 != 0) {
                     list.add("单");
+                    list.add("小单");
                 } else {
                     list.add("双");
+                    list.add("小双");
                 }
 
                 if (sum <= 4) {
@@ -150,8 +152,10 @@ public class updateLotteryController {
 
                 if (sum % 2 != 0) {
                     list.add("单");
+                    list.add("大单");
                 } else {
                     list.add("双");
+                    list.add("大双");
                 }
 
                 if (sum >= 23) {
@@ -198,13 +202,10 @@ public class updateLotteryController {
                         for (int i=0;i<pcBetEntityList.size();i++){
                             int gold = 0;
                             PcBetEntity pcBetEntity = pcBetEntityList.get(i);
-                            GameBetType gameBetType = (GameBetType)CacheHelper.getSystemCacheBean().getCacheObject(pcBetEntity.getBetLotterTypeId(),BMDataContext.SYSTEM_ORGI);
+                            BetLevelTypeInfo betLevelTypeInfo = (BetLevelTypeInfo)CacheHelper.getBetValueCacheBean().getCacheObject(pcBetEntity.getBetLotterTypeId(),BMDataContext.SYSTEM_ORGI);
 //                            GameBetType gameBetType = betTypeGroupRepository.findById(pcBetEntity.getLotterTypeId());
-                            if (list.contains(gameBetType.getName())) {
-                                gold = pcBetEntity.getGoldcoins() * Integer.parseInt(gameBetType.getValue());
-                                totalgold += gold;
-                            } else {
-                                gold = -1 * pcBetEntity.getGoldcoins();
+                            if (list.contains(pcBetEntity.getBetLotterName())) {
+                                gold = pcBetEntity.getGoldcoins() * Integer.parseInt(betLevelTypeInfo.getValue());
                                 totalgold += gold;
                             }
                             pcBetEntity.setGetGold(gold);
@@ -242,7 +243,7 @@ public class updateLotteryController {
                 //客户端显示?,?,? 同时进行下一期下注
                 status = 4;
             }
-        }else if (nexttime > 20){
+        }else if (nexttime > 15){
             //正常下注
             status = 1;
         }else{

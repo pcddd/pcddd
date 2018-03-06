@@ -17,68 +17,28 @@ public class GameBetType implements java.io.Serializable {
 
     private String name;
 
-    private String value;
+    private String type;
 
-    private String orgi;
-
-    private String roomtype;
-
-    private int minbet;
-
-    private int maxbet;
-
-    public void setMinbet(int minbet) {
-        this.minbet = minbet;
-    }
-
-    public int getMinbet() {
-        return minbet;
-    }
-
-    public void setMaxbet(int maxbet) {
-        this.maxbet = maxbet;
-    }
-
-    public int getMaxbet() {
-        return maxbet;
-    }
-
-    private String type; // 1-大小单双 2-猜数字 3-特殊玩法
+    private String rescode;
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setRescode(String rescode) {
+        this.rescode = rescode;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setOrgi(String orgi) {
-        this.orgi = orgi;
-    }
-
-    public String getOrgi() {
-        return orgi;
-    }
-
-    public void setRoomtype(String roomtype) {
-        this.roomtype = roomtype;
-    }
-
-    public String getRoomtype() {
-        return roomtype;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public String getRescode() {
+        return rescode;
     }
 
     public String getType() {

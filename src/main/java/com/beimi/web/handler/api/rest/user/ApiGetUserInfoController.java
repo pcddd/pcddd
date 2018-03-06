@@ -3,8 +3,6 @@ package com.beimi.web.handler.api.rest.user;
 import com.beimi.util.MessageEnum;
 import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.TokenESRepository;
-import com.beimi.web.service.repository.jpa.GameBetFatherTypeRepository;
-import com.beimi.web.service.repository.jpa.GameBetTypeRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

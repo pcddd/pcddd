@@ -4,12 +4,8 @@ import com.beimi.core.BMDataContext;
 import com.beimi.util.cache.CacheBean;
 import com.beimi.util.cache.CacheInstance;
 import com.beimi.util.cache.PlayerCacheBean;
-import com.beimi.util.cache.hazelcast.impl.ApiUserCache;
-import com.beimi.util.cache.hazelcast.impl.GameCache;
-import com.beimi.util.cache.hazelcast.impl.GameRoomCache;
-import com.beimi.util.cache.hazelcast.impl.OnlineCache;
-import com.beimi.util.cache.hazelcast.impl.QueneCache;
-import com.beimi.util.cache.hazelcast.impl.SystemCache;
+import com.beimi.util.cache.hazelcast.impl.*;
+
 /**
  * Hazlcast缓存处理实例类
  * @author admin
@@ -22,7 +18,19 @@ public class HazlcastCacheHelper implements CacheInstance{
 	 *
 	 */
 	public enum CacheServiceEnum{
-		HAZLCAST_CLUSTER_AGENT_USER_CACHE, HAZLCAST_CLUSTER_AGENT_STATUS_CACHE, HAZLCAST_CLUSTER_QUENE_USER_CACHE,HAZLCAST_ONLINE_CACHE , GAME_PLAYERS_CACHE , HAZLCAST_CULUSTER_SYSTEM , HAZLCAST_GAMEROOM_CACHE , API_USER_CACHE , QUENE_CACHE, HAZLCAST_TASK_CACHE, HAZLCAST_GAME_CACHE;
+		HAZLCAST_CLUSTER_AGENT_USER_CACHE,
+		HAZLCAST_CLUSTER_AGENT_STATUS_CACHE,
+		HAZLCAST_CLUSTER_QUENE_USER_CACHE,
+		HAZLCAST_ONLINE_CACHE ,
+		GAME_PLAYERS_CACHE ,
+		HAZLCAST_CULUSTER_SYSTEM ,
+		HAZLCAST_GAMEROOM_CACHE ,
+		API_USER_CACHE ,
+		QUENE_CACHE,
+		HAZLCAST_TASK_CACHE,
+		PC_GAMELEVEL_BETTYPE_CACHE,
+		PC_BETVALUE_CACHE,
+		HAZLCAST_GAME_CACHE;
 		public String toString(){
 			return super.toString().toLowerCase();
 		}
@@ -35,6 +43,14 @@ public class HazlcastCacheHelper implements CacheInstance{
 	@Override
 	public CacheBean getSystemCacheBean() {
 		return BMDataContext.getContext().getBean(SystemCache.class).getCacheInstance(CacheServiceEnum.HAZLCAST_CULUSTER_SYSTEM.toString()) ;
+	}
+	@Override
+	public CacheBean getPcGameLevelBetTypeBean() {
+		return BMDataContext.getContext().getBean(PcGameLevelBetTypeCache.class).getCacheInstance(CacheServiceEnum.PC_GAMELEVEL_BETTYPE_CACHE.toString()) ;
+	}
+	@Override
+	public CacheBean getBetValueCacheBean() {
+		return BMDataContext.getContext().getBean(PcBetValueCache.class).getCacheInstance(CacheServiceEnum.PC_BETVALUE_CACHE.toString()) ;
 	}
 	@Override
 	public CacheBean getGameRoomCacheBean() {

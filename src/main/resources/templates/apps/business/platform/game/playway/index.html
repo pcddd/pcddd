@@ -35,12 +35,6 @@
 													<th>底分</th>
 													<th>金币要求</th>
 													<th>排序位置</th>
-													<#if game.code == "dizhu">
-													<th>洗牌</th>
-													<#elseif  game.code == "majiang">
-													<th>胡牌方式</th>
-													</#if>
-													<th>有风牌</th>
 													<th>发牌数量</th>
 													<th>开启限免</th>
 													<th style="white-space:nowrap;width:1%;" nowrap="nowrap">操作</th>
@@ -57,26 +51,6 @@
 													<td>${playway.score!''}</td>
 													<td>${playway.mincoins}~${playway.maxcoins}</td>
 													<td>${playway.sortindex!''}</td>
-													<td>
-														<#if playway.code == "dizhu">
-															<#if playway.shuffle?? && playway.shuffle> 
-															<i class="layui-icon" style="color:#19a55d;">&#xe618;</i>
-															</#if>
-														<#elseif  playway.code == "majiang">
-															<#if playway.wintype?? && playway.wintype == "tui"> 
-																推倒胡
-															<#elseif playway.wintype?? && playway.wintype == "end"> 
-																血战到底
-															<#elseif playway.wintype?? && playway.wintype == "river"> 
-																血流到底
-															</#if>
-														</#if>
-													</td>
-													<td>
-														<#if playway.wind?? && playway.wind> 
-														<i class="layui-icon" style="color:#19a55d;">&#xe618;</i>
-														</#if>
-													</td>
 													<td>${playway.cardsnum!''}</td>
 													<td>
 														<#if playway.free?? && playway.free == true>

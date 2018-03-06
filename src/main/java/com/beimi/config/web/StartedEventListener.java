@@ -22,8 +22,7 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
 //	@Resource
 //	private GameEngine gameEngine ;
 	
-//	private SysDicRepository sysDicRes;
-
+	private SysDicRepository sysDicRes;
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
     	if(BMDataContext.getContext() == null){
@@ -31,21 +30,21 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
     	}
 //    	BMDataContext.setGameEngine(gameEngine);
     	
-//    	sysDicRes = event.getApplicationContext().getBean(SysDicRepository.class) ;
-//    	List<SysDic> sysDicList = sysDicRes.findAll() ;
+    	sysDicRes = event.getApplicationContext().getBean(SysDicRepository.class) ;
+    	List<SysDic> sysDicList = sysDicRes.findAll() ;
     	
-//    	for(SysDic dic : sysDicList){
-//    		CacheHelper.getSystemCacheBean().put(dic.getId(), dic, dic.getOrgi());
-//			if(dic.getParentid().equals("0")){
-//				List<SysDic> sysDicItemList = new ArrayList<SysDic>();
-//				for(SysDic item : sysDicList){
-//					if(item.getDicid()!=null && item.getDicid().equals(dic.getId())){
-//						sysDicItemList.add(item) ;
-//					}
-//				}
-//				CacheHelper.getSystemCacheBean().put(dic.getCode(), sysDicItemList, dic.getOrgi());
-//			}
-//		}
+    	for(SysDic dic : sysDicList){
+    		CacheHelper.getSystemCacheBean().put(dic.getId(), dic, dic.getOrgi());
+			if(dic.getParentid().equals("0")){
+				List<SysDic> sysDicItemList = new ArrayList<SysDic>();
+				for(SysDic item : sysDicList){
+					if(item.getDicid()!=null && item.getDicid().equals(dic.getId())){
+						sysDicItemList.add(item) ;
+					}
+				}
+				CacheHelper.getSystemCacheBean().put(dic.getCode(), sysDicItemList, dic.getOrgi());
+			}
+		}
     	/**
     	 * 加载系统全局配置
     	 */
@@ -55,30 +54,20 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
     		CacheHelper.getSystemCacheBean().put("systemConfig", config, BMDataContext.SYSTEM_ORGI);
     	}
 
-		BetTypeGroupRepository betTypeGroupRepository = event.getApplicationContext().getBean(BetTypeGroupRepository.class);
+		/**
+		 * 倍率缓存
+		 */
+		BetLevelRepository betLevelRepository = event.getApplicationContext().getBean(BetLevelRepository.class);
     	try{
-			List<GameBetType> gameBetTypes = betTypeGroupRepository.findAll() ;
-			if(gameBetTypes.size() > 0){
-				for(GameBetType gameBetType : gameBetTypes){
-					CacheHelper.getSystemCacheBean().put(gameBetType.getId(), gameBetType, BMDataContext.SYSTEM_ORGI);
+			List<BetLevelTypeInfo> betLevelTypeInfoList = betLevelRepository.findAll() ;
+			if(betLevelTypeInfoList.size() > 0){
+				for(BetLevelTypeInfo betLevelTypeInfo : betLevelTypeInfoList){
+					CacheHelper.getBetValueCacheBean().put(betLevelTypeInfo.getId(), betLevelTypeInfo, BMDataContext.SYSTEM_ORGI);
 				}
 			}
 		}catch (Exception e){
     		e.printStackTrace();
 		}
-    	
-//    	GameRoomRepository gameRoomRes = event.getApplicationContext().getBean(GameRoomRepository.class) ;
-//    	List<GameRoom> gameRoomList = gameRoomRes.findAll() ;
-//    	if(gameRoomList.size() > 0){
-//    		for(GameRoom gameRoom : gameRoomList){
-//    			if(gameRoom.isCardroom()){
-//    				gameRoomRes.delete(gameRoom);//回收房卡房间资源
-//    			}else{
-//    				CacheHelper.getQueneCache().put(gameRoom, gameRoom.getOrgi());
-//    				CacheHelper.getGameRoomCacheBean().put(gameRoom.getId(), gameRoom, gameRoom.getOrgi());
-//    			}
-//    		}
-//    	}
     	
     	GenerationRepository generationRes = event.getApplicationContext().getBean(GenerationRepository.class) ;
     	List<Generation> generationList = generationRes.findAll() ;
@@ -86,6 +75,22 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
     		CacheHelper.getSystemCacheBean().setAtomicLong(BMDataContext.ModelType.ROOM.toString(), generation.getStartinx());
     	}
 
+    	//缓存环信房间字符串
+		cacheHxRoomIdStr(event);
+    	//缓存游戏投注类型
+		cacheLevelBetInfo(event);
+    }
+
+	private void cacheLevelBetInfo(ContextRefreshedEvent event) {
+		BetTypeGroupRepository betTypeGroupRepository = event.getApplicationContext().getBean(BetTypeGroupRepository.class) ;
+		List<GameBetType> gameBetTypes = betTypeGroupRepository.findAll();
+		for (int i=0; i<gameBetTypes.size();i++){
+			GameBetType gameBetType = gameBetTypes.get(i);
+			CacheHelper.getPcGameLevelBetTypeCacheBean().put(gameBetType.getId(),gameBetType,BMDataContext.SYSTEM_ORGI);
+		}
+	}
+
+	private void cacheHxRoomIdStr(ContextRefreshedEvent event) {
 		String hxRoomIds = "";
 		String roomStrs = "[";
 		String[] roomIdArr;
@@ -116,17 +121,17 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
 				hxRoomIds += pcRoomInfo.getRoomid()+",";
 			}
 		}
-        roomIdArr = hxRoomIds.split(",");
-        for (int i=0;i<roomIdArr.length;i++){
-            if (StringUtils.isNotEmpty(roomIdArr[i])){
-                roomStrs += "\"" + roomIdArr[i] + "\"";
-            }
-            if (i != roomIdArr.length-1){
-                roomStrs += ",";
-            }
-        }
-        roomStrs += "]";
-
+		System.out.println();
+		roomIdArr = hxRoomIds.split(",");
+		for (int i=0;i<roomIdArr.length;i++){
+			if (StringUtils.isNotEmpty(roomIdArr[i])){
+				roomStrs += "\"" + roomIdArr[i] + "\"";
+			}
+			if (i != roomIdArr.length-1){
+				roomStrs += ",";
+			}
+		}
+		roomStrs += "]";
 		CacheHelper.getSystemCacheBean().put(BMDataContext.ROOMID_TYPE_JND,roomStrs,BMDataContext.SYSTEM_ORGI);
-    }
+	}
 }

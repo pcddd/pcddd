@@ -13,15 +13,24 @@ import java.util.List;
  */
 public abstract interface BetGameDetailESRepository extends ElasticsearchCrudRepository<BetGameDetail, String> {
 
-    public abstract BetGameDetail findByPeriodsAndUserId(int periods,String userId);
 
     public abstract List<BetGameDetail> findByStatus(int status);
+
+    public abstract BetGameDetail findByUsername(String username);
+
+    public abstract BetGameDetail findByUserIdAndPeriodsAndLevel(String userId,int periods,int level);
 
     public abstract List<BetGameDetail> findByTypeAndUserId(int type,String userId,Pageable page);
 
     public abstract List<BetGameDetail> findByTypeAndPeriods(int type,int periods);
 
     public abstract Page<BetGameDetail> findByOrgi(String orgi,Pageable page);
+
+    public abstract Page<BetGameDetail> findByUsernameAndPeriods(String tokenid,int periods,Pageable page);
+
+    public abstract Page<BetGameDetail> findByPeriods(int periods,Pageable page);
+
+    public abstract Page<BetGameDetail> findByUsername(String tokenid,Pageable page);
 
     public abstract Page<BetGameDetail> findByUserIdAndPeriods(String userId,int periods,Pageable page);
 
