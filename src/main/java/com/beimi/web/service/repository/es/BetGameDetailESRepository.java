@@ -24,13 +24,13 @@ public abstract interface BetGameDetailESRepository extends ElasticsearchCrudRep
 
     public abstract List<BetGameDetail> findByTypeAndPeriods(int type,int periods);
 
-    public abstract Page<BetGameDetail> findByOrgi(String orgi,Pageable page);
+    public abstract Page<BetGameDetail> findByOrgiAndType(String orgi,int type,Pageable page);
 
-    public abstract Page<BetGameDetail> findByUsernameAndPeriods(String tokenid,int periods,Pageable page);
+    public abstract Page<BetGameDetail> findByUsernameAndPeriodsAndType(String tokenid,int periods,int type,Pageable page);
 
-    public abstract Page<BetGameDetail> findByPeriods(int periods,Pageable page);
+    public abstract Page<BetGameDetail> findByPeriodsAndType(int periods,int type,Pageable page);
 
-    public abstract Page<BetGameDetail> findByUsername(String tokenid,Pageable page);
+    public abstract Page<BetGameDetail> findByUsernameAndType(String username,int type,Pageable page);
 
     public abstract Page<BetGameDetail> findByUserIdAndPeriods(String userId,int periods,Pageable page);
 

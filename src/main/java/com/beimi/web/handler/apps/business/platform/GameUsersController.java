@@ -34,6 +34,13 @@ public class GameUsersController extends Handler{
 		map.addAttribute("playersList", playersRes.findByOrgi(super.getOrgi(request), new PageRequest(super.getP(request), super.getPs(request)))) ;
 		return request(super.createAppsTempletResponse("/apps/business/platform/game/data/index"));
 	}
+
+	@RequestMapping({"/gameusers/search"})
+	@Menu(type="platform", subtype="gameusers")
+	public ModelAndView search(ModelMap map , HttpServletRequest request , @Valid String username){
+		map.addAttribute("playersList", playersRes.findByUsername(username, new PageRequest(super.getP(request), super.getPs(request)))) ;
+		return request(super.createAppsTempletResponse("/apps/business/platform/game/data/index"));
+	}
 	
 	@RequestMapping({"/gameusers/online"})
 	@Menu(type="platform", subtype="onlinegameusers")

@@ -7,7 +7,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="site-h1" style="background-color:#FFFFFF;">
-					在线玩家列表<#if playersList??>（${playersList.totalElements}）</#if>
+					玩家列表<#if playersList??>（${playersList.totalElements}）</#if>
 				</h1>
 				<div> &nbsp;&nbsp;用户名称 :&nbsp;&nbsp;<input style="width: 100px" class="text" id="username"></input>
 					&nbsp;&nbsp;期数 :&nbsp;&nbsp;<input style="width: 100px" class="text" id="periods"></input>
@@ -46,7 +46,7 @@
 													已开奖
 											</#if>
 										<td style="white-space:nowrap;width:1%;" nowrap="nowrap">
-											<a href="/apps/platform/online/gameusers/edit.html?username=${betgame.username!''}" data-toggle="ajax" data-width="680" data-height="522" data-title="详情"> <i class="layui-icon">&#xe642;</i>
+											<a href="/apps/platform/online/gameusers/indexs.html?username=${betgame.username!''}" target="_parent" data-toggle="ajax" data-width="953" data-height="552" data-title="详情"> <i class="layui-icon">&#xe642;</i>
 												详情
 											</a>
 										</td>
@@ -83,10 +83,14 @@
     $('#btn_submit').click(function(){
         var username=$(" #username ").val();
         var periods=$(" #periods ").val();
-        location.href = "/apps/platform/online/gameusers/search.html?username="+username+"&periods="+ periods;
+        location.href = "/apps/platform/online/gameusers/search.html?username="+username+"&periods="+ periods+"&type=${type}";
     });
 
     $('#btn_reset').click(function(){
         location.href = "/apps/platform/online/gameusers.html";
     });
+    $('#btn_detail').click(function(){
+        location.href = "/apps/platform/online/gameusers/indexs.html";
+    });
+
 </script>
