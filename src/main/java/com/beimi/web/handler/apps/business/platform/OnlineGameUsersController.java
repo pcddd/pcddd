@@ -14,6 +14,7 @@ import freemarker.template.utility.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,50 +38,47 @@ public class OnlineGameUsersController extends Handler{
 
 	@Autowired
 	private BetGameDetailESRepository betGameDetailESRes;
-	
-	/*@RequestMapping({"/gameusers"})
-	@Menu(type="platform", subtype="onlinegameusers")
-	public ModelAndView online(ModelMap map , HttpServletRequest request , @Valid String id){
-		map.addAttribute("playersList", playersRes.findByOrgi("beimi",new PageRequest(super.getP(request), super.getPs(request)))) ;
-		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
-	}*/
 
 	@RequestMapping({"/gameusers"})
 	@Menu(type="platform", subtype="onlinegameusers")
 	public ModelAndView online(ModelMap map , HttpServletRequest request , @Valid String id){
-		/*Page<BetGameDetail> page=betGameDetailESRes.findByOrgi("beimi",new PageRequest(super.getP(request), super.getPs(request)));
-		for (BetGameDetail betGameDetail){
+		map.addAttribute("playersList", betGameDetailESRes.findByOrgiAndType("beimi",1,new PageRequest(super.getP(request), super.getPs(request)))) ;
+		map.addAttribute("type",1);
+		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
+	}
 
-		}*/
-		map.addAttribute("playersList", betGameDetailESRes.findByOrgi("beimi",new PageRequest(super.getP(request), super.getPs(request)))) ;
+	@RequestMapping({"/gameusers/type"})
+	@Menu(type="platform", subtype="onlinegame")
+	public ModelAndView type(ModelMap map , HttpServletRequest request , @Valid String id){
+		map.addAttribute("playersList", betGameDetailESRes.findByOrgiAndType("beimi",2,new PageRequest(super.getP(request), super.getPs(request)))) ;
+		map.addAttribute("type",2);
 		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
 	}
 
 	@RequestMapping({"/gameusers/search"})
 	@Menu(type="platform", subtype="onlinegameusers")
-	public ModelAndView search(ModelMap map , HttpServletRequest request , @Valid String username,@Valid String periods){
+	public ModelAndView search(ModelMap map , HttpServletRequest request , @Valid String username,@Valid String periods,@Valid String type){
 		int per=0;
 		if(!"".equals(periods)&&!"".equals(username)){
 			per=Integer.parseInt(periods);
-			map.addAttribute("playersList", betGameDetailESRes.findByUsernameAndPeriods(username,per,new PageRequest(super.getP(request), super.getPs(request)))) ;
+			map.addAttribute("playersList", betGameDetailESRes.findByUsernameAndPeriodsAndType(username,per,Integer.parseInt(type),new PageRequest(super.getP(request), super.getPs(request)))) ;
 		}else if (!"".equals(periods)){
 			per=Integer.parseInt(periods);
-			map.addAttribute("playersList", betGameDetailESRes.findByPeriods(per,new PageRequest(super.getP(request), super.getPs(request)))) ;
+			map.addAttribute("playersList", betGameDetailESRes.findByPeriodsAndType(per,Integer.parseInt(type),new PageRequest(super.getP(request), super.getPs(request)))) ;
 		}else if (!"".equals(username)){
-			map.addAttribute("playersList", betGameDetailESRes.findByUsername(username,new PageRequest(super.getP(request), super.getPs(request)))) ;
+			map.addAttribute("playersList", betGameDetailESRes.findByUsernameAndType(username,Integer.parseInt(type),new PageRequest(super.getP(request), super.getPs(request)))) ;
 		}
 
 		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
 	}
 	
-	@RequestMapping({"/gameusers/edit"})
+	@RequestMapping({"/gameusers/indexs"})
 	@Menu(type="platform", subtype="onlinegameusers")
-	public ModelAndView edit(ModelMap map , HttpServletRequest request , @Valid String username){
-		BetGameDetail betGameDetail=betGameDetailESRes.findByUsername(username);
+	public ModelAndView indexs(ModelMap map , HttpServletRequest request , @Valid String username){
+	    BetGameDetail betGameDetail=betGameDetailESRes.findByUsername(username);
 		ArrayList<PcBetEntity> pcBetEntityList= betGameDetail.getPcBetEntityList();
-		map.addAttribute("pcBetEntityList", pcBetEntityList) ;
-		
-		return request(super.createRequestPageTempletResponse("/apps/business/platform/game/online/edit"));
+		map.addAttribute("pcBetEntityList",pcBetEntityList);
+		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/indexs"));
 	}
 	
 	@RequestMapping("/gameusers/update")
