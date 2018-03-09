@@ -4,6 +4,7 @@ import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.BetGameDetailESRepository;
 import com.beimi.web.service.repository.es.TokenESRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
+import javafx.scene.control.Pagination;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -18,8 +19,8 @@ import javax.validation.Valid;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/betRecord")
-public class ApiBetRecordController {
+@RequestMapping("/api/gameRecord")
+public class ApiGameRecordController {
 
     @Autowired
     private TokenESRepository tokenESRes;
@@ -31,17 +32,22 @@ public class ApiBetRecordController {
     private PlayUserRepository playUserRes;
 
     @RequestMapping
-    public ResponseEntity<PcData> betRecord(HttpServletRequest request, @Valid int type,@Valid int page, @Valid int pagesize) {
+    public ResponseEntity<PcData> gameRecord(HttpServletRequest request,@Valid long daytime, @Valid int page, @Valid int pagesize) {
         PcData pcData = null;
         Token userToken = tokenESRes.findById(request.getHeader("token"));
-        PlayUser  playUser = playUserRes.findByToken(userToken.getId());
+        PlayUser playUser = playUserRes.findByToken(userToken.getId());
         if (playUser == null){
             pcData = new PcData("201", "找不到用户", null);
         }else{
-            List<BetGameDetail> betGameDetailList = betGameDetailESRes.findByTypeAndUserId(type,playUser.getId(),
-                    new PageRequest(page - 1, pagesize, new Sort(Sort.Direction.DESC, "periods")));
-            if (betGameDetailList == null)
-                betGameDetailList = new ArrayList<>();
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
+            calendar.setTimeInMillis(daytime);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            List<BetGameDetail> betGameDetailList = betGameDetailESRes.findByUserIdAndCreatetime(playUser.getId(),calendar.getTimeInMillis(),
+                    new PageRequest(page-1,pagesize,new Sort(Sort.Direction.DESC, "createtime")));
+
             List<PcBetEntity> pcBetEntityList = new ArrayList<>();
             for (int i=0;i<betGameDetailList.size();i++){
                 pcBetEntityList.addAll(betGameDetailList.get(i).getPcBetEntityList());
@@ -54,6 +60,7 @@ public class ApiBetRecordController {
                     return -1;
                 }
             });
+
             HashMap hashMap = new HashMap();
             hashMap.put("data",pcBetEntityList);
             pcData = new PcData("200", "成功", hashMap);

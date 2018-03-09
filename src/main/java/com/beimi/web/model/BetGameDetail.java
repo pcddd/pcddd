@@ -6,6 +6,8 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,8 +15,6 @@ import java.util.List;
  */
 @Document(indexName = "beimi", type = "uk_game_betdetail")
 @Entity
-@Table(name = "bm_game_betdetail")
-@org.hibernate.annotations.Proxy(lazy = false)
 public class BetGameDetail {
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +43,50 @@ public class BetGameDetail {
 
     private String username;
 
-//    public PlayUser playUser;//用户信息
+    private long createtime;
+
+//    private int backwater = 0;
+
+    private int totalbetgold;
+
+    private int totalwingold;
+
+    private int combinationGold; //组合黄金
+
+    private int backwaterstatus = -1; //-1不用处理 0待处理 1已处理 2处理成功
+
+    public void setCombinationGold(int combinationGold) {
+        this.combinationGold = combinationGold;
+    }
+
+    public int getCombinationGold() {
+        return combinationGold;
+    }
+
+    public void setTotalbetgold(int totalbetgold) {
+        this.totalbetgold = totalbetgold;
+    }
+
+    public int getTotalbetgold() {
+        return totalbetgold;
+    }
+
+    public void setBackwaterstatus(int backwaterstatus) {
+        this.backwaterstatus = backwaterstatus;
+    }
+
+    public int getBackwaterstatus() {
+        return backwaterstatus;
+    }
+
+    public void setCreatetime(long createtime) {
+        this.createtime = createtime;
+    }
+
+    public long getCreatetime() {
+        return createtime;
+    }
+    //    public PlayUser playUser;//用户信息
 
     @Id
     @Column(length = 32)
@@ -55,6 +98,14 @@ public class BetGameDetail {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setTotalwingold(int totalwingold) {
+        this.totalwingold = totalwingold;
+    }
+
+    public int getTotalwingold() {
+        return totalwingold;
     }
 
     public void setLevel(int level) {

@@ -30,21 +30,11 @@ public class ApiRoomController {
     private TokenESRepository tokenESRes ;
 
     @RequestMapping
-    public ResponseEntity<PcData> roomlist(@Valid String roomtype,@Valid String token,@Valid String orgi) {
+    public ResponseEntity<PcData> roomlist(@Valid String gametype) {
         PcData resu=null;
-        if(!StringUtils.isBlank(token)){
-            Token userToken = userToken = tokenESRes.findById(token);
-            if(userToken != null){
-                if (!StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
-                    List<PcRoomInfo> roominfo = playRoomRes.findByRoomtypeAndOrgi(roomtype,orgi);
-                    resu=new PcData( roominfo.size() != 0?"200":"201", roominfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_GAMEROOM,
-                            new ListContainer(roominfo));
-                    return new ResponseEntity<>(resu,HttpStatus.OK);
-                }else{
-                    tokenESRes.delete(userToken);
-                }
-            }
-        }
-        return new ResponseEntity<>( new PcData("201",MessageEnum.USER_TOKEN, resu),HttpStatus.OK);
+        List<PcRoomInfo> roominfo = playRoomRes.findByOrgi(gametype);
+        resu=new PcData( roominfo.size() != 0?"200":"201", roominfo.size() != 0 ? MessageEnum.USER_REGISTER_SUCCESS : MessageEnum.USER_FAILD_GAMEROOM,
+                new ListContainer(roominfo));
+        return new ResponseEntity<>(resu,HttpStatus.OK);
     }
 }

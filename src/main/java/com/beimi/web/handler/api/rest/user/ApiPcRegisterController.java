@@ -41,7 +41,7 @@ public class ApiPcRegisterController extends Handler{
 	    public ResponseEntity<PcData> register(HttpServletRequest request , @Valid PlayUser player) {
 			String ip = UKTools.getIpAddr(request);
 	        player = register(player,ip) ;
-			PcData resu=new PcData(player!=null?"200":"201", player!=null ? MessageEnum.USER_REGISTER_SUCCESS :"注册失败  ", player);
+			PcData resu=new PcData(player!=null?"200":"201", player!=null ? MessageEnum.USER_REGISTER_SUCCESS :"注册失败", player);
 			return new ResponseEntity<>(resu, HttpStatus.OK);
 	    }
 	    /**
@@ -54,6 +54,7 @@ public class ApiPcRegisterController extends Handler{
 				player.setPassword(UKTools.md5(player.getPassword()));
 	            player.setCreatetime(new Date());
 	            player.setUpdatetime(new Date());
+				player.setGoldcoins(10000);
 	            player.setLastlogintime(new Date());
 				player.setNickname(player.getUsername());
 				Token userToken=null;

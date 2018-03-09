@@ -128,6 +128,11 @@ public class Handler {
 		return pagesize;
 	}
 	
+	public String getGametype(HttpServletRequest request)
+	{
+		return getUser(request).getOrgi();
+	}
+
 	public String getOrgi(HttpServletRequest request)
 	{
 		return getUser(request).getOrgi();

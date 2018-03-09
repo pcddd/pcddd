@@ -3,6 +3,7 @@ package com.beimi.web.handler.api.rest.user;
 import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.BetGameDetailESRepository;
 import com.beimi.web.service.repository.es.TokenESRepository;
+import com.beimi.web.service.repository.jpa.BackWaterRepository;
 import com.beimi.web.service.repository.jpa.PlayUserRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,27 +19,31 @@ import javax.validation.Valid;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/setNickName")
-public class ApiSetNickNameController {
+@RequestMapping("/api/backWater")
+public class ApiBackWaterController {
 
     @Autowired
     private TokenESRepository tokenESRes;
 
     @Autowired
-    private PlayUserRepository playUserRepository;
+    private BackWaterRepository backWaterRepository;
+
+    @Autowired
+    private PlayUserRepository playUserRes;
 
     @RequestMapping
-    public ResponseEntity<PcData> setNickName(HttpServletRequest request,@Valid String nickname, @Valid String personalword) {
+    public ResponseEntity<PcData> backWater(HttpServletRequest request,@Valid int roomtype, @Valid int page, @Valid int pagesize) {
         PcData pcData = null;
         Token userToken = tokenESRes.findById(request.getHeader("token"));
-        if (StringUtils.isNotEmpty(nickname) && StringUtils.isNotEmpty(personalword)){
-            PlayUser playUser = playUserRepository.findByToken(userToken.getId());
-            playUser.setNickname(nickname);
-            playUser.setPersonalword(personalword);
-            playUserRepository.save(playUser);
-            pcData = new PcData("200", "成功", null);
+        PlayUser playUser = playUserRes.findByToken(userToken.getId());
+        if (playUser == null){
+            pcData = new PcData("201", "找不到用户", null);
         }else{
-            pcData = new PcData("200", "请输入正确的昵称和签名", null);
+            List<BackWaterMondel> backWaterMondelList = backWaterRepository.findByUseridAndRoomtypeAndWatergoldGreaterThan(playUser.getId(),roomtype,0,
+                    new PageRequest(page-1,pagesize,new Sort(Sort.Direction.DESC,"createtime")));
+            HashMap hashMap = new HashMap();
+            hashMap.put("data",backWaterMondelList);
+            pcData = new PcData("200", "成功", hashMap);
         }
         return new ResponseEntity<>(pcData, HttpStatus.OK);
     }

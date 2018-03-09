@@ -50,7 +50,8 @@ public class OnlineGameUsersController extends Handler{
 	@RequestMapping({"/gameusers/type"})
 	@Menu(type="platform", subtype="onlinegame")
 	public ModelAndView type(ModelMap map , HttpServletRequest request , @Valid String id){
-		map.addAttribute("playersList", betGameDetailESRes.findByOrgiAndType("beimi",2,new PageRequest(super.getP(request), super.getPs(request)))) ;
+		map.addAttribute("playersList",
+				betGameDetailESRes.findByOrgiAndType("beimi",2,new PageRequest(super.getP(request), super.getPs(request)))) ;
 		map.addAttribute("type",2);
 		return request(super.createAppsTempletResponse("/apps/business/platform/game/online/index"));
 	}
@@ -61,7 +62,8 @@ public class OnlineGameUsersController extends Handler{
 		int per=0;
 		if(!"".equals(periods)&&!"".equals(username)){
 			per=Integer.parseInt(periods);
-			map.addAttribute("playersList", betGameDetailESRes.findByUsernameAndPeriodsAndType(username,per,Integer.parseInt(type),new PageRequest(super.getP(request), super.getPs(request)))) ;
+			map.addAttribute("playersList",
+					betGameDetailESRes.findByUsernameAndPeriodsAndType(username,per,Integer.parseInt(type),new PageRequest(super.getP(request), super.getPs(request)))) ;
 		}else if (!"".equals(periods)){
 			per=Integer.parseInt(periods);
 			map.addAttribute("playersList", betGameDetailESRes.findByPeriodsAndType(per,Integer.parseInt(type),new PageRequest(super.getP(request), super.getPs(request)))) ;

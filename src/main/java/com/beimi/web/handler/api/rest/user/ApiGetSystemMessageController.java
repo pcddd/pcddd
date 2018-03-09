@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,25 +30,13 @@ public class ApiGetSystemMessageController {
     private TokenESRepository tokenESRes;
 
     @RequestMapping
-    public ResponseEntity<PcData> getSystemMes(@Valid String token) {
+    public ResponseEntity<PcData> getSystemMes(HttpServletRequest request) {
         PcData resu=null;
-        if(!StringUtils.isBlank(token)){
-            Token userToken = tokenESRes.findById(token);
-            if(userToken != null){
-                if (!StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
-
-                    List<SysMesModel> sysMesModels = systemMesRepository.findAll();
-
-                    HashMap hashMap = new HashMap();
-                    hashMap.put("data",sysMesModels);
-                    resu=new PcData( sysMesModels.size() != 0?"200":"201", sysMesModels.size() != 0 ? "成功": "暂无消息",
-                            hashMap);
-                    return new ResponseEntity<>(resu, HttpStatus.OK);
-                }else{
-                    tokenESRes.delete(userToken);
-                }
-            }
-        }
-        return new ResponseEntity<>( new PcData("201",MessageEnum.USER_TOKEN, resu),HttpStatus.OK);
+        List<SysMesModel> sysMesModels = systemMesRepository.findAll();
+        HashMap hashMap = new HashMap();
+        hashMap.put("data",sysMesModels);
+        resu=new PcData( sysMesModels.size() != 0?"200":"201", sysMesModels.size() != 0 ? "成功": "暂无消息",
+                hashMap);
+        return new ResponseEntity<>(resu, HttpStatus.OK);
     }
 }

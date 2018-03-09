@@ -36,8 +36,8 @@ public class SystemConfig implements java.io.Serializable{
 	private String jksfile ;
 	private String jkspassword ;
 	private String mapkey ;
-	private boolean workorders ;	
-	
+	private boolean workorders ;
+
 	private boolean callout ;	
 	private boolean auth ;			//启用权限控制
 	

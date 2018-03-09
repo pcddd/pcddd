@@ -32,6 +32,24 @@ public class PcRoomInfo implements UserEvent, java.io.Serializable{
     private String roomid;
     private int players;
     private String img;
+    private int maxgold;
+    private int mingold;
+
+    public void setMaxgold(int maxgold) {
+        this.maxgold = maxgold;
+    }
+
+    public void setMingold(int mingold) {
+        this.mingold = mingold;
+    }
+
+    public int getMaxgold() {
+        return maxgold;
+    }
+
+    public int getMingold() {
+        return mingold;
+    }
 
     public void setDetail(String detail) {
         this.detail = detail;

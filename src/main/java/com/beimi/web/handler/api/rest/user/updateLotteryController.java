@@ -7,10 +7,7 @@ import com.beimi.util.UKTools;
 import com.beimi.util.cache.CacheHelper;
 import com.beimi.web.model.*;
 import com.beimi.web.service.repository.es.*;
-import com.beimi.web.service.repository.jpa.HxConfigRepository;
-import com.beimi.web.service.repository.jpa.PcddPeriodsRepository;
-import com.beimi.web.service.repository.jpa.PlayUserRepository;
-import com.beimi.web.service.repository.jpa.BetTypeGroupRepository;
+import com.beimi.web.service.repository.jpa.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,8 +37,8 @@ public class updateLotteryController {
     @Autowired
     private PlayUserRepository playUserRes ;
 
-//    @Autowired
-//    private BetTypeGroupRepository betTypeGroupRepository;
+    @Autowired
+    private AccountRecordRepository accountRecordRepository;
 
     @Autowired
     private PcddPeriodsESRepository pcddPeriodsESRepository;
@@ -125,6 +122,11 @@ public class updateLotteryController {
         String green = "1,4,7,10,16,19,22,25";
         String blue = "2,5,8,11,17,20,23,26";
         List<String> list = new ArrayList<String>();
+        List<String> combinationList = new ArrayList<String>();
+        combinationList.add("大双");
+        combinationList.add("小双");
+        combinationList.add("大单");
+        combinationList.add("小单");
         if (StringUtils.isNotEmpty(resno)) {
             String[] numStr = resno.split("=");
             if (numStr.length < 2){
@@ -198,26 +200,41 @@ public class updateLotteryController {
                     playUser = playUserRes.findById(betGameDetail.getUserId());
                     if (playUser!=null) {
                         List<PcBetEntity> pcBetEntityList = betGameDetail.getPcBetEntityList();
-                        int totalgold = 0;
+                        int totalgold  = 0,getgold = 0, combinationGold=0;
                         for (int i=0;i<pcBetEntityList.size();i++){
-                            int gold = 0;
+                            long gold = 0;
                             PcBetEntity pcBetEntity = pcBetEntityList.get(i);
                             BetLevelTypeInfo betLevelTypeInfo = (BetLevelTypeInfo)CacheHelper.getBetValueCacheBean().getCacheObject(pcBetEntity.getBetLotterTypeId(),BMDataContext.SYSTEM_ORGI);
-//                            GameBetType gameBetType = betTypeGroupRepository.findById(pcBetEntity.getLotterTypeId());
-                            if (list.contains(pcBetEntity.getBetLotterName())) {
-                                gold = pcBetEntity.getGoldcoins() * Integer.parseInt(betLevelTypeInfo.getValue());
-                                totalgold += gold;
+                            totalgold += pcBetEntity.getGoldcoins();
+                            if (combinationList.contains(pcBetEntity.getBetLotterName())){
+                                combinationGold += pcBetEntity.getGoldcoins();
                             }
+                            if (list.contains(pcBetEntity.getBetLotterName())){
+                                gold = Math.round(pcBetEntity.getGoldcoins() * Double.parseDouble(betLevelTypeInfo.getValue()));
+                                getgold += gold;
+                            }
+                            pcBetEntity.setRealResult(resno);
                             pcBetEntity.setGetGold(gold);
                             pcBetEntity.setLotterName(list.toString());
-                            pcBetEntity.setIsWin(gold > 0 ? 1 : 0);
-                            pcBetEntity.setRealResult(resno);
+                            if (gold > 0){
+                                pcBetEntity.setIsWin(1);
+                                accountRecordRepository.save(new AccountRecordModel(playUser.getId(),"+"+gold,pcBetEntity.toString()));
+                            }else{
+                                pcBetEntity.setIsWin(0);
+                            }
                         }
-                        if (totalgold > 0){
-                            playUser.setGoldcoins(playUser.getGoldcoins() + totalgold);
+                        if (getgold > 0){
+                            playUser.setGoldcoins(playUser.getGoldcoins() + getgold);
                             UKTools.published(playUser , playUserESRes , playUserRes , BMDataContext.UserDataEventType.SAVE.toString());
                         }
+                        if (totalgold > getgold){
+                            //输钱
+                            betGameDetail.setBackwaterstatus(0);
+                        }
                         betGameDetail.setStatus(1);
+                        betGameDetail.setTotalwingold(getgold);
+                        betGameDetail.setTotalbetgold(totalgold);
+                        betGameDetail.setCombinationGold(combinationGold);
                         betGameDetailESRepository.save(betGameDetail);
                     }
                 }

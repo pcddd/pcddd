@@ -14,13 +14,13 @@ public abstract class AbstractTask implements ValueWithExpiryTime {
 
 	/**
 	 * 根据玩法，找到对应的状态机
-	 * @param playway
-	 * @param orgi
+//	 * @param playway
+//	 * @param orgi
 	 * @return
 	 */
-	public Game getGame(String playway , String orgi){
-		return GameUtils.getGame(playway , orgi) ;
-	}
+//	public Game getGame(String playway , String orgi){
+//		return GameUtils.getGame(playway , orgi) ;
+//	}
 	
 	public void sendEvent(String event , Message message , GameRoom gameRoom){
 		ActionTaskUtils.sendEvent(event, message, gameRoom);

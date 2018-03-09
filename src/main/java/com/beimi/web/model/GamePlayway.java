@@ -14,8 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "bm_game_playway")
 @org.hibernate.annotations.Proxy(lazy = false)
 public class GamePlayway implements java.io.Serializable{
-	
-	
+
 	/**
 	 * 
 	 */
@@ -24,62 +23,30 @@ public class GamePlayway implements java.io.Serializable{
 	private String name ;
 	private String code ;
 	private Date createtime ;
-	private String parentid ;
-	private String typeid ;
 	private String creater;
-	
-	private int sortindex = 1; 	//排序编号
-	private String username ;
-	
-	private String typelevel ;	//初级|高级
-	private String typecolor ;	//玩法图标颜色
-	
-	private String status ;	//当前状态
 
-    private  String detail;//详情
+
+    private String detail;//详情
 	
-	private int score;		//底分
+	private int score;
 	private int mincoins ;	//最小金币数量
 	private int maxcoins ;	//最大金币数量
 	
-	private boolean wind ;	//有无风
-	
-	private int shuffletimes	;	//洗牌次数
-	
-	
-	private String powerful ;	//癞子生成规则  ， 
-	
-	
-	private int cardsnum ;	//每个玩家获牌数量
-	
-	private boolean changecard ;	//换牌
-	
-	private boolean shuffle ;	//是否洗牌
-	
-	
 	private Date updatetime ;
-	private String orgi ;
-	private String area ;
-	
-	private String game ;	//游戏类型 ： 麻将：地主：德州
+	private int gametype ;
+
 	private int players ;	//游戏人数
-	
-	private int numofgames ;//局数 ， 大厅游戏为 0 表示 无限
-	
-	private String wintype ;//胡牌方式，推倒胡，血战 、 血流
-	
-	
-	private String roomtype ;	//房间类型， 房卡：大厅
-	private String memo ;		//备注信息，不超过30个字
-	private boolean free ;		//开启房卡限免
+
+	private int roomtype;
 	private String roomtitle ; 	//玩法标题
-	private boolean extpro ;	//启用扩展属性配置（房卡游戏中的自定义规则）
 
-	private String cardsrules ;	//定义允许的出牌规则
-    private String mjwinrules ; //麻将允许的胡牌规则
+	private String img;//背景图片
 
-	private  String img;//背景图片
-	
+	private String section_1;
+	private String section_2;
+	private String section_3;
+	private int composability; //组合率
+
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -108,54 +75,30 @@ public class GamePlayway implements java.io.Serializable{
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
-	public String getParentid() {
-		return parentid;
-	}
-	public void setParentid(String parentid) {
-		this.parentid = parentid;
-	}
-	public String getTypeid() {
-		return typeid;
-	}
-	public void setTypeid(String typeid) {
-		this.typeid = typeid;
-	}
-	public String getCreater() {
-		return creater;
-	}
-	public void setCreater(String creater) {
-		this.creater = creater;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
+
 	public Date getUpdatetime() {
 		return updatetime;
 	}
 	public void setUpdatetime(Date updatetime) {
 		this.updatetime = updatetime;
 	}
-	public String getOrgi() {
-		return orgi;
+
+	public void setGametype(int gametype) {
+		this.gametype = gametype;
 	}
-	public void setOrgi(String orgi) {
-		this.orgi = orgi;
+
+	public int getGametype() {
+		return gametype;
 	}
-	public String getArea() {
-		return area;
+
+	public void setComposability(int composability) {
+		this.composability = composability;
 	}
-	public void setArea(String area) {
-		this.area = area;
+
+	public int getComposability() {
+		return composability;
 	}
-	public String getGame() {
-		return game;
-	}
-	public void setGame(String game) {
-		this.game = game;
-	}
+
 	public int getPlayers() {
 		return players;
 	}
@@ -171,24 +114,13 @@ public class GamePlayway implements java.io.Serializable{
         this.detail = detail;
     }
 
-    public String getRoomtype() {
+    public int getRoomtype() {
 		return roomtype;
 	}
-	public void setRoomtype(String roomtype) {
+	public void setRoomtype(int roomtype) {
 		this.roomtype = roomtype;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public int getNumofgames() {
-		return numofgames;
-	}
-	public void setNumofgames(int numofgames) {
-		this.numofgames = numofgames;
-	}
+
 	public int getScore() {
 		return score;
 	}
@@ -216,76 +148,7 @@ public class GamePlayway implements java.io.Serializable{
 	public void setMaxcoins(int maxcoins) {
 		this.maxcoins = maxcoins;
 	}
-	public boolean isChangecard() {
-		return changecard;
-	}
-	public void setChangecard(boolean changecard) {
-		this.changecard = changecard;
-	}
-	public boolean isShuffle() {
-		return shuffle;
-	}
-	public void setShuffle(boolean shuffle) {
-		this.shuffle = shuffle;
-	}
-	public int getCardsnum() {
-		return cardsnum;
-	}
-	public void setCardsnum(int cardsnum) {
-		this.cardsnum = cardsnum;
-	}
-	public String getTypelevel() {
-		return typelevel;
-	}
-	public void setTypelevel(String typelevel) {
-		this.typelevel = typelevel;
-	}
-	public String getTypecolor() {
-		return typecolor;
-	}
-	public void setTypecolor(String typecolor) {
-		this.typecolor = typecolor;
-	}
-	public int getSortindex() {
-		return sortindex;
-	}
-	public void setSortindex(int sortindex) {
-		this.sortindex = sortindex;
-	}
-	public String getPowerful() {
-		return powerful;
-	}
-	public void setPowerful(String powerful) {
-		this.powerful = powerful;
-	}
-	public int getShuffletimes() {
-		return shuffletimes;
-	}
-	public void setShuffletimes(int shuffletimes) {
-		this.shuffletimes = shuffletimes;
-	}
-	public boolean isWind() {
-		return wind;
-	}
-	public void setWind(boolean wind) {
-		this.wind = wind;
-	}
 
-	public String getMemo() {
-		return memo;
-	}
-
-	public void setMemo(String memo) {
-		this.memo = memo;
-	}
-
-	public boolean isFree() {
-		return free;
-	}
-
-	public void setFree(boolean free) {
-		this.free = free;
-	}
 
 	public String getRoomtitle() {
 		return roomtitle;
@@ -295,33 +158,27 @@ public class GamePlayway implements java.io.Serializable{
 		this.roomtitle = roomtitle;
 	}
 
-	public boolean isExtpro() {
-		return extpro;
+	public void setSection_1(String section_1) {
+		this.section_1 = section_1;
 	}
 
-	public void setExtpro(boolean extpro) {
-		this.extpro = extpro;
+	public void setSection_2(String section_2) {
+		this.section_2 = section_2;
 	}
 
-	public String getCardsrules() {
-		return cardsrules;
+	public void setSection_3(String section_3) {
+		this.section_3 = section_3;
 	}
 
-	public void setCardsrules(String cardsrules) {
-		this.cardsrules = cardsrules;
+	public String getSection_1() {
+		return section_1;
 	}
 
-    public String getMjwinrules() {
-        return mjwinrules;
-    }
-
-    public void setMjwinrules(String mjwinrules) {
-        this.mjwinrules = mjwinrules;
-    }
-	public String getWintype() {
-		return wintype;
+	public String getSection_2() {
+		return section_2;
 	}
-	public void setWintype(String wintype) {
-		this.wintype = wintype;
+
+	public String getSection_3() {
+		return section_3;
 	}
 }

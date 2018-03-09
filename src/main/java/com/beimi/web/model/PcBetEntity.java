@@ -3,6 +3,7 @@ package com.beimi.web.model;
 import java.beans.Transient;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PcBetEntity {
     private int goldcoins;		//下注金额
@@ -13,7 +14,7 @@ public class PcBetEntity {
 
     private double getGold;        //中奖金额
 
-    private long createTime;        //下注时间
+    private Date createTime = new Date();        //下注时间
 
     private int isWin = -1;            //是否中奖 -1待开奖 1中奖 0未中
 
@@ -43,7 +44,7 @@ public class PcBetEntity {
         return periods;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -67,7 +68,7 @@ public class PcBetEntity {
         this.realResult = realResult;
     }
 
-    public long getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
@@ -116,5 +117,38 @@ public class PcBetEntity {
 
     public void setNewtime(String newtime) {
         this.newtime = newtime;
+    }
+
+    @Override
+    public String toString() {
+        if (getGold > 0){
+            //只记录胜利的记录
+            String typeName;
+            try{
+                typeName = "单点:" + Integer.parseInt(betLotterName) + ",";
+            }catch (Exception e){
+                typeName = betLotterName + ",";
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(orgi == 1 ? "北京28," : "加拿大28,")
+                    .append(periods + "期,")
+                    .append(typeName)
+                    .append("下注" + goldcoins + "元宝,")
+                    .append("中奖" + getGold + "元宝.");
+            return sb.toString();
+        }else{
+            String typeName;
+            try{
+                typeName = "单点:" + Integer.parseInt(betLotterName) + ",";
+            }catch (Exception e){
+                typeName = betLotterName + ",";
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(orgi == 1 ? "北京28," : "加拿大28,")
+                    .append(periods + "期,")
+                    .append(typeName)
+                    .append("下注" + goldcoins + "元宝.");
+            return sb.toString();
+        }
     }
 }

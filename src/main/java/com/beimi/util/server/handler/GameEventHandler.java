@@ -129,7 +129,7 @@ public class GameEventHandler
 				
 				UKTools.published(userClient,BMDataContext.getContext().getBean(PlayUserClientESRepository.class), BMDataContext.getContext().getBean(PlayUserClientRepository.class));
 				
-				BMDataContext.getGameEngine().gameRequest(userToken.getUserid(), beiMiClient.getPlayway(), beiMiClient.getRoom(), beiMiClient.getOrgi(), userClient , beiMiClient) ;
+//				BMDataContext.getGameEngine().gameRequest(userToken.getUserid(), beiMiClient.getPlayway(), beiMiClient.getRoom(), beiMiClient.getOrgi(), userClient , beiMiClient) ;
 			}
 		}
     }
@@ -179,7 +179,7 @@ public class GameEventHandler
 			if(userToken!=null){
 				PlayUserClient playUser = (PlayUserClient) CacheHelper.getApiUserCacheBean().getCacheObject(userToken.getUserid(), userToken.getOrgi()) ;
 				String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(playUser.getId(), playUser.getOrgi()) ;
-				BMDataContext.getGameEngine().actionRequest(roomid, playUser, playUser.getOrgi(), true);
+//				BMDataContext.getGameEngine().actionRequest(roomid, playUser, playUser.getOrgi(), true);
 			}
 		}
     }
@@ -195,7 +195,7 @@ public class GameEventHandler
 			if(userToken!=null){
 				PlayUserClient playUser = (PlayUserClient) CacheHelper.getApiUserCacheBean().getCacheObject(userToken.getUserid(), userToken.getOrgi()) ;
 				String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(playUser.getId(), playUser.getOrgi()) ;
-				BMDataContext.getGameEngine().actionRequest(roomid, playUser, playUser.getOrgi(), false);
+//				BMDataContext.getGameEngine().actionRequest(roomid, playUser, playUser.getOrgi(), false);
 			}
 		}
     }
@@ -265,7 +265,7 @@ public class GameEventHandler
 			if(userToken!=null){
 				PlayUserClient playUser = (PlayUserClient) CacheHelper.getApiUserCacheBean().getCacheObject(userToken.getUserid(), userToken.getOrgi()) ;
 				String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(playUser.getId(), playUser.getOrgi()) ;
-				BMDataContext.getGameEngine().selectColorRequest(roomid, playUser.getId(), userToken.getOrgi() , data);
+//				BMDataContext.getGameEngine().selectColorRequest(roomid, playUser.getId(), userToken.getOrgi() , data);
 			}
 		}
     }
@@ -281,7 +281,7 @@ public class GameEventHandler
 			if(userToken!=null){
 				PlayUserClient playUser = (PlayUserClient) CacheHelper.getApiUserCacheBean().getCacheObject(userToken.getUserid(), userToken.getOrgi()) ;
 				String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(playUser.getId(), playUser.getOrgi()) ;
-				BMDataContext.getGameEngine().actionEventRequest(roomid, playUser.getId(), userToken.getOrgi() , data);
+//				BMDataContext.getGameEngine().actionEventRequest(roomid, playUser.getId(), userToken.getOrgi() , data);
 			}
 		}
     }
@@ -297,7 +297,7 @@ public class GameEventHandler
 			if(userToken!=null){
 				PlayUserClient playUser = (PlayUserClient) CacheHelper.getApiUserCacheBean().getCacheObject(userToken.getUserid(), userToken.getOrgi()) ;
 				String roomid = (String) CacheHelper.getRoomMappingCacheBean().getCacheObject(playUser.getId(), playUser.getOrgi()) ;
-				BMDataContext.getGameEngine().restartRequest(roomid, playUser , beiMiClient , "true".equals(data));
+//				BMDataContext.getGameEngine().restartRequest(roomid, playUser , beiMiClient , "true".equals(data));
 			}
 		}
     }
@@ -314,7 +314,7 @@ public class GameEventHandler
 				
 				PlayUserClient playUser = (PlayUserClient) CacheHelper.getGamePlayerCacheBean().getPlayer(userToken.getUserid(), userToken.getOrgi()) ;
 				if(playUser!=null){
-					BMDataContext.getGameEngine().startGameRequest(playUser.getRoomid(), playUser , userToken.getOrgi() , "true".equals(data)) ;
+//					BMDataContext.getGameEngine().startGameRequest(playUser.getRoomid(), playUser , userToken.getOrgi() , "true".equals(data)) ;
 				}
 			}
 		}
@@ -330,7 +330,7 @@ public class GameEventHandler
 			Token userToken = (Token) CacheHelper.getApiUserCacheBean().getCacheObject(token, BMDataContext.SYSTEM_ORGI) ;
 			if(userToken!=null){
 				PlayUserClient playUser = (PlayUserClient) CacheHelper.getApiUserCacheBean().getCacheObject(userToken.getUserid(), userToken.getOrgi()) ;
-				BMDataContext.getGameEngine().gameRequest(playUser.getId(), beiMiClient.getPlayway(), beiMiClient.getRoom(), beiMiClient.getOrgi(), playUser , beiMiClient) ;
+//				BMDataContext.getGameEngine().gameRequest(playUser.getId(), beiMiClient.getPlayway(), beiMiClient.getRoom(), beiMiClient.getOrgi(), playUser , beiMiClient) ;
 			}
 		}
     }
@@ -379,7 +379,7 @@ public class GameEventHandler
 					gamePlayway = (GamePlayway) CacheHelper.getSystemCacheBean().getCacheObject(gameRoom.getPlayway(), gameRoom.getOrgi()) ;
 					List<PlayUserClient> playerList = CacheHelper.getGamePlayerCacheBean().getCacheObject(gameRoom.getId(), gameRoom.getOrgi()) ;
 					if(playerList.size() < gamePlayway.getPlayers()){
-						BMDataContext.getGameEngine().joinRoom(gameRoom, playUser, playerList);
+//						BMDataContext.getGameEngine().joinRoom(gameRoom, playUser, playerList);
 						joinRoom = true ;
 					}
 					/**

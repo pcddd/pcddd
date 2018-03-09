@@ -62,7 +62,7 @@ public class MaJiangBoard extends Board implements java.io.Serializable{
 	
 	/**
 	 * 找到玩家
-	 * @param board
+//	 * @param board
 	 * @param userid
 	 * @return
 	 */
@@ -78,7 +78,7 @@ public class MaJiangBoard extends Board implements java.io.Serializable{
 	
 	/**
 	 * 找到玩家的 位置
-	 * @param board
+//	 * @param board
 	 * @param userid
 	 * @return
 	 */
@@ -96,7 +96,7 @@ public class MaJiangBoard extends Board implements java.io.Serializable{
 	
 	/**
 	 * 找到下一个玩家
-	 * @param board
+//	 * @param board
 	 * @param index
 	 * @return
 	 */
@@ -131,7 +131,7 @@ public class MaJiangBoard extends Board implements java.io.Serializable{
 	/**
 	 * 
 	 * @param player
-	 * @param current
+//	 * @param current
 	 * @return
 	 */
 	public TakeCards takecard( Player player , boolean allow , byte[] playCards) {
@@ -141,7 +141,7 @@ public class MaJiangBoard extends Board implements java.io.Serializable{
 	/**
 	 * 当前玩家随机出牌，能管住当前出牌的 最小牌
 	 * @param player
-	 * @param current
+//	 * @param current
 	 * @return
 	 */
 	public TakeCards takecard(Player player) {
@@ -151,7 +151,7 @@ public class MaJiangBoard extends Board implements java.io.Serializable{
 	/**
 	 * 当前玩家随机出牌，能管住当前出牌的 最小牌
 	 * @param player
-	 * @param current
+//	 * @param current
 	 * @return
 	 */
 	public TakeCards takecard(Player player , TakeCards last) {
@@ -176,7 +176,7 @@ public class MaJiangBoard extends Board implements java.io.Serializable{
 		
 		TakeCards takeCards = null ;
 		if(board.getDeskcards().size() == 0){//出完了
-			GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.ALLCARDS.toString() , 0);	//通知结算
+//			GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.ALLCARDS.toString() , 0);	//通知结算
 		}else{
 			takeCards = board.takecard(player , true , playCards) ;
 			
@@ -229,7 +229,7 @@ public class MaJiangBoard extends Board implements java.io.Serializable{
 				if(hasAction == false){
 					board.dealRequest(gameRoom, board, orgi , false , null);
 				}else{
-					GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.DEAL.toString() , 5);	//有杠碰吃，等待5秒后发牌
+//					GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.DEAL.toString() , 5);	//有杠碰吃，等待5秒后发牌
 				}
 			}else{
 				takeCards = new TakeMaJiangCards();
@@ -309,9 +309,9 @@ public class MaJiangBoard extends Board implements java.io.Serializable{
 		 */
 		PlayUserClient nextPlayUserClient = ActionTaskUtils.getPlayUserClient(gameRoom.getId(), player.getPlayuser(), orgi) ;
 		if(BMDataContext.PlayerTypeEnum.NORMAL.toString().equals(nextPlayUserClient.getPlayertype()) && !player.isHu()){
-			GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 8);	//应该从 游戏后台配置参数中获取 , 当前玩家未胡牌或听牌（听牌以后也不允许换牌）
-		}else{
-			GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 1);	//应该从游戏后台配置参数中获取
+//			GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 8);	//应该从 游戏后台配置参数中获取 , 当前玩家未胡牌或听牌（听牌以后也不允许换牌）
+//		}else{
+//			GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 1);	//应该从游戏后台配置参数中获取
 		}
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,32 +33,21 @@ public class ApiGetPersonalMessageController {
     private PlayUserRepository playUserRes;
 
     @RequestMapping
-    public ResponseEntity<PcData> getPersonalMes(@Valid String token) {
+    public ResponseEntity<PcData> getPersonalMes(HttpServletRequest request) {
         PcData resu=null;
-        if(!StringUtils.isBlank(token)){
-            Token userToken = tokenESRes.findById(token);
-            if(userToken != null){
-                if (!StringUtils.isBlank(userToken.getUserid()) && userToken.getExptime()!=null && userToken.getExptime().after(new Date())){
-
-                    PlayUser playUser = playUserRes.findByToken(userToken.getId());
-                    if (playUser == null){
-                        resu=new PcData( "201", "查无此人",
-                                null);
-                    }else{
-                        List<PersonalMesModel> personalMesModels = personalMesRepository.findByUserid(playUser.getId());
-                        HashMap hashMap = new HashMap();
-                        hashMap.put("data",personalMesModels);
-                        resu=new PcData( personalMesModels.size() != 0?"200":"201", personalMesModels.size() != 0 ? "成功": "暂无消息",
-                                hashMap);
-                    }
-
-                    return new ResponseEntity<>(resu, HttpStatus.OK);
-                }else{
-                    tokenESRes.delete(userToken);
-                }
-
-            }
+        Token userToken = tokenESRes.findById(request.getHeader("token"));
+        PlayUser playUser = playUserRes.findByToken(userToken.getId());
+        if (playUser == null){
+            resu=new PcData( "201", "查无此人",
+                    null);
+        }else{
+            List<PersonalMesModel> personalMesModels = personalMesRepository.findByUserid(playUser.getId());
+            HashMap hashMap = new HashMap();
+            hashMap.put("data",personalMesModels);
+            resu=new PcData( personalMesModels.size() != 0?"200":"201", personalMesModels.size() != 0 ? "成功": "暂无消息",
+                    hashMap);
         }
-        return new ResponseEntity<>( new PcData("201",MessageEnum.USER_TOKEN, resu),HttpStatus.OK);
+
+        return new ResponseEntity<>(resu, HttpStatus.OK);
     }
 }

@@ -35,33 +35,33 @@ public class MaJiangGame implements ChessGame{
 		/**
 		 * 血流/战玩法 ， 无风 ，广东麻将， 有风 ， 需要根据配置的玩法 获取
 		 */
-		if(playway.isWind()){
-			for(int i= -4 ; i>-32 ; i--){
-				temp.add(0 , (byte)i) ;
-			}
-		}
+//		if(playway.isWind()){
+//			for(int i= -4 ; i>-32 ; i--){
+//				temp.add(0 , (byte)i) ;
+//			}
+//		}
 		/**
 		 * 洗牌次数，参数指定，建议洗牌次数 为1次，多次洗牌的随机效果更好，例如：7次
 		 */
-		for(int i = 0 ; i<playway.getShuffletimes()+1 ; i++){
-			Collections.shuffle(temp);
-		}
+//		for(int i = 0 ; i<playway.getShuffletimes()+1 ; i++){
+//			Collections.shuffle(temp);
+//		}
 		byte[] cards = new byte[136] ;
 		for(int i=0 ; i<temp.size() ; i++){
 			cards[i] = temp.get(i) ;
 		}
 		board.setCards(cards);
-		
+
 		board.setRatio(2); 	//默认番 ： 2
-		
+
 		/**
 		 * 以下为定癞子牌(根据玩法需要)
 		 */
 		int random = (byte)new Random().nextInt(6) ;		//骰子 0~6
-		
-		board.setPosition(random);	
-		
-		
+
+		board.setPosition(random);
+
+
 		byte[] powerful = new byte[1];
 		if(cards[cards.length - 2] >=0){
 			if(cards[cards.length - 2]/4 % 9 == 8){
@@ -80,7 +80,7 @@ public class MaJiangGame implements ChessGame{
 		}
 		board.setPowerful(powerful);	//填癞子牌
 		Player[] players = new Player[playUsers.size()];
-		
+
 		int inx = 0 ;
 		for(PlayUserClient playUser : playUsers){
 			Player player = new Player(playUser.getId()) ;
@@ -126,7 +126,7 @@ public class MaJiangGame implements ChessGame{
 					tempbanker = player ; break ;
 				}
 			}
-			
+
 		}
 		board.setPlayers(players);
 		if(tempbanker!=null){

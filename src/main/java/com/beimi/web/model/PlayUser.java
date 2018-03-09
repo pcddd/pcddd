@@ -96,11 +96,69 @@ public class PlayUser implements UserEvent , java.io.Serializable{
 	private int goldcoins;		//金币数量
 	private int diamonds;		//钻石数量
 
-	public String lotterType;//投注类型
+	private String lotterType;//投注类型
 
-	public String periods;//期数
+	private String periods;//期数
 
-	public String personalword;
+	private String personalword;
+
+	private String withdrawals_password;
+
+	private String real_name;
+
+	private String bank_name;
+
+	private String bank_no;
+	private String open_card_address;
+	private String headportrait;
+
+	public void setHeadportrait(String headportrait) {
+		this.headportrait = headportrait;
+	}
+
+	public String getHeadportrait() {
+		return headportrait;
+	}
+
+	public void setOpen_card_address(String open_card_address) {
+		this.open_card_address = open_card_address;
+	}
+
+	public String getOpen_card_address() {
+		return open_card_address;
+	}
+
+	public void setBank_no(String bank_no) {
+		this.bank_no = bank_no;
+	}
+
+	public String getBank_no() {
+		return bank_no;
+	}
+
+	public void setBank_name(String bank_name) {
+		this.bank_name = bank_name;
+	}
+
+	public String getBank_name() {
+		return bank_name;
+	}
+
+	public void setReal_name(String real_name) {
+		this.real_name = real_name;
+	}
+
+	public String getReal_name() {
+		return real_name;
+	}
+
+	public void setWithdrawals_password(String withdrawals_password) {
+		this.withdrawals_password = withdrawals_password;
+	}
+
+	public String getWithdrawals_password() {
+		return withdrawals_password;
+	}
 
 	/**
 	 *对金币+房卡+id进行RSA签名 ， 任何对ID,cards ， goldcoins 进行修改之前，都需要做签名验证，

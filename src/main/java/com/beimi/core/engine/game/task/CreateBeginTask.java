@@ -79,6 +79,6 @@ public class CreateBeginTask extends AbstractTask implements ValueWithExpiryTime
 		/**
 		 * 发送一个 Begin 事件
 		 */
-		super.getGame(gameRoom.getPlayway(), orgi).change(gameRoom , BeiMiGameEvent.AUTO.toString() , 2);	//通知状态机 , 此处应由状态机处理异步执行
+//		super.getGame(gameRoom.getPlayway(), orgi).change(gameRoom , BeiMiGameEvent.AUTO.toString() , 2);	//通知状态机 , 此处应由状态机处理异步执行
 	}
 }

@@ -45,7 +45,6 @@ public class HttpUtils {
         return client;
     }
 
-
     /**
      * post请求  json数据为body
      *
@@ -68,8 +67,10 @@ public class HttpUtils {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     onSuccess(callBack, response.body().string());
+                    response.close();
                 } else {
                     OnError(callBack, response.message());
+                    response.close();
                 }
             }
         });
@@ -156,7 +157,6 @@ public class HttpUtils {
                 });
     }
 
-
     /**
      *  下注
      */
@@ -208,7 +208,6 @@ public class HttpUtils {
         }else{
             roomIds = (String)CacheHelper.getSystemCacheBean().getCacheObject(BMDataContext.ROOMID_TYPE_JND,BMDataContext.SYSTEM_ORGI);
         }
-
 
         stringBuilder.append("{\"target_type\":\"chatrooms\",\"target\":" + roomIds + ",\"msg\":{\"type\":\"txt\",\"msg\":\"{notice_type:3,game_count:")
                 .append(game_count)

@@ -41,24 +41,24 @@ public class GameUtils {
 		games.put("majiang", new MaJiangGame()) ;
 	}
 	
-	public static Game getGame(String playway ,String orgi){
-		GamePlayway gamePlayway = (GamePlayway) CacheHelper.getSystemCacheBean().getCacheObject(playway, orgi) ;
-		Game game = null ;
-		if(gamePlayway!=null){
-			SysDic dic = (SysDic) CacheHelper.getSystemCacheBean().getCacheObject(gamePlayway.getGame(), gamePlayway.getOrgi()) ;
-			if(dic.getCode().equals("dizhu") || gamePlayway.getCode().equals("dizhu")){
-				game = (Game) BMDataContext.getContext().getBean("dizhuGame") ;
-			}else if(dic.getCode().equals("majiang") || gamePlayway.getCode().equals("majiang")){
-				game = (Game) BMDataContext.getContext().getBean("majiangGame") ;
-			}
-		}
-		return game;
-	}
+//	public static Game getGame(String playway ,String orgi){
+//		GamePlayway gamePlayway = (GamePlayway) CacheHelper.getSystemCacheBean().getCacheObject(playway, orgi) ;
+//		Game game = null ;
+//		if(gamePlayway!=null){
+//			SysDic dic = (SysDic) CacheHelper.getSystemCacheBean().getCacheObject(gamePlayway.getGame(), gamePlayway.getOrgi()) ;
+//			if(dic.getCode().equals("dizhu") || gamePlayway.getCode().equals("dizhu")){
+//				game = (Game) BMDataContext.getContext().getBean("dizhuGame") ;
+//			}else if(dic.getCode().equals("majiang") || gamePlayway.getCode().equals("majiang")){
+//				game = (Game) BMDataContext.getContext().getBean("majiangGame") ;
+//			}
+//		}
+//		return game;
+//	}
 	
 	/**
-	 * 移除GameRoom
-	 * @param gameRoom
-	 * @param orgi
+//	 * 移除GameRoom
+//	 * @param gameRoom
+//	 * @param orgi
 	 */
 	public static void removeGameRoom(String roomid,String playway,String orgi){
 		CacheHelper.getQueneCache().delete(roomid);
@@ -224,8 +224,8 @@ public class GameUtils {
 	public static List<GamePlayway> playwayConfig(String gametype,String orgi){
 		List<GamePlayway> gamePlayList = (List<GamePlayway>) CacheHelper.getSystemCacheBean().getCacheObject(gametype+"."+BMDataContext.ConfigNames.PLAYWAYCONFIG.toString(), orgi) ;
 		if(gamePlayList == null){
-			gamePlayList = BMDataContext.getContext().getBean(GamePlaywayRepository.class).findByOrgiAndTypeid(orgi, gametype , new Sort(Sort.Direction.ASC, "sortindex")) ;
-			CacheHelper.getSystemCacheBean().put(gametype+"."+BMDataContext.ConfigNames.PLAYWAYCONFIG.toString() , gamePlayList , orgi) ;
+//			gamePlayList = BMDataContext.getContext().getBean(GamePlaywayRepository.class).findByOrgiAndTypeid(orgi, gametype , new Sort(Sort.Direction.ASC, "sortindex")) ;
+//			CacheHelper.getSystemCacheBean().put(gametype+"."+BMDataContext.ConfigNames.PLAYWAYCONFIG.toString() , gamePlayList , orgi) ;
 		}
 		return gamePlayList ;
 	}
@@ -269,70 +269,70 @@ public class GameUtils {
 	public static void cleanPlaywayCache(String gametype,String orgi){
 		CacheHelper.getSystemCacheBean().delete(gametype+"."+BMDataContext.ConfigNames.PLAYWAYCONFIG.toString(), orgi) ;
 	}
-	/**
-	 * 封装Game信息，基于缓存操作
-	 * @param gametype
-	 * @return
-	 */
-	public static List<BeiMiGame> games(String gametype){
-		List<BeiMiGame> beiMiGameList = new ArrayList<BeiMiGame>();
-		if(!StringUtils.isBlank(gametype)){
-			/**
-			 * 找到游戏配置的 模式 和玩法，如果多选，则默认进入的是 大厅模式，如果是单选，则进入的是选场模式
-			 */
-			String[] games = gametype.split(",") ;
-			for(String game : games){
-				BeiMiGame beiMiGame = new BeiMiGame();
-				for(SysDic sysDic : BeiMiDic.getInstance().getDic(BMDataContext.BEIMI_SYSTEM_GAME_TYPE_DIC)){
-					if(sysDic.getId().equals(game)){
-						beiMiGame.setName(sysDic.getName());
-						beiMiGame.setId(sysDic.getId());
-						beiMiGame.setCode(sysDic.getCode());
-						
-						List<SysDic> gameModelList = BeiMiDic.getInstance().getDic(BMDataContext.BEIMI_SYSTEM_GAME_TYPE_DIC, game) ;
-						for(SysDic gameModel : gameModelList){
-							Type type = new Type(gameModel.getId(), gameModel.getName() , gameModel.getCode()) ;
-							beiMiGame.getTypes().add(type) ;
-							List<GamePlayway> gamePlaywayList = playwayConfig(gameModel.getId(), gameModel.getOrgi()) ;
-
-							List<GamePlaywayGroup> gamePlaywayGroups = playwayGroupsConfig(gameModel.getOrgi()) ;
-							List<GamePlaywayGroupItem> gamePlaywayGroupItems = playwayGroupItemConfig(gameModel.getOrgi()) ;
-
-
-							for(GamePlayway gamePlayway : gamePlaywayList){
-								Playway playway = new Playway(gamePlayway.getId(), gamePlayway.getName() , gamePlayway.getCode(), gamePlayway.getScore() , gamePlayway.getMincoins(), gamePlayway.getMaxcoins(), gamePlayway.isChangecard() , gamePlayway.isShuffle()) ;
-								playway.setLevel(gamePlayway.getTypelevel());
-
-								playway.setGroups(new ArrayList<GamePlaywayGroup>());
-								playway.setItems(new ArrayList<GamePlaywayGroupItem>());
-
-								for(GamePlaywayGroup group : gamePlaywayGroups){
-									if(group.getPlaywayid().equals(gamePlayway.getId())){
-										playway.getGroups().add(group) ;
-									}
-								}
-
-								for(GamePlaywayGroupItem item : gamePlaywayGroupItems){
-									if(item.getPlaywayid().equals(gamePlayway.getId())){
-										playway.getItems().add(item) ;
-									}
-								}
-
-								playway.setSkin(gamePlayway.getTypecolor());
-								playway.setMemo(gamePlayway.getMemo());
-                                playway.setRoomtitle(gamePlayway.getRoomtitle());
-								playway.setFree(gamePlayway.isFree());
-								playway.setExtpro(gamePlayway.isExtpro());
-								type.getPlayways().add(playway) ;
-							}
-						}
-						beiMiGameList.add(beiMiGame) ;
-					}
-				}
-			}
-		}
-		return beiMiGameList ;
-	}
+//	/**
+//	 * 封装Game信息，基于缓存操作
+//	 * @param gametype
+//	 * @return
+//	 */
+//	public static List<BeiMiGame> games(String gametype){
+//		List<BeiMiGame> beiMiGameList = new ArrayList<BeiMiGame>();
+//		if(!StringUtils.isBlank(gametype)){
+//			/**
+//			 * 找到游戏配置的 模式 和玩法，如果多选，则默认进入的是 大厅模式，如果是单选，则进入的是选场模式
+//			 */
+//			String[] games = gametype.split(",") ;
+//			for(String game : games){
+//				BeiMiGame beiMiGame = new BeiMiGame();
+//				for(SysDic sysDic : BeiMiDic.getInstance().getDic(BMDataContext.BEIMI_SYSTEM_GAME_TYPE_DIC)){
+//					if(sysDic.getId().equals(game)){
+//						beiMiGame.setName(sysDic.getName());
+//						beiMiGame.setId(sysDic.getId());
+//						beiMiGame.setCode(sysDic.getCode());
+//
+//						List<SysDic> gameModelList = BeiMiDic.getInstance().getDic(BMDataContext.BEIMI_SYSTEM_GAME_TYPE_DIC, game) ;
+//						for(SysDic gameModel : gameModelList){
+//							Type type = new Type(gameModel.getId(), gameModel.getName() , gameModel.getCode()) ;
+//							beiMiGame.getTypes().add(type) ;
+//							List<GamePlayway> gamePlaywayList = playwayConfig(gameModel.getId(), gameModel.getOrgi()) ;
+//
+//							List<GamePlaywayGroup> gamePlaywayGroups = playwayGroupsConfig(gameModel.getOrgi()) ;
+//							List<GamePlaywayGroupItem> gamePlaywayGroupItems = playwayGroupItemConfig(gameModel.getOrgi()) ;
+//
+//
+//							for(GamePlayway gamePlayway : gamePlaywayList){
+//								Playway playway = new Playway(gamePlayway.getId(), gamePlayway.getName() , gamePlayway.getCode(), gamePlayway.getScore() , gamePlayway.getMincoins(), gamePlayway.getMaxcoins(), gamePlayway.isChangecard() , gamePlayway.isShuffle()) ;
+//								playway.setLevel(gamePlayway.getTypelevel());
+//
+//								playway.setGroups(new ArrayList<GamePlaywayGroup>());
+//								playway.setItems(new ArrayList<GamePlaywayGroupItem>());
+//
+//								for(GamePlaywayGroup group : gamePlaywayGroups){
+//									if(group.getPlaywayid().equals(gamePlayway.getId())){
+//										playway.getGroups().add(group) ;
+//									}
+//								}
+//
+//								for(GamePlaywayGroupItem item : gamePlaywayGroupItems){
+//									if(item.getPlaywayid().equals(gamePlayway.getId())){
+//										playway.getItems().add(item) ;
+//									}
+//								}
+//
+//								playway.setSkin(gamePlayway.getTypecolor());
+//								playway.setMemo(gamePlayway.getMemo());
+//                                playway.setRoomtitle(gamePlayway.getRoomtitle());
+//								playway.setFree(gamePlayway.isFree());
+//								playway.setExtpro(gamePlayway.isExtpro());
+//								type.getPlayways().add(playway) ;
+//							}
+//						}
+//						beiMiGameList.add(beiMiGame) ;
+//					}
+//				}
+//			}
+//		}
+//		return beiMiGameList ;
+//	}
 	
 	public static void main(String[] args){
 		long start = System.nanoTime() ;
@@ -563,13 +563,13 @@ public class GameUtils {
 		return key ;
 	}
 	
-	/**
-	 * 麻将的出牌判断，杠碰吃胡
-	 * @param cards
-	 * @param card
-	 * @param deal	是否抓牌
-	 * @return
-	 */
+//	/**
+//	 * 麻将的出牌判断，杠碰吃胡
+//	 * @param cards
+//	 * @param card
+//	 * @param deal	是否抓牌
+//	 * @return
+//	 */
 	public static Byte getGangCard(byte[] cards){
 		Byte card = null ;
 		Map<Integer, Byte> data = new HashMap<Integer, Byte>();

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -28,25 +29,15 @@ public class ApiResultRecordController {
     private PcddPeriodsESRepository pcddPeriodsESRepository;
 
     @RequestMapping
-    public ResponseEntity<PcData> recordResult(@Valid int type,@Valid String token,@Valid int page,@Valid int pagesize) {
+    public ResponseEntity<PcData> recordResult(@Valid int type,@Valid int page, @Valid int pagesize) {
         PcData pcData = null;
-        Token userToken = null;
-        if (!StringUtils.isBlank(token)) {
-            userToken = tokenESRes.findById(token);
-            if (userToken != null && !StringUtils.isBlank(userToken.getId()) && userToken.getExptime() != null && userToken.getExptime().after(new Date())) {
-                List<PcddPeriods> pcddPeriodsList = pcddPeriodsESRepository.findByType(type,
-                        new PageRequest(page - 1, pagesize, new Sort(Sort.Direction.DESC, "periods")));
-                if (pcddPeriodsList == null)
-                    pcddPeriodsList = new ArrayList<>();
-                HashMap hashMap = new HashMap();
-                hashMap.put("data",pcddPeriodsList);
-                pcData = new PcData("200", "成功", hashMap);
-            }else{
-                pcData = new PcData("201", "token失效,请重新登陆", null);
-            }
-        }else{
-            pcData = new PcData("203", "token为空",null);
-        }
+        List<PcddPeriods> pcddPeriodsList = pcddPeriodsESRepository.findByType(type,
+                new PageRequest(page - 1, pagesize, new Sort(Sort.Direction.DESC, "periods")));
+        if (pcddPeriodsList == null)
+            pcddPeriodsList = new ArrayList<>();
+        HashMap hashMap = new HashMap();
+        hashMap.put("data",pcddPeriodsList);
+        pcData = new PcData("200", "成功", hashMap);
         return new ResponseEntity<>(pcData, HttpStatus.OK);
     }
 }

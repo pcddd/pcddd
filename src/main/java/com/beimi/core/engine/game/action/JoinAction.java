@@ -34,7 +34,7 @@ public class JoinAction<T,S> implements Action<T, S>{
 				/**
 				 * 发送一个 Enough 事件
 				 */
-				ActionTaskUtils.roomReady(gameRoom, GameUtils.getGame(gameRoom.getPlayway() , gameRoom.getOrgi()));
+//				ActionTaskUtils.roomReady(gameRoom, GameUtils.getGame(gameRoom.getPlayway() , gameRoom.getOrgi()));
 			}
 		}
 	}

@@ -76,9 +76,9 @@ public class CreateRaiseHandsTask extends AbstractTask implements ValueWithExpir
 		PlayUserClient playUserClient = ActionTaskUtils.getPlayUserClient(gameRoom.getId(), lastHandsPlayer.getPlayuser(), orgi) ;
 		
 		if(BMDataContext.PlayerTypeEnum.NORMAL.toString().equals(playUserClient.getPlayertype())){
-			super.getGame(gameRoom.getPlayway(), orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 25);	//应该从 游戏后台配置参数中获取
-		}else{
-			super.getGame(gameRoom.getPlayway(), orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() ,3);	//应该从游戏后台配置参数中获取
+//			super.getGame(gameRoom.getPlayway(), orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 25);	//应该从 游戏后台配置参数中获取
+//		}else{
+//			super.getGame(gameRoom.getPlayway(), orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() ,3);	//应该从游戏后台配置参数中获取
 		}
 	}
 }

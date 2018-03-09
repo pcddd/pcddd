@@ -48,7 +48,7 @@ public class StartedEventListener implements ApplicationListener<ContextRefreshe
     	/**
     	 * 加载系统全局配置
     	 */
-    	SystemConfigRepository systemConfigRes = event.getApplicationContext().getBean(SystemConfigRepository.class) ;
+    	SystemConfigRepository systemConfigRes = event.getApplicationContext().getBean(SystemConfigRepository.class);
     	SystemConfig config = systemConfigRes.findByOrgi(BMDataContext.SYSTEM_ORGI) ;
     	if(config != null){
     		CacheHelper.getSystemCacheBean().put("systemConfig", config, BMDataContext.SYSTEM_ORGI);

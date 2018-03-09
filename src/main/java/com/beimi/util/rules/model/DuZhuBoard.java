@@ -64,8 +64,8 @@ public class DuZhuBoard extends Board implements java.io.Serializable{
 	
 	/**
 	 * 找到玩家
-	 * @param board
-	 * @param userid
+//	 * @param board
+//	 * @param userid
 	 * @return
 	 */
 	public Player player(String userid){
@@ -80,8 +80,8 @@ public class DuZhuBoard extends Board implements java.io.Serializable{
 	
 	/**
 	 * 找到玩家的 位置
-	 * @param board
-	 * @param userid
+//	 * @param board
+//	 * @param userid
 	 * @return
 	 */
 	public int index(String userid){
@@ -98,8 +98,8 @@ public class DuZhuBoard extends Board implements java.io.Serializable{
 	
 	/**
 	 * 找到下一个玩家
-	 * @param board
-	 * @param index
+//	 * @param board
+//	 * @param index
 	 * @return
 	 */
 	public Player next(int index){
@@ -134,7 +134,7 @@ public class DuZhuBoard extends Board implements java.io.Serializable{
 	/**
 	 * 
 	 * @param player
-	 * @param current
+//	 * @param current
 	 * @return
 	 */
 	public TakeCards takecard( Player player , boolean allow , byte[] playCards) {
@@ -144,7 +144,7 @@ public class DuZhuBoard extends Board implements java.io.Serializable{
 	/**
 	 * 当前玩家随机出牌，能管住当前出牌的 最小牌
 	 * @param player
-	 * @param current
+//	 * @param current
 	 * @return
 	 */
 	public TakeCards takecard(Player player) {
@@ -154,7 +154,7 @@ public class DuZhuBoard extends Board implements java.io.Serializable{
 	/**
 	 * 当前玩家随机出牌，能管住当前出牌的 最小牌
 	 * @param player
-	 * @param current
+//	 * @param current
 	 * @return
 	 */
 	public TakeCards takecard(Player player , TakeCards last) {
@@ -164,7 +164,7 @@ public class DuZhuBoard extends Board implements java.io.Serializable{
 	/**
 	 * 当前玩家随机出牌，能管住当前出牌的 最小牌
 	 * @param player
-	 * @param current
+//	 * @param current
 	 * @return
 	 */
 	public TakeCards cardtip(Player player , TakeCards last) {
@@ -291,19 +291,19 @@ public class DuZhuBoard extends Board implements java.io.Serializable{
 			/**
 			 * 牌出完了就算赢了
 			 */
-			if(board.isWin()){//出完了
-				GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.ALLCARDS.toString() , 0);	//赢了，通知结算
-				takeCards.setNextplayer(null);
-			}else{
-				PlayUserClient nextPlayUserClient = ActionTaskUtils.getPlayUserClient(gameRoom.getId(), takeCards.getNextplayer(), orgi) ;
-				if(nextPlayUserClient!=null){
-					if(BMDataContext.PlayerTypeEnum.NORMAL.toString().equals(nextPlayUserClient.getPlayertype())){
-						GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 25);	//应该从 游戏后台配置参数中获取
-					}else{
-						GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 3);	//应该从游戏后台配置参数中获取
-					}
-				}
-			}
+//			if(board.isWin()){//出完了
+//				GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.ALLCARDS.toString() , 0);	//赢了，通知结算
+//				takeCards.setNextplayer(null);
+//			}else{
+//				PlayUserClient nextPlayUserClient = ActionTaskUtils.getPlayUserClient(gameRoom.getId(), takeCards.getNextplayer(), orgi) ;
+//				if(nextPlayUserClient!=null){
+//					if(BMDataContext.PlayerTypeEnum.NORMAL.toString().equals(nextPlayUserClient.getPlayertype())){
+//						GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 25);	//应该从 游戏后台配置参数中获取
+//					}else{
+//						GameUtils.getGame(gameRoom.getPlayway() , orgi).change(gameRoom , BeiMiGameEvent.PLAYCARDS.toString() , 3);	//应该从游戏后台配置参数中获取
+//					}
+//				}
+//			}
 		}else{
 			takeCards = new TakeDiZhuCards();
 			takeCards.setAllow(false);

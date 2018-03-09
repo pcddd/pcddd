@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.repository.ElasticsearchCrudRepository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,9 +21,15 @@ public abstract interface BetGameDetailESRepository extends ElasticsearchCrudRep
 
     public abstract BetGameDetail findByUserIdAndPeriodsAndLevel(String userId,int periods,int level);
 
-    public abstract List<BetGameDetail> findByTypeAndUserId(int type,String userId,Pageable page);
+    public abstract List<BetGameDetail> findByLevelAndCreatetime(int level,long date);
+
+    public abstract List<BetGameDetail> findByLevelAndBackwaterstatusAndCreatetime(int level,int backwaterstatus,long date);
+
+    public abstract List<BetGameDetail> findByUserIdAndCreatetime(String userId,long date,Pageable page);
 
     public abstract List<BetGameDetail> findByTypeAndPeriods(int type,int periods);
+
+    public abstract List<BetGameDetail> findByTypeAndUserId(int type,String userId,Pageable page);
 
     public abstract Page<BetGameDetail> findByOrgiAndType(String orgi,int type,Pageable page);
 

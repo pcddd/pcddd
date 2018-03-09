@@ -8,10 +8,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.beimi.core.BMDataContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @EnableAutoConfiguration
 @SpringBootApplication
+@EnableScheduling
 @EnableAsync
 @EnableJpaRepositories("com.beimi.web.service.repository.jpa")
 @EnableElasticsearchRepositories("com.beimi.web.service.repository.es")

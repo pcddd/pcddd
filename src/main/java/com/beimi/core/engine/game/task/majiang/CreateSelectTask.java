@@ -66,6 +66,6 @@ public class CreateSelectTask extends AbstractTask implements BeiMiGameTask{
 		}
 		CacheHelper.getBoardCacheBean().put(gameRoom.getId() , board, gameRoom.getOrgi());	//更新缓存数据
 		
-		super.getGame(gameRoom.getPlayway(), orgi).change(gameRoom , BeiMiGameEvent.RAISEHANDS.toString());	
+//		super.getGame(gameRoom.getPlayway(), orgi).change(gameRoom , BeiMiGameEvent.RAISEHANDS.toString());
 	}
 }

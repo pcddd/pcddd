@@ -60,12 +60,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     {
         return new ApiRequestMatchingFilter(new AntPathRequestMatcher[]{
                 new AntPathRequestMatcher("/api/lottery"),
-                new AntPathRequestMatcher("/api/caiRegister"),
                 new AntPathRequestMatcher("/api/joinAndLeaveRoom"),
                 new AntPathRequestMatcher("/api/room"),
                 new AntPathRequestMatcher("/api/Level"),
                 new AntPathRequestMatcher("/api/updateLottery"),
-                new AntPathRequestMatcher("/api/caiGuest"),
                 new AntPathRequestMatcher("/api/dobet"),
                 new AntPathRequestMatcher("/api/updatehxconfig"),
                 new AntPathRequestMatcher("/api/betRecord"),
@@ -74,8 +72,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 new AntPathRequestMatcher("/api/recordResult"),
                 new AntPathRequestMatcher("/api/getSystemMes"),
                 new AntPathRequestMatcher("/api/getPersonalMes"),
+                new AntPathRequestMatcher("/api/gameRecord"),
+                new AntPathRequestMatcher("/api/accountRecord"),
+                new AntPathRequestMatcher("/api/backWater"),
+                new AntPathRequestMatcher("/api/setBankInfo"),
+                new AntPathRequestMatcher("/api/setWithdrawPwd"),
+                new AntPathRequestMatcher("/api/updateWithdrawPwd"),
                 new AntPathRequestMatcher("/api/bettype")},
-                new AntPathRequestMatcher("/api/**"));
+                new AntPathRequestMatcher[]{
+                new AntPathRequestMatcher("/api/caiRegister"),
+                        new AntPathRequestMatcher("/api/caiGuest"),
+                                new AntPathRequestMatcher("/api/token")
+        });
     }
     
     private Filter csrfHeaderFilter() {
